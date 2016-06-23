@@ -10,7 +10,7 @@ A Networked Checkers Game. All documentation and no code makes Jack a Software E
 
 ## Our Work Flow
 
-We will be following a model of forks and branches. This means we each work on our own fork, and only Mark (who's managing operations) can merge to the master repo. If your git-fu fails you and everything is completely messed up, it won't affect anyone else this way, and you can always do a clean pull from master to reset everything.
+We will be following a model of forks and branches. We each work on our own fork, and only Mark (who's managing operations) can merge to the master repo. If your git-fu fails you and everything is completely messed up, it won't affect anyone else this way, and you can always do a clean pull from master to reset everything.
 
 *Please, please PLEASE do not merge your PRs to Master.* This is Mark's job, because munging the repo will just slow everyone down. Mark is the Benevolent Dictator :innocent:
 
