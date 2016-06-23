@@ -14,9 +14,20 @@ We will be following a model of forks and branches. We each work on our own fork
 
 ### First Steps
 
-1. Click the button at the top of this repository that says "Fork". This will create your own personal fork where your (or our) git-fu failures are insulated away from the rest of the team. You'll notice the repository URL is https://github.com/<**YOUR USERNAME**>/CS-451-001-Checkers so use this information to check your commands in the following steps
+1. Click the button at the top of this repository that says "Fork". This will create your own personal fork where your (or our) git-fu failures are insulated away from the rest of the team. You'll notice the repository URL is https://github.com/**your-username**/CS-451-001-Checkers so use this information to check your commands in the following steps
 1. Clone your personal fork to your programming device (hopefully a real computer of some sort and not like a phone). On the commandline (which I'm going to assume you're using), this is `git clone https://github.com/<**YOUR USERNAME**>/CS-451-001-Checkers.git`. It may ask for credentials or other info and it's up to you to decide if/how to handle that.
 1. Add upstream as a remote target (aka you can push/pull to it). The main repository will be called "upstream" and is added to your environment using `git remote add upstream https://github.com/MBLAHO13/CS-451-001-Checkers.git` **REMEMBER, NEVER EVER EVER DO SOMETHING THAT LOOKS LIKE `push upstream`**
+1. Your evironment should now be set up and ready to use
+
+### Basic Flow
+
+I'm assuming some special cases here, chances are you can skip some of these steps (but they're all harmless in any case if you do a step you didn't have to).
+
+1. Ensure you're up to date with upstream/master
+	1. Checkout master: `git checkout master`
+	1. Rebase: `git rebase upstream/master`
+1. Create a branch, if you don't already have one: `git branch <name-of-branch>`. *Please use dashes instead of spaces because we're working on the commandline and nobody wants to re-learn why bash and quotes don't mix*
+1. Checkout that new branch, or the one you are already working on: `git checkout <name-of-branch>`
 
 *Please, please PLEASE do not merge your PRs to Master.* This is Mark's job, because munging the repo will just slow everyone down. Mark is the Benevolent Dictator :innocent:
 
