@@ -12,6 +12,12 @@ A Networked Checkers Game. All documentation and no code makes Jack a Software E
 
 We will be following a model of forks and branches. We each work on our own fork, and only Mark (who's managing operations) can merge to the master repo. If your git-fu fails you and everything is completely messed up, it won't affect anyone else this way, and you can always do a clean pull from master to reset everything.
 
+### First Steps
+
+1. Click the button at the top of this repository that says "Fork". This will create your own personal fork where your (or our) git-fu failures are insulated away from the rest of the team. You'll notice the repository URL is https://github.com/<**YOUR USERNAME**>/CS-451-001-Checkers so use this information to check your commands in the following steps
+1. Clone your personal fork to your programming device (hopefully a real computer of some sort and not like a phone). On the commandline (which I'm going to assume you're using), this is `git clone https://github.com/<**YOUR USERNAME**>/CS-451-001-Checkers.git`. It may ask for credentials or other info and it's up to you to decide if/how to handle that.
+1. Add upstream as a remote target (aka you can push/pull to it). The main repository will be called "upstream" and is added to your environment using `git remote add upstream https://github.com/MBLAHO13/CS-451-001-Checkers.git` **REMEMBER, NEVER EVER EVER DO SOMETHING THAT LOOKS LIKE `push upstream`**
+
 *Please, please PLEASE do not merge your PRs to Master.* This is Mark's job, because munging the repo will just slow everyone down. Mark is the Benevolent Dictator :innocent:
 
 Don't forget to set your name and email on your local machine as well! Just a nice thing to do. [Documentation on how to do that is here](https://help.github.com/articles/setting-your-email-in-git/)
