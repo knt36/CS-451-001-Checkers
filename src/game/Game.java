@@ -34,6 +34,10 @@ public class Game extends Observable {
         return false;
     }
 
+    public Boolean move(Game newState) {
+        return false;
+    }
+
     public Disk getSquare(int coord) {
         return board.get(coord);
     }
