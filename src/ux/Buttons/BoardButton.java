@@ -2,6 +2,8 @@ package Buttons;
 
 import java.awt.Color;
 
+import game.Disk;
+
 public class BoardButton extends ButtonFactory {
 	Disk d = null;
 
