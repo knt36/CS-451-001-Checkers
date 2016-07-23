@@ -1,5 +1,11 @@
 package Labels;
 
-public class HeaderLabel {
+public class HeaderLabel extends LabelFactory {
+
+	@Override
+	Label genLabel(String label) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
