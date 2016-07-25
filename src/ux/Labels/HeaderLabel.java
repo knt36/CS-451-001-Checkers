@@ -1,5 +1,9 @@
 package Labels;
 
+import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import javax.swing.JLabel;
 
 import Screens.STYLE;
@@ -12,5 +16,6 @@ public class HeaderLabel extends LabelFactory {
 		// TODO Auto-generated constructor stub
 		this.setFont(STYLE.HEADERLABEL_FONT);
 		this.setBorder(STYLE.HEADERBORDER);
+		
 	}
 }
