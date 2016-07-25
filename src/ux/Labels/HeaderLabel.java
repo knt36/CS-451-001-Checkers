@@ -1,11 +1,16 @@
 package Labels;
 
+import javax.swing.JLabel;
+
+import Screens.STYLE;
+
+
 public class HeaderLabel extends LabelFactory {
 
-	@Override
-	Label genLabel(String label) {
-		// TODO Auto-generated method stub
-		return null;
+	public HeaderLabel(String label) {
+		super(label);
+		// TODO Auto-generated constructor stub
+		this.setFont(STYLE.HEADERLABEL_FONT);
+		this.setBorder(STYLE.HEADERBORDER);
 	}
-
 }

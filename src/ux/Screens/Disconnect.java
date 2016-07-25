@@ -1,11 +1,11 @@
 package Screens;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-import Buttons.Button;
-import Labels.Label;
-
-public class Disconnect extends JFrame {
-	Button quitBut = new Button();
-	Label msg = new Label();
+public class Disconnect extends JPanel {
+	JButton quitBut = new JButton();
+	JLabel  msg = new JLabel("");
 }

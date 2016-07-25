@@ -1,11 +1,11 @@
 package Labels;
 
+import javax.swing.JLabel;
+
 public class NoteLabel extends LabelFactory {
 
-	@Override
-	Label genLabel(String label) {
-		// TODO Auto-generated method stub
-		return null;
+	public NoteLabel(String label) {
+		super(label);
+		// TODO Auto-generated constructor stub
 	}
-
 }

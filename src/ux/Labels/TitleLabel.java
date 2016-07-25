@@ -1,11 +1,15 @@
 package Labels;
 
+import javax.swing.JLabel;
+
+import Screens.STYLE;
+
 public class TitleLabel extends LabelFactory {
 
-	@Override
-	Label genLabel(String label) {
-		// TODO Auto-generated method stub
-		return null;
+	public TitleLabel(String label) {
+		super(label);
+		// TODO Auto-generated constructor stub
+		this.setFont(STYLE.TITLEFONT);
+		this.setForeground(STYLE.TITLECOLOR);
 	}
-
 }

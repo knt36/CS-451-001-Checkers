@@ -1,13 +1,12 @@
 package Labels;
 
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class MyTextField extends LabelFactory{
 	JTextField field = new JTextField();
-	@Override
-	Label genLabel(String label) {
-		// TODO Auto-generated method stub
-		return null;
+	public MyTextField(String label) {
+		super(label);
+		// TODO Auto-generated constructor stub
 	}
-	
 }

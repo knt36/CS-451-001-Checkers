@@ -5,11 +5,9 @@ import java.awt.Color;
 import game.Disk;
 
 public class BoardButton extends ButtonFactory {
-	Disk d = null;
 
-	@Override
-	protected Button genButton(Color c, String s) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public BoardButton(Color c, String s) {
+		super(c, s);
+		// TODO Auto-generated constructor stub
+	}	
 }

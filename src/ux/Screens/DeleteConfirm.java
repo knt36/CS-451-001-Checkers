@@ -1,13 +1,14 @@
 package Screens;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-import Buttons.Button;
-import Labels.Label;
 
-public class DeleteConfirm extends JFrame{
-	Button okBut = new Button();
-	Button quitBut = new Button();
+public class DeleteConfirm extends JPanel{
+	JButton okBut = new JButton();
+	JButton quitBut = new JButton();
 	
-	Label msg = new Label(); 
+	JLabel msg = new JLabel(); 
 }

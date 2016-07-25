@@ -1,16 +1,56 @@
 package Screens;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-import Buttons.Button;
+import Buttons.OptionButton;
 import Labels.HeaderLabel;
-import Labels.MyTextField;
+import Labels.TitleLabel;
+import TextField.TextField;
 
-public class Login extends JFrame{
-	protected Button signUpBut = new Button();
-	protected Button signInBut = new Button();
-	protected MyTextField userName = new MyTextField();
-	protected MyTextField passWord = new MyTextField();
+public class Login extends ScreenFactory{
+	protected OptionButton signUpBut = new OptionButton(STYLE.GREEN,STRINGS.SIGNUP);
+	protected OptionButton signInBut = new OptionButton(Color.RED,STRINGS.SIGNIN);
+	protected TextField userName = new TextField(STRINGS.USERNAME_HINT);
+	protected TextField passWord = new TextField(STRINGS.PASSWORD_HINT);
 	
-	protected HeaderLabel title = new HeaderLabel();
+	protected TitleLabel title = new TitleLabel(STRINGS.TITLE);
+	
+	public Login() {
+		// TODO Auto-generated constructor stub
+		this.add(leftPanel());
+		this.constr.gridx++;
+		this.add(rightPanel());
+	}
+	
+	public JPanel rightPanel(){
+		ScreenFactory right = new ScreenFactory();
+		right.constr.fill = right.constr.HORIZONTAL;
+		right.add(this.userName);
+		right.constr.gridy++;
+		right.add(this.passWord);
+		right.constr.fill = right.constr.NONE;
+		right.constr.gridy++;
+		right.add(this.signInBut);
+		return(right);
+	}
+	
+	public JPanel leftPanel(){
+		ScreenFactory left = new ScreenFactory();
+		left.constr.anchor = left.constr.ABOVE_BASELINE;
+		left.add(title);
+		left.constr.gridy++;
+		left.constr.fill = left.constr.NONE;
+		left.constr.anchor = left.constr.NORTH;
+		left.add(signUpBut);
+		return(left);
+	}
 }

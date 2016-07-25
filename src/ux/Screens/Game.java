@@ -1,13 +1,13 @@
 package Screens;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
-
-import Buttons.Button;
+import javax.swing.JPanel;
 import Buttons.GuiBoard;
 
-public class Game extends JFrame{
+public class Game extends JPanel{
 	protected GuiBoard board = new GuiBoard();
-	protected Button helpBt = new Button();
-	protected Button quitBt= new Button();
-	protected Button endBt = new Button();
+	protected JButton helpBt = new JButton();
+	protected JButton quitBt= new JButton();
+	protected JButton endBt = new JButton();
 }
