@@ -1,6 +1,7 @@
 package Screens;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -64,6 +65,7 @@ public class ScrMainMenu extends ScrFactory{
 		right.constr.fill = right.constr.BOTH;
 		this.curGameArea.constr.fill= curGameArea.constr.HORIZONTAL;
 		right.constr.weighty = 1;
+		this.curGameScroll.setMinimumSize(new Dimension(0, 300));
 		for(int i = 0 ; i < 10; i ++){
 			BulletLabel lb = new BulletLabel("Current Game");
 			this.curGameArea.add(lb);
@@ -82,6 +84,7 @@ public class ScrMainMenu extends ScrFactory{
 		right.constr.fill = right.constr.BOTH;
 		this.pubGameArea.constr.fill= pubGameArea.constr.HORIZONTAL;
 		right.constr.weighty = 1;
+		this.pubGameScroll.setMinimumSize(new Dimension(0, 300));
 		for(int i = 0 ; i < 10 ; i ++){
 			this.pubGameArea.add(new BulletLabel("Public Game"));
 			this.pubGameArea.constr.gridy++;

@@ -2,12 +2,13 @@ package Labels;
 
 import javax.swing.JLabel;
 
+import Screens.STRINGS;
 import Screens.STYLE;
 
 public class NoteLabel extends LabelFactory {
 
 	public NoteLabel(String label) {
-		super(label);
+		super(STRINGS.DIVTEXTCENTER + label + STRINGS.ENDDIV);
 		// TODO Auto-generated constructor stub
 		this.setFont(STYLE.NOTELABELFONT);
 		this.setHorizontalAlignment(this.CENTER);

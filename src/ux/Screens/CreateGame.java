@@ -1,5 +1,6 @@
 package Screens;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -38,7 +39,13 @@ public class ScrCreateGame extends ScrFactory {
 		this.add(usersLabel);
 		this.constr.gridy++;
 		this.constr.weighty = 1;
-		this.constr.fill = constr.BOTH;
+		this.constr.fill = constr.HORIZONTAL;
+		this.usersArea.constr.fill = this.usersArea.constr.BOTH;
+		this.usersScroll.setMinimumSize(new Dimension(0, 300));
+		for(int i = 0 ; i < 99; i++){
+			this.usersArea.add(new BulletLabel("Dick " + i));
+			this.usersArea.constr.gridy++;
+		}
 		this.add(usersScroll);
 		this.constr.gridy++;
 		this.constr.fill = constr.NONE;
