@@ -61,7 +61,6 @@ public class ScrMainMenu extends ScrFactory{
 		right.constr.gridy++;
 		
 		//Bullets
-		
 		right.constr.fill = right.constr.BOTH;
 		this.curGameArea.constr.fill= curGameArea.constr.HORIZONTAL;
 		right.constr.weighty = 1;
