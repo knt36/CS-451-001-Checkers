@@ -6,7 +6,7 @@ import static game.Color.*;
 
 public class Player {
     public String name;
-    public Color color;
+    private Color color;
 
     public Player(String name, Color color) {
         this.name = name;
@@ -23,10 +23,25 @@ public class Player {
 
     public Player(String name, Player other) {
         this.name = name;
-        if (other.color == RED) {
-            this.color = WHITE;
+        this.color = other.oppositeColor();
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        if (color == NONE) {
+            throw new IllegalArgumentException("Player cannot have color 'None'");
+        }
+        this.color = color;
+    }
+
+    public Color oppositeColor() {
+        if (color.equals(RED)) {
+            return WHITE;
         } else {
-            this.color = RED;
+            return RED;
         }
     }
 }

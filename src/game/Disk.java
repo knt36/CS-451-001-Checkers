@@ -18,4 +18,13 @@ public class Disk {
         this.color = color;
         this.king = king;
     }
+
+    /**
+     * Checks if the square is empty
+     *
+     * @return color == None
+     */
+    public Boolean empty() {
+        return this.color.equals(NONE);
+    }
 }
