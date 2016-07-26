@@ -15,16 +15,16 @@ import javax.swing.Scrollable;
 import Buttons.OptionButton;
 import Labels.BulletLabel;
 import Labels.HeaderLabel;
-public class MainMenu extends ScreenFactory{
+public class ScrMainMenu extends ScrFactory{
 	protected HeaderLabel curGameLabel = new HeaderLabel(STRINGS.CURGAMELABEL);
 	//Bullets
-	ScreenFactory curGameArea = new ScreenFactory();
+	ScrFactory curGameArea = new ScrFactory();
 	JScrollPane curGameScroll = new JScrollPane(curGameArea);
 	
 	
 	protected HeaderLabel pubGameLabel = new HeaderLabel(STRINGS.PUBGAMELABEL);
 	//Bullets
-	ScreenFactory pubGameArea = new ScreenFactory();
+	ScrFactory pubGameArea = new ScrFactory();
 	JScrollPane pubGameScroll = new JScrollPane(pubGameArea);
 	
 	protected OptionButton contBt = new OptionButton(STYLE.GREEN,STRINGS.CONTINUEBUT);
@@ -32,15 +32,15 @@ public class MainMenu extends ScreenFactory{
 	protected OptionButton helpBt = new OptionButton(STYLE.GREEN,STRINGS.HELPBUT);
 	protected OptionButton quitBt= new OptionButton(Color.red,STRINGS.QUITBUT);
 	
-	public MainMenu() {
+	public ScrMainMenu() {
 		// TODO Auto-generated constructor stub
 		this.add(leftPanel());
 		this.constr.gridx++;
 		this.add(rightPanel());
 	}
 	
-	public ScreenFactory leftPanel(){
-		ScreenFactory left = new ScreenFactory();
+	public ScrFactory leftPanel(){
+		ScrFactory left = new ScrFactory();
 		left.constr.fill = left.constr.NONE;
 		left.add(contBt);
 		left.constr.gridy++;
@@ -52,8 +52,8 @@ public class MainMenu extends ScreenFactory{
 		return(left);
 	}
 	
-	public ScreenFactory rightPanel(){
-		ScreenFactory right = new ScreenFactory();
+	public ScrFactory rightPanel(){
+		ScrFactory right = new ScrFactory();
 		right.constr.fill = right.constr.HORIZONTAL;
 		right.constr.weighty = 0;
 		right.add(curGameLabel);

@@ -8,12 +8,12 @@ import javax.swing.JPanel;
 import Buttons.OptionButton;
 import TextField.TextField;
 
-public class SignUp extends ScreenFactory{
+public class ScrSignUp extends ScrFactory{
 	protected TextField userName = new TextField(STRINGS.USERNAME_HINT);
 	protected TextField passWord = new TextField(STRINGS.PASSWORD_HINT);
 	
 	protected OptionButton createBt = new OptionButton(STYLE.GREEN, STRINGS.CREATE);
-	public SignUp() {
+	public ScrSignUp() {
 		// TODO Auto-generated constructor stub
 		this.constr.fill=this.constr.HORIZONTAL;
 		this.add(this.userName);

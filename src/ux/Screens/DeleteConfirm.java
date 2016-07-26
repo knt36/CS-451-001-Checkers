@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
-public class DeleteConfirm extends JPanel{
+public class ScrDeleteConfirm extends JPanel{
 	JButton okBut = new JButton();
 	JButton quitBut = new JButton();
 	

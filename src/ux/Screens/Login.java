@@ -16,7 +16,7 @@ import Labels.HeaderLabel;
 import Labels.TitleLabel;
 import TextField.TextField;
 
-public class Login extends ScreenFactory{
+public class ScrLogin extends ScrFactory{
 	protected OptionButton signUpBut = new OptionButton(STYLE.GREEN,STRINGS.SIGNUP);
 	protected OptionButton signInBut = new OptionButton(Color.RED,STRINGS.SIGNIN);
 	protected TextField userName = new TextField(STRINGS.USERNAME_HINT);
@@ -24,7 +24,7 @@ public class Login extends ScreenFactory{
 	
 	protected TitleLabel title = new TitleLabel(STRINGS.TITLE);
 	
-	public Login() {
+	public ScrLogin() {
 		// TODO Auto-generated constructor stub
 		this.add(leftPanel());
 		this.constr.gridx++;
@@ -32,7 +32,7 @@ public class Login extends ScreenFactory{
 	}
 	
 	public JPanel rightPanel(){
-		ScreenFactory right = new ScreenFactory();
+		ScrFactory right = new ScrFactory();
 		right.constr.fill = right.constr.HORIZONTAL;
 		right.add(this.userName);
 		right.constr.gridy++;
@@ -44,7 +44,7 @@ public class Login extends ScreenFactory{
 	}
 	
 	public JPanel leftPanel(){
-		ScreenFactory left = new ScreenFactory();
+		ScrFactory left = new ScrFactory();
 		left.constr.anchor = left.constr.ABOVE_BASELINE;
 		left.add(title);
 		left.constr.gridy++;
