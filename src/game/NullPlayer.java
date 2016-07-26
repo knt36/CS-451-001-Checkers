@@ -8,4 +8,8 @@ public class NullPlayer extends Player {
     public NullPlayer(Color color) {
         super("", color);
     }
+
+    public NullPlayer(Player other) {
+        super("", other);
+    }
 }
