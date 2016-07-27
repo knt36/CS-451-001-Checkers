@@ -89,3 +89,5 @@ ENV/
 .ropeproject
 /.idea/
 /src/.idea/
+/CS-451-001-Checkers.iml
+/out/
