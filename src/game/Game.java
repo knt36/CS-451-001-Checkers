@@ -3,15 +3,12 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static game.Color.*;
+import static game.Color.RED;
+import static game.Disk.*;
 
 public class Game extends Observable {
-    public static Set<Integer> validJumpMoves = Stream.of(7, 9).collect(Collectors.toSet());
-
     public Player turn;
     public Player p1;
     public Player p2;
@@ -63,23 +60,86 @@ public class Game extends Observable {
     }
 
     /**
+     * Copy Constructor. Does not run data validation, but this may change in the future.
+     * @param other Game data to copy.
+     */
+    public Game(Game other) {
+        this.name = other.name;
+        this.p1 = new Player(other.p1);
+        this.p2 = new Player(other.p2);
+        this.board = new ArrayList<>(other.board);
+        if (other.turn.equals(other.p1)) {
+            this.turn = this.p1;
+        } else {
+            this.turn = this.p2;
+        }
+    }
+
+    /**
      * Creates a new board in the initial state.
      *
      * @return Board state, with 12 white and 12 red disks in the starting position, and null disks in all others.
      */
-    private static List<Disk> newBoard() {
+    public static List<Disk> newBoard() {
         List<Disk> board = new ArrayList<>(32);
         // The board is oriented top to bottom. Squares 0-4 should be on the top row of the screen.
         for (int i = 0; i < 32; i++) {
             if (i < 12) {
-                board.set(i, new Disk(RED));
+                board.add(RED_DISK);
             } else if (i < 20) {
-                board.set(i, new Disk(NONE));
+                board.add(EMPTY);
             } else {
-                board.set(i, new Disk(WHITE));
+                board.add(WHITE_DISK);
             }
         }
         return board;
+    }
+
+    /**
+     * Determines if the move is a legal single-square diagonal move. Only checks movement numbers and not disk
+     * validity.
+     *
+     * @param src Source square coordinate
+     * @param dst Destination square coordinate
+     * @return True if the move is valid.
+     */
+    public static Boolean legalAdj(Integer src, Integer dst) {
+        Integer move = dst - src;
+        return Math.abs(move) == 4
+                || Math.abs(move + 1) == 4
+                && src % 8 > 4
+                || Math.abs(move - 1) == 4
+                && src % 8 < 3;
+    }
+
+    /**
+     * Determines if the move is a legal jump move. Only checks movement numbers and not disk validity.
+     *
+     * @param src Source square coordinate
+     * @param dst Destination square coordinate
+     * @return True if the move is valid.
+     */
+    public static Boolean legalJmp(Integer src, Integer dst) {
+        Integer move = dst - src;
+        return (Math.abs(move + 1) == 8 && src % 4 > 0)
+                || (Math.abs(move - 1) == 8 && src % 4 < 3);
+    }
+
+    /**
+     * Returns the position being jumped over. Assumes that the jump is valid, otherwise returns are undefined
+     *
+     * @param src Source square coordinate
+     * @param dst Destination square coordinate
+     * @return Jumped square coordinate.
+     */
+    public static Integer jumpedSquare(Integer src, Integer dst) {
+        Integer move = Math.abs(src - dst);
+        Integer shift = -Math.floorDiv(move, 4);
+        if (move.equals(9)) {
+            return Math.max(src, dst) - 4 + shift;
+        } else {
+            return Math.max(src, dst) - 3 + shift;
+        }
     }
 
     /**
@@ -111,9 +171,9 @@ public class Game extends Observable {
         this.p2 = p2;
         if (board.size() != 32) {
             throw new IllegalArgumentException("Board must contain exactly 32 spaces");
-        } else if (board.stream().filter(d -> d.color == RED).count() > 12) {
+        } else if (board.stream().filter(Disk::red).count() > 12) {
             throw new IllegalArgumentException("Board must contain <= 12 red disks");
-        } else if (board.stream().filter(d -> d.color == WHITE).count() > 12) {
+        } else if (board.stream().filter(Disk::white).count() > 12) {
             throw new IllegalArgumentException("Board must contain <= 12 white disks");
         } else {
             this.board = board;
@@ -153,9 +213,15 @@ public class Game extends Observable {
      * @return True if the move was valid and state was updated, else False
      */
     public Boolean move(Integer src, Integer dst) {
+        if (src < 0 || src > 31 || dst < 0 || dst > 31) {
+            return false; // Not a square on the board
+        }
+        if (Stream.of(3, 4, 5, 7, 9).noneMatch(i -> i.equals(Math.abs(dst - src)))) {
+            return false; // Early filtering of invalid values to save some time
+        }
         Disk srcDisk = this.board.get(src);
         Disk dstSquare = this.board.get(dst);
-        if (srcDisk.color != turn.getColor()) {
+        if (srcDisk.getColor() != turn.getColor()) {
             // Attempted to move wrong color or blank space
             return false;
         }
@@ -163,63 +229,22 @@ public class Game extends Observable {
             // Attempted to move to a filled square
             return false;
         }
-        if (legalSingle(src, dst)) {
+        if ((src < dst && !srcDisk.canMoveUp()) || (src > dst && !srcDisk.canMoveDown())) {
+            // Attempted to move in the wrong direction
+            return false;
+        }
+        if (legalAdj(src, dst)) {
             this.board.set(dst, srcDisk);
             this.board.set(src, dstSquare); // dstSquare is empty, so just swap them
             return true;
         }
-        if (legalJump(src, dst) && this.board.get(jumpedSquare(src, dst)).color.equals(turn.oppositeColor())) {
+        if (legalJmp(src, dst) && this.board.get(jumpedSquare(src, dst)).getColor().equals(turn.oppositeColor())) {
             this.board.set(dst, srcDisk);
             this.board.set(src, dstSquare);
-            this.board.set(jumpedSquare(src, dst), new Disk()); // Removing jumped square
+            this.board.set(jumpedSquare(src, dst), EMPTY); // Removing jumped square
             return true;
         }
         return false; // Neither legal move nor legal jump
-    }
-
-    /**
-     * Determines if the move is a legal single-square diagonal move. Only checks movement numbers and not disk
-     * validity.
-     *
-     * @param src Source square coordinate
-     * @param dst Destination square coordinate
-     * @return True if the move is valid.
-     */
-    private Boolean legalSingle(Integer src, Integer dst) {
-        Integer move = Math.abs(src - dst);
-        return move.equals(4)
-                || (move.equals(3) && src % 8 >= 6)
-                || (move.equals(5) && src % 8 <= 2);
-    }
-
-    /**
-     * Determines if the move is a legal jump move. Only checks movement numbers and not disk validity.
-     *
-     * @param src Source square coordinate
-     * @param dst Destination square coordinate
-     * @return True if the move is valid.
-     */
-    private Boolean legalJump(Integer src, Integer dst) {
-        Integer move = Math.abs(src - dst);
-        return (move.equals(7) && src % 4 >= 1)
-                || (move.equals(9) && src % 4 <= 2)
-    }
-
-    /**
-     * Returns the position being jumped over. Assumes that the jump is valid, otherwise returns are undefined
-     *
-     * @param src Source square coordinate
-     * @param dst Destination square coordinate
-     * @return Jumped square coordinate.
-     */
-    private Integer jumpedSquare(Integer src, Integer dst) {
-        Integer move = Math.abs(src - dst);
-        Integer shift = -Math.floorDiv(move, 4);
-        if (move.equals(9)) {
-            return Math.max(src, dst) - 4 + shift;
-        } else {
-            return Math.max(src, dst) - 3 + shift;
-        }
     }
 
     /**

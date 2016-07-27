@@ -26,6 +26,11 @@ public class Player {
         this.color = other.oppositeColor();
     }
 
+    public Player(Player other) {
+        this.name = other.name;
+        this.color = other.color;
+    }
+
     public Color getColor() {
         return color;
     }

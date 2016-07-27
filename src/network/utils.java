@@ -17,7 +17,6 @@ public class Utils {
     }
 
     private void acknowledge(int error) {
-        return;
     }
 
     private Boolean isWellFormed(String json) {
