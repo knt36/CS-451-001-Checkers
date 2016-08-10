@@ -7,13 +7,9 @@ public class Disk {
     public static final Disk WHITE_DISK = new Disk(WHITE, false);
     public static final Disk RED_KING = new Disk(RED, true);
     public static final Disk WHITE_KING = new Disk(WHITE, true);
-    public static final Disk EMPTY = new Disk();
+    public static final Disk EMPTY = new Disk(NONE, false);
     private final Color color;
     private final Boolean king;
-
-    private Disk() {
-        this(NONE, false);
-    }
 
     private Disk(Color color, Boolean king) {
         this.color = color;

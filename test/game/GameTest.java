@@ -8,6 +8,7 @@ import java.util.List;
 import static game.Color.RED;
 import static game.Color.WHITE;
 import static game.Disk.*;
+import static game.MoveStatus.*;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 
@@ -15,6 +16,9 @@ import static org.junit.Assert.*;
  *
  */
 public class GameTest {
+    private static Integer sampleSrc = 0;
+    private static Integer sampleAdjDst = 4;
+    private static Integer sampleJmpDst = 9;
     private static String sampleName = "test";
     private static Player redPlayer = new Player("red player", RED);
     private static Player whitePlayer = new Player("white player", WHITE);
@@ -70,25 +74,25 @@ public class GameTest {
         Game testGame;
         if (src < dst) {
             testGame = setupBoardAdj(src, dst, RED_DISK);
-            assertTrue(testGame.move(src, dst));
-            if (dst >= 28) {
+            assertEquals(ADJ, testGame.move(src, dst));
+            if(dst >= 28) {
                 assertEquals(RED_KING, testGame.getSquare(dst));
             } else {
                 assertEquals(RED_DISK, testGame.getSquare(dst));
             }
-            assertFalse(setupBoardAdj(src, dst, WHITE_DISK).move(src, dst));
+            assertEquals(WRONG_DIRECTION, setupBoardAdj(src, dst, WHITE_DISK).move(src, dst));
         } else {
             testGame = setupBoardAdj(src, dst, WHITE_DISK);
-            assertTrue(testGame.move(src, dst));
-            if (dst <= 3) {
+            assertEquals(ADJ, testGame.move(src, dst));
+            if(dst <= 3) {
                 assertEquals(WHITE_KING, testGame.getSquare(dst));
             } else {
                 assertEquals(WHITE_DISK, testGame.getSquare(dst));
             }
-            assertFalse(setupBoardAdj(src, dst, RED_DISK).move(src, dst));
+            assertEquals(WRONG_DIRECTION, setupBoardAdj(src, dst, RED_DISK).move(src, dst));
         }
-        assertTrue(setupBoardAdj(src, dst, RED_KING).move(src, dst));
-        assertTrue(setupBoardAdj(src, dst, WHITE_KING).move(src, dst));
+        assertEquals(ADJ, setupBoardAdj(src, dst, RED_KING).move(src, dst));
+        assertEquals(ADJ, setupBoardAdj(src, dst, WHITE_KING).move(src, dst));
     }
 
     /**
@@ -101,25 +105,25 @@ public class GameTest {
         Game testGame;
         if (src < dst) {
             testGame = setupBoardJmp(src, dst, RED_DISK);
-            assertTrue(testGame.move(src, dst));
+            assertEquals(JMP, testGame.move(src, dst));
             if (dst >= 28) {
                 assertEquals(RED_KING, testGame.getSquare(dst));
             } else {
                 assertEquals(RED_DISK, testGame.getSquare(dst));
             }
-            assertFalse(setupBoardJmp(src, dst, WHITE_DISK).move(src, dst));
+            assertEquals(WRONG_DIRECTION, setupBoardJmp(src, dst, WHITE_DISK).move(src, dst));
         } else {
             testGame = setupBoardJmp(src, dst, WHITE_DISK);
-            assertTrue(testGame.move(src, dst));
+            assertEquals(JMP, testGame.move(src, dst));
             if (dst <= 3) {
                 assertEquals(WHITE_KING, testGame.getSquare(dst));
             } else {
                 assertEquals(WHITE_DISK, testGame.getSquare(dst));
             }
-            assertFalse(setupBoardJmp(src, dst, RED_DISK).move(src, dst));
+            assertEquals(WRONG_DIRECTION, setupBoardJmp(src, dst, RED_DISK).move(src, dst));
         }
-        assertTrue(setupBoardJmp(src, dst, RED_KING).move(src, dst));
-        assertTrue(setupBoardJmp(src, dst, WHITE_KING).move(src, dst));
+        assertEquals(JMP, setupBoardJmp(src, dst, RED_KING).move(src, dst));
+        assertEquals(JMP, setupBoardJmp(src, dst, WHITE_KING).move(src, dst));
     }
 
     /**
@@ -129,14 +133,14 @@ public class GameTest {
      * @param dst Destination coordinate
      */
     private static void assertMoveFalse(Integer src, Integer dst) {
-        assertFalse(setupBoardAdj(src, dst, RED_DISK).move(src, dst));
-        assertFalse(setupBoardAdj(src, dst, WHITE_DISK).move(src, dst));
-        assertFalse(setupBoardAdj(src, dst, RED_KING).move(src, dst));
-        assertFalse(setupBoardAdj(src, dst, WHITE_KING).move(src, dst));
-        assertFalse(setupBoardJmp(src, dst, RED_DISK).move(src, dst));
-        assertFalse(setupBoardJmp(src, dst, WHITE_DISK).move(src, dst));
-        assertFalse(setupBoardJmp(src, dst, RED_KING).move(src, dst));
-        assertFalse(setupBoardJmp(src, dst, WHITE_KING).move(src, dst));
+        assertFalse(setupBoardAdj(src, dst, RED_DISK).move(src, dst).success());
+        assertFalse(setupBoardAdj(src, dst, WHITE_DISK).move(src, dst).success());
+        assertFalse(setupBoardAdj(src, dst, RED_KING).move(src, dst).success());
+        assertFalse(setupBoardAdj(src, dst, WHITE_KING).move(src, dst).success());
+        assertFalse(setupBoardJmp(src, dst, RED_DISK).move(src, dst).success());
+        assertFalse(setupBoardJmp(src, dst, WHITE_DISK).move(src, dst).success());
+        assertFalse(setupBoardJmp(src, dst, RED_KING).move(src, dst).success());
+        assertFalse(setupBoardJmp(src, dst, WHITE_KING).move(src, dst).success());
     }
 
     /**
@@ -159,7 +163,30 @@ public class GameTest {
      */
     @Test
     public void jumpEmpty() throws Exception {
-        assertFalse(setupBoardAdj(0, 9, RED_DISK).move(0, 9));
+        assertFalse(setupBoardAdj(sampleSrc, sampleJmpDst, RED_DISK).move(sampleSrc, sampleJmpDst).success());
+    }
+
+    /**
+     * Tests that a jump cannot be made over a piece of the same color
+     *
+     * @throws Exception
+     */
+    @Test
+    public void jumpSameColor() throws Exception {
+        Disk testDisk = RED_DISK;
+        Game testGame = setupBoardAdj(sampleSrc, sampleJmpDst, testDisk);
+        testGame.board.set(Game.jumpedSquare(sampleSrc, sampleJmpDst), testDisk);
+        assertEquals(WRONG_JMP_COLOR, testGame.move(sampleSrc, sampleJmpDst));
+    }
+
+    /**
+     * Tests a move outside of the board space. Probably shouldn't happen in production, but can't hurt to check
+     *
+     * @throws Exception
+     */
+    @Test
+    public void moveOutsideBoard() throws Exception {
+        assertEquals(OUT_OF_BOARD, setupBoardAdj(sampleSrc, sampleSrc - 4, RED_DISK).move(sampleSrc, sampleSrc - 4));
     }
 
     /**

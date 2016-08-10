@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import static game.Color.RED;
 import static game.Disk.*;
+import static game.MoveStatus.*;
 import static java.util.Arrays.asList;
 
 public class Game extends Observable {
@@ -223,41 +224,45 @@ public class Game extends Observable {
      * @param dst Location where the disk is being moved to. Must be an empty space (color = NONE).
      * @return True if the move was valid and state was updated, else False
      */
-    public Boolean move(Integer src, Integer dst) {
+    public MoveStatus move(Integer src, Integer dst) {
         if (src < 0 || src > 31 || dst < 0 || dst > 31) {
-            return false; // Not a square on the board
+            return OUT_OF_BOARD; // Not a square on the board
         }
         if (Stream.of(3, 4, 5, 7, 9).noneMatch(i -> i.equals(Math.abs(dst - src)))) {
-            return false; // Early filtering of invalid values to save some time
+            return INVALID_DISTANCE; // Early filtering of invalid values to save some time
         }
         Disk srcDisk = this.board.get(src);
         Disk dstSquare = this.board.get(dst);
         if (srcDisk.getColor() != turn.getColor()) {
             // Attempted to move wrong color or blank space
-            return false;
+            return WRONG_TURN;
         }
         if (!dstSquare.empty()) {
             // Attempted to move to a filled square
-            return false;
+            return NONEMPTY_DEST;
         }
         if ((src < dst && !srcDisk.canMoveUp()) || (src > dst && !srcDisk.canMoveDown())) {
             // Attempted to move in the wrong direction
-            return false;
+            return WRONG_DIRECTION;
         }
         if (legalAdj(src, dst)) {
             this.board.set(dst, kingify(dst, srcDisk));
             this.board.set(src, dstSquare); // dstSquare is empty, so just swap them
             this.lastMove = asList(src, dst);
-            return true;
+            return ADJ;
         }
-        if (legalJmp(src, dst) && this.board.get(jumpedSquare(src, dst)).getColor().equals(turn.oppositeColor())) {
-            this.board.set(dst, kingify(dst, srcDisk));
-            this.board.set(src, dstSquare);
-            this.board.set(jumpedSquare(src, dst), EMPTY); // Removing jumped square
-            this.lastMove = asList(src, dst);
-            return true;
+        if (legalJmp(src, dst)) {
+            if (this.board.get(jumpedSquare(src, dst)).getColor().equals(turn.oppositeColor())) {
+                this.board.set(dst, kingify(dst, srcDisk));
+                this.board.set(src, dstSquare);
+                this.board.set(jumpedSquare(src, dst), EMPTY); // Removing jumped square
+                this.lastMove = asList(src, dst);
+                return JMP;
+            } else {
+                return WRONG_JMP_COLOR;
+            }
         }
-        return false; // Neither legal move nor legal jump
+        return INVALID_DISTANCE; // Passed other checks but isn't a valid adj or jmp
     }
 
     /**
@@ -267,10 +272,10 @@ public class Game extends Observable {
      * @param newState New board state
      * @return True if the state was updated.
      */
-    public Boolean move(Game newState) {
+    public MoveStatus move(Game newState) {
         Integer src = newState.lastMove.get(0);
         Integer dst = newState.lastMove.get(lastMove.size() - 1);
-        return false;
+        return FAIL;
     }
 
     public Disk getSquare(Integer coord) {
