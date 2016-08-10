@@ -75,7 +75,7 @@ public class GameTest {
         if (src < dst) {
             testGame = setupBoardAdj(src, dst, RED_DISK);
             assertEquals(ADJ, testGame.move(src, dst));
-            if(dst >= 28) {
+            if (dst >= 28) {
                 assertEquals(RED_KING, testGame.getSquare(dst));
             } else {
                 assertEquals(RED_DISK, testGame.getSquare(dst));
@@ -84,7 +84,7 @@ public class GameTest {
         } else {
             testGame = setupBoardAdj(src, dst, WHITE_DISK);
             assertEquals(ADJ, testGame.move(src, dst));
-            if(dst <= 3) {
+            if (dst <= 3) {
                 assertEquals(WHITE_KING, testGame.getSquare(dst));
             } else {
                 assertEquals(WHITE_DISK, testGame.getSquare(dst));
