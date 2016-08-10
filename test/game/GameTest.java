@@ -23,30 +23,36 @@ public class GameTest {
 
     /**
      * Sets up the board to move disk at src to dst
-     * @param src Source coordinate
-     * @param dst Destination coordinate
+     *
+     * @param src  Source coordinate
+     * @param dst  Destination coordinate
      * @param disk Disk at source
      * @return Setup game board with all spaces empty except src
      */
     private static Game setupBoardAdj(Integer src, Integer dst, Disk disk) {
         Game testGame = new Game(sampleGame); // Copy the sample board
         testGame.board.replaceAll(d -> EMPTY); // Clear the board to prevent interference
-        testGame.turn.setColor(disk.getColor());
+        if (disk.red()) {
+            testGame.turn = redPlayer;
+        } else {
+            testGame.turn = whitePlayer;
+        }
         testGame.board.set(src, disk);
         return testGame;
     }
 
     /**
      * Sets up board to move disk at src to dst and places opposite colored disk to jump over
-     * @param src Source coordinate
-     * @param dst Destination coordinate
+     *
+     * @param src  Source coordinate
+     * @param dst  Destination coordinate
      * @param disk Disk at source (opposite color placed between src and dst)
      * @return Setup game board with all spaces empty except src and jumped square
      */
     private static Game setupBoardJmp(Integer src, Integer dst, Disk disk) {
         Game testGame = setupBoardAdj(src, dst, disk);
         try {
-            testGame.board.set(Game.jumpedSquare(src, dst), Disk.inverse(disk));
+            testGame.board.set(Game.jumpedSquare(src, dst), disk.inverse());
         } catch (IndexOutOfBoundsException e) {
             // Do nothing since we're probably testing for failure and got undefined behavior. If we return a board
             // with no jumpable piece, it will return "false" for the move anyway.
@@ -56,6 +62,7 @@ public class GameTest {
 
     /**
      * Asserts that an adjacent move can be made with all disk configurations
+     *
      * @param src Source coordinate
      * @param dst Destination coordinate
      */
@@ -64,7 +71,7 @@ public class GameTest {
         if (src < dst) {
             testGame = setupBoardAdj(src, dst, RED_DISK);
             assertTrue(testGame.move(src, dst));
-            if(dst >= 28) {
+            if (dst >= 28) {
                 assertEquals(RED_KING, testGame.getSquare(dst));
             } else {
                 assertEquals(RED_DISK, testGame.getSquare(dst));
@@ -73,7 +80,7 @@ public class GameTest {
         } else {
             testGame = setupBoardAdj(src, dst, WHITE_DISK);
             assertTrue(testGame.move(src, dst));
-            if(dst <= 3) {
+            if (dst <= 3) {
                 assertEquals(WHITE_KING, testGame.getSquare(dst));
             } else {
                 assertEquals(WHITE_DISK, testGame.getSquare(dst));
@@ -86,6 +93,7 @@ public class GameTest {
 
     /**
      * Asserts that a jump move can be made with all disk configurations
+     *
      * @param src Source coordinate
      * @param dst Destination coordinate
      */
@@ -116,6 +124,7 @@ public class GameTest {
 
     /**
      * Asserts that a move cannot be made with any disk configuration
+     *
      * @param src Source coordinate
      * @param dst Destination coordinate
      */
@@ -132,6 +141,7 @@ public class GameTest {
 
     /**
      * Tests the 'isPublicGame' function
+     *
      * @throws Exception
      */
     @Test
@@ -144,6 +154,7 @@ public class GameTest {
 
     /**
      * Tests that a jump cannot be made over an empty space
+     *
      * @throws Exception
      */
     @Test
@@ -154,6 +165,7 @@ public class GameTest {
     /**
      * Tests all moves across all board coordinates exhaustively and checks that all valid moves fit into the exact set
      * of 170 possible cases.
+     *
      * @throws Exception
      */
     @Test
@@ -319,6 +331,7 @@ public class GameTest {
 
     /**
      * Tests all moves exhaustively using board state differences instead of coordinates
+     *
      * @throws Exception
      */
     @Test
@@ -328,11 +341,12 @@ public class GameTest {
 
     /**
      * Tests that the board returns the correct disk for a square
+     *
      * @throws Exception
      */
     @Test
     public void getSquare() throws Exception {
-        for(Integer coordinate = 0; coordinate < 32; coordinate++) {
+        for (Integer coordinate = 0; coordinate < 32; coordinate++) {
             assertEquals(sampleBoard.get(coordinate), sampleGame.getSquare(coordinate));
         }
     }

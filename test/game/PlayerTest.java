@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static game.Color.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -23,13 +23,6 @@ public class PlayerTest {
     }
 
     @Test
-    public void setColor() throws Exception {
-        Player testPlayer = new Player("test", RED);
-        testPlayer.setColor(WHITE);
-        assertEquals(testPlayer.getColor(), WHITE);
-    }
-
-    @Test
     public void oppositeColor() throws Exception {
         Player testPlayer = new Player("test", RED);
         assertEquals(testPlayer.oppositeColor(), WHITE);
@@ -42,13 +35,5 @@ public class PlayerTest {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Player cannot have color 'None'");
         Player testPlayer = new Player("test", NONE);
-    }
-
-    @Test
-    public void setColorNone() throws Exception {
-        Player testPlayer = new Player("test", RED);
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Player cannot have color 'None'");
-        testPlayer.setColor(NONE);
     }
 }

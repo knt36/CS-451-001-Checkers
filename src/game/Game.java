@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import static game.Color.RED;
 import static game.Disk.*;
+import static java.util.Arrays.asList;
 
 public class Game extends Observable {
     public Player turn;
@@ -14,6 +15,7 @@ public class Game extends Observable {
     public Player p2;
     public List<Disk> board;
     public String name;
+    public List<Integer> lastMove;
 
     /**
      * Creates a new public game with the initiating player. Colors will be randomized.
@@ -36,7 +38,7 @@ public class Game extends Observable {
      */
     public Game(String name, String u1, String u2) {
         Player p1 = new Player(u1);     // Random color
-        Player p2 = new Player(u2, p1); // Opposite color of p1
+        Player p2 = p1.opponent(u2); // Opposite color of p1
         construct(name, p1, p2);
     }
 
@@ -143,6 +145,23 @@ public class Game extends Observable {
     }
 
     /**
+     * Turns disk into king if applicable, otherwise returns it unchanged
+     *
+     * @param dst  Destination coordinate
+     * @param disk Disk being moved
+     * @return Updated disk
+     */
+    private static Disk kingify(Integer dst, Disk disk) {
+        if (disk.red() && dst >= 28) {
+            return RED_KING;
+        } else if (disk.white() && dst <= 3) {
+            return WHITE_KING;
+        } else {
+            return disk;
+        }
+    }
+
+    /**
      * Constructs a new game with two players
      * @param name Unique game name
      * @param p1 First player
@@ -150,7 +169,7 @@ public class Game extends Observable {
      */
     private void construct(String name, Player p1, Player p2) {
         Player turn;
-        if(p1.getColor().equals(RED)) {
+        if (p1.getColor().equals(RED)) {
             turn = p1;
         } else {
             turn = p2;
@@ -198,22 +217,6 @@ public class Game extends Observable {
     }
 
     /**
-     * Turns disk into king if applicable, otherwise returns it unchanged
-     * @param dst Destination coordinate
-     * @param disk Disk being moved
-     * @return Updated disk
-     */
-    private static Disk kingify(Integer dst, Disk disk) {
-        if(disk.red() && dst >= 28) {
-            return RED_KING;
-        } else if(disk.white() && dst <= 3) {
-            return WHITE_KING;
-        } else {
-            return disk;
-        }
-    }
-
-    /**
      * Moves the piece from one space on the board to another.
      *
      * @param src Location of the disk being moved. Must be a the same color as the current 'turn' player.
@@ -244,12 +247,14 @@ public class Game extends Observable {
         if (legalAdj(src, dst)) {
             this.board.set(dst, kingify(dst, srcDisk));
             this.board.set(src, dstSquare); // dstSquare is empty, so just swap them
+            this.lastMove = asList(src, dst);
             return true;
         }
         if (legalJmp(src, dst) && this.board.get(jumpedSquare(src, dst)).getColor().equals(turn.oppositeColor())) {
             this.board.set(dst, kingify(dst, srcDisk));
             this.board.set(src, dstSquare);
             this.board.set(jumpedSquare(src, dst), EMPTY); // Removing jumped square
+            this.lastMove = asList(src, dst);
             return true;
         }
         return false; // Neither legal move nor legal jump
@@ -263,6 +268,8 @@ public class Game extends Observable {
      * @return True if the state was updated.
      */
     public Boolean move(Game newState) {
+        Integer src = newState.lastMove.get(0);
+        Integer dst = newState.lastMove.get(lastMove.size() - 1);
         return false;
     }
 
