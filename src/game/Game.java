@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import static game.Color.RED;
 import static game.Disk.*;
+import static game.MoveStatus.*;
 
 public class Game extends Observable {
     public Player turn;
@@ -143,6 +144,22 @@ public class Game extends Observable {
     }
 
     /**
+     * Turns disk into king if applicable, otherwise returns it unchanged
+     * @param dst Destination coordinate
+     * @param disk Disk being moved
+     * @return Updated disk
+     */
+    private static Disk kingify(Integer dst, Disk disk) {
+        if (disk.red() && dst >= 28) {
+            return RED_KING;
+        } else if (disk.white() && dst <= 3) {
+            return WHITE_KING;
+        } else {
+            return disk;
+        }
+    }
+
+    /**
      * Constructs a new game with two players
      * @param name Unique game name
      * @param p1 First player
@@ -198,61 +215,49 @@ public class Game extends Observable {
     }
 
     /**
-     * Turns disk into king if applicable, otherwise returns it unchanged
-     * @param dst Destination coordinate
-     * @param disk Disk being moved
-     * @return Updated disk
-     */
-    private static Disk kingify(Integer dst, Disk disk) {
-        if(disk.red() && dst >= 28) {
-            return RED_KING;
-        } else if(disk.white() && dst <= 3) {
-            return WHITE_KING;
-        } else {
-            return disk;
-        }
-    }
-
-    /**
      * Moves the piece from one space on the board to another.
      *
      * @param src Location of the disk being moved. Must be a the same color as the current 'turn' player.
      * @param dst Location where the disk is being moved to. Must be an empty space (color = NONE).
      * @return True if the move was valid and state was updated, else False
      */
-    public Boolean move(Integer src, Integer dst) {
+    public MoveStatus move(Integer src, Integer dst) {
         if (src < 0 || src > 31 || dst < 0 || dst > 31) {
-            return false; // Not a square on the board
+            return OUT_OF_BOARD; // Not a square on the board
         }
         if (Stream.of(3, 4, 5, 7, 9).noneMatch(i -> i.equals(Math.abs(dst - src)))) {
-            return false; // Early filtering of invalid values to save some time
+            return INVALID_DISTANCE; // Early filtering of invalid values to save some time
         }
         Disk srcDisk = this.board.get(src);
         Disk dstSquare = this.board.get(dst);
         if (srcDisk.getColor() != turn.getColor()) {
             // Attempted to move wrong color or blank space
-            return false;
+            return WRONG_TURN;
         }
         if (!dstSquare.empty()) {
             // Attempted to move to a filled square
-            return false;
+            return NONEMPTY_DEST;
         }
         if ((src < dst && !srcDisk.canMoveUp()) || (src > dst && !srcDisk.canMoveDown())) {
             // Attempted to move in the wrong direction
-            return false;
+            return WRONG_DIRECTION;
         }
         if (legalAdj(src, dst)) {
             this.board.set(dst, kingify(dst, srcDisk));
             this.board.set(src, dstSquare); // dstSquare is empty, so just swap them
-            return true;
+            return ADJ;
         }
-        if (legalJmp(src, dst) && this.board.get(jumpedSquare(src, dst)).getColor().equals(turn.oppositeColor())) {
-            this.board.set(dst, kingify(dst, srcDisk));
-            this.board.set(src, dstSquare);
-            this.board.set(jumpedSquare(src, dst), EMPTY); // Removing jumped square
-            return true;
+        if (legalJmp(src, dst)) {
+            if (this.board.get(jumpedSquare(src, dst)).getColor().equals(turn.oppositeColor())) {
+                this.board.set(dst, kingify(dst, srcDisk));
+                this.board.set(src, dstSquare);
+                this.board.set(jumpedSquare(src, dst), EMPTY); // Removing jumped square
+                return JMP;
+            } else {
+                return WRONG_JMP_COLOR;
+            }
         }
-        return false; // Neither legal move nor legal jump
+        return INVALID_DISTANCE; // Passed other checks but isn't a valid adj or jmp
     }
 
     /**
@@ -262,8 +267,8 @@ public class Game extends Observable {
      * @param newState New board state
      * @return True if the state was updated.
      */
-    public Boolean move(Game newState) {
-        return false;
+    public MoveStatus move(Game newState) {
+        return FAIL;
     }
 
     public Disk getSquare(Integer coord) {
