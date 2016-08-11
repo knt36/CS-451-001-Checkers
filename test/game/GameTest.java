@@ -1,6 +1,8 @@
 package game;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +24,11 @@ public class GameTest {
     private static String sampleName = "test";
     private static Player redPlayer = new Player("red player", RED);
     private static Player whitePlayer = new Player("white player", WHITE);
-    private static List<Disk> sampleBoard = Game.newBoard(); // Just going to trust this function, maybe not the best idea
-    private static Game sampleGame = new Game(sampleName, redPlayer, whitePlayer, sampleBoard, redPlayer);
+    private static List<Disk> sampleBoard = Game.newBoard(); // Just going to trust this function, maybe not a good idea
+    private static Game sampleGame = new Game(sampleName, redPlayer, whitePlayer, sampleBoard, redPlayer, new ArrayList<>());
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     /**
      * Sets up the board to move disk at src to dst
@@ -76,20 +81,20 @@ public class GameTest {
             testGame = setupBoardAdj(src, dst, RED_DISK);
             assertEquals(ADJ, testGame.move(src, dst));
             if (dst >= 28) {
-                assertEquals(RED_KING, testGame.getSquare(dst));
+                assertEquals(RED_KING, testGame.getDisk(dst));
             } else {
-                assertEquals(RED_DISK, testGame.getSquare(dst));
+                assertEquals(RED_DISK, testGame.getDisk(dst));
             }
-            assertEquals(WRONG_DIRECTION, setupBoardAdj(src, dst, WHITE_DISK).move(src, dst));
+            assertTrue(setupBoardAdj(src, dst, WHITE_DISK).move(src, dst).failure());
         } else {
             testGame = setupBoardAdj(src, dst, WHITE_DISK);
             assertEquals(ADJ, testGame.move(src, dst));
             if (dst <= 3) {
-                assertEquals(WHITE_KING, testGame.getSquare(dst));
+                assertEquals(WHITE_KING, testGame.getDisk(dst));
             } else {
-                assertEquals(WHITE_DISK, testGame.getSquare(dst));
+                assertEquals(WHITE_DISK, testGame.getDisk(dst));
             }
-            assertEquals(WRONG_DIRECTION, setupBoardAdj(src, dst, RED_DISK).move(src, dst));
+            assertTrue(setupBoardAdj(src, dst, RED_DISK).move(src, dst).failure());
         }
         assertEquals(ADJ, setupBoardAdj(src, dst, RED_KING).move(src, dst));
         assertEquals(ADJ, setupBoardAdj(src, dst, WHITE_KING).move(src, dst));
@@ -107,20 +112,20 @@ public class GameTest {
             testGame = setupBoardJmp(src, dst, RED_DISK);
             assertEquals(JMP, testGame.move(src, dst));
             if (dst >= 28) {
-                assertEquals(RED_KING, testGame.getSquare(dst));
+                assertEquals(RED_KING, testGame.getDisk(dst));
             } else {
-                assertEquals(RED_DISK, testGame.getSquare(dst));
+                assertEquals(RED_DISK, testGame.getDisk(dst));
             }
-            assertEquals(WRONG_DIRECTION, setupBoardJmp(src, dst, WHITE_DISK).move(src, dst));
+            assertTrue(setupBoardJmp(src, dst, WHITE_DISK).move(src, dst).failure());
         } else {
             testGame = setupBoardJmp(src, dst, WHITE_DISK);
             assertEquals(JMP, testGame.move(src, dst));
             if (dst <= 3) {
-                assertEquals(WHITE_KING, testGame.getSquare(dst));
+                assertEquals(WHITE_KING, testGame.getDisk(dst));
             } else {
-                assertEquals(WHITE_DISK, testGame.getSquare(dst));
+                assertEquals(WHITE_DISK, testGame.getDisk(dst));
             }
-            assertEquals(WRONG_DIRECTION, setupBoardJmp(src, dst, RED_DISK).move(src, dst));
+            assertTrue(setupBoardJmp(src, dst, RED_DISK).move(src, dst).failure());
         }
         assertEquals(JMP, setupBoardJmp(src, dst, RED_KING).move(src, dst));
         assertEquals(JMP, setupBoardJmp(src, dst, WHITE_KING).move(src, dst));
@@ -176,7 +181,7 @@ public class GameTest {
         Disk testDisk = RED_DISK;
         Game testGame = setupBoardAdj(sampleSrc, sampleJmpDst, testDisk);
         testGame.board.set(Game.jumpedSquare(sampleSrc, sampleJmpDst), testDisk);
-        assertEquals(WRONG_JMP_COLOR, testGame.move(sampleSrc, sampleJmpDst));
+        assertTrue(testGame.move(sampleSrc, sampleJmpDst).failure());
     }
 
     /**
@@ -186,7 +191,31 @@ public class GameTest {
      */
     @Test
     public void moveOutsideBoard() throws Exception {
-        assertEquals(OUT_OF_BOARD, setupBoardAdj(sampleSrc, sampleSrc - 4, RED_DISK).move(sampleSrc, sampleSrc - 4));
+        MoveStatus status = setupBoardAdj(sampleSrc, sampleSrc - 4, RED_DISK).move(sampleSrc, sampleSrc - 4);
+        assertEquals(OUT_OF_BOARD, status);
+        assertTrue(status.serious());
+    }
+
+    @Test
+    public void jumpTwo() throws Exception {
+        Disk testDisk = RED_DISK;
+        Game testGame = setupBoardJmp(sampleSrc, sampleJmpDst, testDisk);
+        for (Integer space : asList(3, 4, 5)) {
+            testGame.board.set(sampleJmpDst + space, testDisk.inverse());
+        }
+        assertEquals(JMP_INCOMPLETE, testGame.move(sampleSrc, sampleJmpDst));
+        assertEquals(JMP, testGame.move(sampleJmpDst, testGame.jmpMoves(sampleJmpDst).iterator().next()));
+    }
+
+    @Test
+    public void jumpWrongDisk() throws Exception {
+        Disk testDisk = RED_DISK;
+        Game testGame = setupBoardJmp(sampleSrc, sampleJmpDst, testDisk);
+        for (Integer space : asList(3, 4, 5)) {
+            testGame.board.set(sampleJmpDst + space, testDisk.inverse());
+        }
+        assertEquals(JMP_INCOMPLETE, testGame.move(sampleSrc, sampleJmpDst));
+        assertEquals(JMP_WRONG_DISK, testGame.move(sampleSrc, sampleJmpDst));
     }
 
     /**
@@ -205,12 +234,10 @@ public class GameTest {
             jmpMoves = new ArrayList<>();
             for (Integer dst = 0; dst < 32; dst++) {
                 if (Game.legalAdj(src, dst)) {
-                    // System.out.println("sing: " + src.toString() + " " + dst.toString());
                     assertMoveAdj(src, dst);
                     totalMoves++;
                     adjMoves.add(dst);
                 } else if (Game.legalJmp(src, dst)) {
-                    // System.out.println("jump: " + src.toString() + " " + dst.toString());
                     assertMoveJmp(src, dst);
                     totalMoves++;
                     jmpMoves.add(dst);
@@ -357,13 +384,49 @@ public class GameTest {
     }
 
     /**
-     * Tests all moves exhaustively using board state differences instead of coordinates
+     * Tests that sending a new state to the server produces a valid adjacent move
      *
      * @throws Exception
      */
     @Test
-    public void move1() throws Exception {
+    public void moveStateAdj() throws Exception {
+        Disk testDisk = RED_DISK;
+        Game testGame = setupBoardAdj(sampleSrc, sampleAdjDst, testDisk);
+        Game newState = new Game(testGame);
+        assertEquals(ADJ, newState.move(sampleSrc, sampleAdjDst));
+        assertEquals(ADJ, testGame.move(newState));
+    }
 
+    /**
+     * Tests that sending a new state to the server produces a multiple-step jump move
+     *
+     * @throws Exception
+     */
+    @Test
+    public void moveStateJmp() throws Exception {
+        Disk testDisk = RED_DISK;
+        Game testGame = setupBoardJmp(sampleSrc, sampleJmpDst, testDisk);
+        for (Integer space : asList(3, 4, 5)) {
+            testGame.board.set(sampleJmpDst + space, testDisk.inverse());
+        }
+        Game newState = new Game(testGame);
+        assertEquals(JMP_INCOMPLETE, newState.move(sampleSrc, sampleJmpDst));
+        assertEquals(JMP, newState.move(sampleJmpDst, newState.jmpMoves(sampleJmpDst).iterator().next()));
+        assertEquals(JMP, testGame.move(newState));
+    }
+
+    /**
+     * Tests that sending an invalid board state produces an error
+     *
+     * @throws Exception
+     */
+    @Test
+    public void moveStateFailed() throws Exception {
+        Disk testDisk = RED_DISK;
+        Game testGame = setupBoardAdj(sampleSrc, sampleAdjDst, testDisk);
+        Game newState = new Game(testGame);
+        newState.lastMove = asList(sampleSrc, sampleAdjDst);
+        assertTrue(testGame.move(newState).serious());
     }
 
     /**
@@ -374,7 +437,41 @@ public class GameTest {
     @Test
     public void getSquare() throws Exception {
         for (Integer coordinate = 0; coordinate < 32; coordinate++) {
-            assertEquals(sampleBoard.get(coordinate), sampleGame.getSquare(coordinate));
+            assertEquals(sampleBoard.get(coordinate), sampleGame.getDisk(coordinate));
         }
+    }
+
+    @Test
+    public void constructInvalidPlayers() {
+        thrown.expect(IllegalArgumentException.class);
+        Game testGame = new Game(sampleName, redPlayer, redPlayer, sampleBoard, redPlayer, new ArrayList<>());
+    }
+
+    @Test
+    public void constructInvalidTurn() {
+        thrown.expect(IllegalArgumentException.class);
+        Game testGame = new Game(sampleName, redPlayer, whitePlayer, sampleBoard, new Player("test", RED), new ArrayList<>());
+    }
+
+    @Test
+    public void constructInvalidBoardSize() {
+        thrown.expect(IllegalArgumentException.class);
+        Game testGame = new Game(sampleName, redPlayer, whitePlayer, new ArrayList<>(10), redPlayer, new ArrayList<>());
+    }
+
+    @Test
+    public void constructTooManyWhiteDisks() {
+        List<Disk> testBoard = new ArrayList<>(sampleBoard);
+        testBoard.replaceAll(d -> WHITE_DISK);
+        thrown.expect(IllegalArgumentException.class);
+        Game testGame = new Game(sampleName, redPlayer, whitePlayer, testBoard, redPlayer, new ArrayList<>());
+    }
+
+    @Test
+    public void constructTooManyRedDisks() {
+        List<Disk> testBoard = new ArrayList<>(sampleBoard);
+        testBoard.replaceAll(d -> RED_DISK);
+        thrown.expect(IllegalArgumentException.class);
+        Game testGame = new Game(sampleName, redPlayer, whitePlayer, testBoard, redPlayer, new ArrayList<>());
     }
 }

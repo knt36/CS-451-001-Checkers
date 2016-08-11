@@ -3,14 +3,19 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static game.Color.RED;
 import static game.Disk.*;
 import static game.MoveStatus.*;
-import static java.util.Arrays.asList;
 
 public class Game extends Observable {
+    protected static Integer boardSize = 32;
+    protected static Integer columns = (int) Math.sqrt(boardSize / 2);
+    protected static Integer width = columns * 2;
+    protected static Integer startRows = 3;
     public Player turn;
     public Player p1;
     public Player p2;
@@ -26,7 +31,7 @@ public class Game extends Observable {
      */
     public Game(String name, String u1) {
         Player p1 = new Player(u1);     // Random color
-        Player p2 = new NullPlayer(p1); // Opposite color of p1
+        Player p2 = p1.opponent(""); // Opposite color of p1
         construct(name, p1, p2);
     }
 
@@ -58,8 +63,8 @@ public class Game extends Observable {
      * @throws IllegalArgumentException when board has more than 12 white disks.
      * @throws IllegalArgumentException when turn is neither p1 nor p2.
      */
-    public Game(String name, Player p1, Player p2, List<Disk> board, Player turn) {
-        construct(name, p1, p2, board, turn);
+    public Game(String name, Player p1, Player p2, List<Disk> board, Player turn, List<Integer> lastMove) {
+        construct(name, p1, p2, board, turn, lastMove);
     }
 
     /**
@@ -71,11 +76,12 @@ public class Game extends Observable {
         this.p1 = new Player(other.p1);
         this.p2 = new Player(other.p2);
         this.board = new ArrayList<>(other.board);
-        if (other.turn.equals(other.p1)) {
+        if (other.turn.getColor().equals(p1.getColor())) {
             this.turn = this.p1;
         } else {
             this.turn = this.p2;
         }
+        this.lastMove = new ArrayList<>(other.lastMove);
     }
 
     /**
@@ -84,12 +90,12 @@ public class Game extends Observable {
      * @return Board state, with 12 white and 12 red disks in the starting position, and null disks in all others.
      */
     public static List<Disk> newBoard() {
-        List<Disk> board = new ArrayList<>(32);
+        List<Disk> board = new ArrayList<>(boardSize);
         // The board is oriented top to bottom. Squares 0-4 should be on the top row of the screen.
-        for (int i = 0; i < 32; i++) {
-            if (i < 12) {
+        for (int i = 0; i < boardSize; i++) {
+            if (i < startRows * columns) {
                 board.add(RED_DISK);
-            } else if (i < 20) {
+            } else if (i < (width - startRows) * columns) {
                 board.add(EMPTY);
             } else {
                 board.add(WHITE_DISK);
@@ -108,11 +114,11 @@ public class Game extends Observable {
      */
     public static Boolean legalAdj(Integer src, Integer dst) {
         Integer move = dst - src;
-        return Math.abs(move) == 4
-                || Math.abs(move + 1) == 4
-                && src % 8 > 4
-                || Math.abs(move - 1) == 4
-                && src % 8 < 3;
+        return Math.abs(move) == columns
+                || Math.abs(move + 1) == columns
+                && src % (columns * 2) > columns
+                || Math.abs(move - 1) == columns
+                && src % (columns * 2) < columns - 1;
     }
 
     /**
@@ -124,8 +130,8 @@ public class Game extends Observable {
      */
     public static Boolean legalJmp(Integer src, Integer dst) {
         Integer move = dst - src;
-        return (Math.abs(move + 1) == 8 && src % 4 > 0)
-                || (Math.abs(move - 1) == 8 && src % 4 < 3);
+        return (Math.abs(move + 1) == 2 * columns && src % columns > 0)
+                || (Math.abs(move - 1) == 2 * columns && src % columns < columns - 1);
     }
 
     /**
@@ -137,11 +143,11 @@ public class Game extends Observable {
      */
     public static Integer jumpedSquare(Integer src, Integer dst) {
         Integer move = Math.abs(src - dst);
-        Integer shift = -Math.floorDiv(move, 4);
-        if (move.equals(9)) {
-            return Math.max(src, dst) - 4 + shift;
+        Integer shift = -Math.floorDiv(move, columns);
+        if (move.equals(2 * columns + 1)) {
+            return Math.max(src, dst) - columns + shift;
         } else {
-            return Math.max(src, dst) - 3 + shift;
+            return Math.max(src, dst) - (columns - 1) + shift;
         }
     }
 
@@ -153,9 +159,9 @@ public class Game extends Observable {
      * @return Updated disk
      */
     private static Disk kingify(Integer dst, Disk disk) {
-        if (disk.red() && dst >= 28) {
+        if (disk.red() && dst >= boardSize - columns) {
             return RED_KING;
-        } else if (disk.white() && dst <= 3) {
+        } else if (disk.white() && dst < columns) {
             return WHITE_KING;
         } else {
             return disk;
@@ -175,7 +181,7 @@ public class Game extends Observable {
         } else {
             turn = p2;
         }
-        construct(name, p1, p2, newBoard(), turn);
+        construct(name, p1, p2, newBoard(), turn, new ArrayList<>());
     }
 
     /**
@@ -186,18 +192,18 @@ public class Game extends Observable {
      * @param board Board state. Must have 32 squares, <= 12 white disks, and <= 12 red disks
      * @param turn Current player's turn. Must be either p1 or p2.
      */
-    private void construct(String name, Player p1, Player p2, List<Disk> board, Player turn) {
+    private void construct(String name, Player p1, Player p2, List<Disk> board, Player turn, List<Integer> lastMove) {
         this.name = name;
         this.p1 = p1;
         if (p2.getColor().equals(p1.getColor())) {
             throw new IllegalArgumentException("Both players cannot have the same color");
         }
         this.p2 = p2;
-        if (board.size() != 32) {
+        if (board.size() != boardSize) {
             throw new IllegalArgumentException("Board must contain exactly 32 spaces");
-        } else if (board.stream().filter(Disk::red).count() > 12) {
+        } else if (board.stream().filter(Disk::red).count() > columns * startRows) {
             throw new IllegalArgumentException("Board must contain <= 12 red disks");
-        } else if (board.stream().filter(Disk::white).count() > 12) {
+        } else if (board.stream().filter(Disk::white).count() > columns * startRows) {
             throw new IllegalArgumentException("Board must contain <= 12 white disks");
         } else {
             this.board = board;
@@ -207,6 +213,7 @@ public class Game extends Observable {
             throw new IllegalArgumentException("Turn must be either p1 or p2");
         }
         this.turn = turn;
+        this.lastMove = lastMove;
     }
 
     /**
@@ -214,7 +221,66 @@ public class Game extends Observable {
      * @return True if the game is public and waiting for another player.
      */
     public Boolean isPublicGame() {
-        return this.p2 instanceof NullPlayer;
+        return this.p2.getName().equals("");
+    }
+
+    /**
+     * Basic filtering of moves for adjMoves and jmpMoves
+     *
+     * @param move Distance being moved
+     * @param src  Source location
+     * @return False if the move is invalid, True otherwise (that is, there will be false positives).
+     */
+    private Boolean moveFilter(Integer move, Integer src) {
+        Disk disk = this.getDisk(src);
+        return
+                // Move is in the right direction
+                ((move < 0 && disk.canMoveDown()) || (move >= 0 && disk.canMoveUp()))
+                        // Double check board bounds
+                        && (src + move) >= 0 && (src + move) < boardSize
+                        // Destination is empty
+                        && this.getDisk(src + move).empty();
+    }
+
+    /**
+     * Returns the list of valid adjacent moves for the given disk. Checks the source turn color, if dest is empty, and
+     * direction (whether the source is a king or not).
+     *
+     * @param src Disk location
+     * @return Destination squares that would produce valid moves
+     */
+    public Set<Integer> adjMoves(Integer src) {
+        Set<Integer> result = Stream
+                // All valid adjacent moves
+                .of(-columns - 1, -columns, -columns + 1, columns - 1, columns, columns + 1)
+                // Basic filtering for moves
+                .filter(move -> moveFilter(move, src))
+                .map(move -> src + move)
+                // Prevent wrapping around the edge of the board
+                .filter(dst -> legalAdj(src, dst))
+                .collect(Collectors.toSet());
+        return result;
+    }
+
+    public Set<Integer> jmpMoves(Integer src) {
+        return Stream
+                // All valid adjacent moves
+                .of(-(2 * columns) - 1, -(2 * columns) + 1, (2 * columns) - 1, (2 * columns) + 1)
+                // Basic filtering for moves
+                .filter(move -> moveFilter(move, src))
+                .map(move -> src + move)
+                // Prevent wrapping around the edge of the board
+                .filter(dst -> legalJmp(src, dst))
+                .filter(dst -> this.getDisk(jumpedSquare(src, dst)).getColor().equals(turn.oppositeColor()))
+                .collect(Collectors.toSet());
+    }
+
+    private Player nextTurn() {
+        if (turn.equals(p1)) {
+            return p2;
+        } else {
+            return p1;
+        }
     }
 
     /**
@@ -225,44 +291,47 @@ public class Game extends Observable {
      * @return True if the move was valid and state was updated, else False
      */
     public MoveStatus move(Integer src, Integer dst) {
-        if (src < 0 || src > 31 || dst < 0 || dst > 31) {
-            return OUT_OF_BOARD; // Not a square on the board
-        }
-        if (Stream.of(3, 4, 5, 7, 9).noneMatch(i -> i.equals(Math.abs(dst - src)))) {
-            return INVALID_DISTANCE; // Early filtering of invalid values to save some time
-        }
-        Disk srcDisk = this.board.get(src);
-        Disk dstSquare = this.board.get(dst);
-        if (srcDisk.getColor() != turn.getColor()) {
-            // Attempted to move wrong color or blank space
-            return WRONG_TURN;
-        }
-        if (!dstSquare.empty()) {
-            // Attempted to move to a filled square
-            return NONEMPTY_DEST;
-        }
-        if ((src < dst && !srcDisk.canMoveUp()) || (src > dst && !srcDisk.canMoveDown())) {
-            // Attempted to move in the wrong direction
-            return WRONG_DIRECTION;
-        }
-        if (legalAdj(src, dst)) {
-            this.board.set(dst, kingify(dst, srcDisk));
-            this.board.set(src, dstSquare); // dstSquare is empty, so just swap them
-            this.lastMove = asList(src, dst);
-            return ADJ;
-        }
-        if (legalJmp(src, dst)) {
-            if (this.board.get(jumpedSquare(src, dst)).getColor().equals(turn.oppositeColor())) {
-                this.board.set(dst, kingify(dst, srcDisk));
-                this.board.set(src, dstSquare);
-                this.board.set(jumpedSquare(src, dst), EMPTY); // Removing jumped square
-                this.lastMove = asList(src, dst);
-                return JMP;
-            } else {
-                return WRONG_JMP_COLOR;
+        if (!this.lastMove.isEmpty()) {
+            if (!this.getDisk(this.lastMove.get(this.lastMove.size() - 1)).getColor().equals(this.turn.getColor())) {
+                // If starting a new player's turn, clear the last moves
+                this.lastMove = new ArrayList<>();
+            } else if (!this.lastMove.get(this.lastMove.size() - 1).equals(src)) {
+                // If it's the same player's turn, make sure they're moving the same piece
+                return JMP_WRONG_DISK;
             }
         }
-        return INVALID_DISTANCE; // Passed other checks but isn't a valid adj or jmp
+        if (src < 0 || dst < 0 || src >= this.board.size() || dst >= this.board.size()) {
+            return OUT_OF_BOARD; // Not a square on the board
+        }
+        if (this.getDisk(src).empty()) {
+            return EMPTY_SRC;
+        }
+        if (!this.getDisk(src).getColor().equals(turn.getColor())) {
+            return WRONG_TURN;
+        }
+        if (adjMoves(src).contains(dst)) {
+            this.board.set(dst, kingify(dst, this.getDisk(src)));
+            this.board.set(src, EMPTY);
+            this.lastMove.add(src);
+            this.lastMove.add(dst);
+            this.turn = this.nextTurn();
+            return ADJ;
+        } else if (jmpMoves(src).contains(dst)) {
+            this.board.set(dst, kingify(dst, this.getDisk(src)));
+            this.board.set(src, EMPTY);
+            this.board.set(jumpedSquare(src, dst), EMPTY); // Removing jumped square
+            if (this.lastMove.isEmpty()) {
+                this.lastMove.add(src);
+            }
+            this.lastMove.add(dst);
+            if (jmpMoves(dst).isEmpty()) {
+                this.turn = this.nextTurn();
+                return JMP;
+            } else {
+                return JMP_INCOMPLETE;
+            }
+        }
+        return INVALID_MOVE;
     }
 
     /**
@@ -273,12 +342,25 @@ public class Game extends Observable {
      * @return True if the state was updated.
      */
     public MoveStatus move(Game newState) {
-        Integer src = newState.lastMove.get(0);
-        Integer dst = newState.lastMove.get(lastMove.size() - 1);
-        return FAIL;
+        MoveStatus status = INVALID_STATE;
+        Integer src = null;
+        for (Integer dst : newState.lastMove) {
+            if (src != null) {
+                status = move(src, dst);
+                if (status.failure()) {
+                    return status;
+                }
+            }
+            src = dst;
+        }
+        if (newState.board.equals(board)) {
+            return status;
+        } else {
+            return INVALID_STATE;
+        }
     }
 
-    public Disk getSquare(Integer coord) {
+    public Disk getDisk(Integer coord) {
         return board.get(coord);
     }
 }

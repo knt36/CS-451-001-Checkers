@@ -54,4 +54,26 @@ public class Disk {
     public Boolean white() {
         return color == WHITE;
     }
+
+    public boolean king() {
+        return this.king;
+    }
+
+    @Override
+    public String toString() {
+        String result = "";
+        if (this.red()) {
+            result += "r";
+        } else if (this.white()) {
+            result += "w";
+        } else {
+            result += "_";
+        }
+        if (this.king()) {
+            result += "k";
+        } else {
+            result += "_";
+        }
+        return result;
+    }
 }
