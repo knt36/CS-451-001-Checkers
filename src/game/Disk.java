@@ -3,27 +3,23 @@ package game;
 import static game.Color.*;
 
 public class Disk {
-    public static Disk RED_DISK = new Disk(RED, false);
-    public static Disk WHITE_DISK = new Disk(WHITE, false);
-    public static Disk RED_KING = new Disk(RED, true);
-    public static Disk WHITE_KING = new Disk(WHITE, true);
-    public static Disk EMPTY = new Disk();
-    private Color color;
-    private Boolean king;
-
-    private Disk() {
-        this(NONE, false);
-    }
+    public static final Disk RED_DISK = new Disk(RED, false);
+    public static final Disk WHITE_DISK = new Disk(WHITE, false);
+    public static final Disk RED_KING = new Disk(RED, true);
+    public static final Disk WHITE_KING = new Disk(WHITE, true);
+    public static final Disk EMPTY = new Disk(NONE, false);
+    private final Color color;
+    private final Boolean king;
 
     private Disk(Color color, Boolean king) {
         this.color = color;
         this.king = king;
     }
 
-    public static Disk inverse(Disk other) {
-        if (other.red()) {
+    public Disk inverse() {
+        if (this.red()) {
             return WHITE_DISK;
-        } else if (other.white()) {
+        } else if (this.white()) {
             return RED_DISK;
         } else {
             return EMPTY;
@@ -57,5 +53,27 @@ public class Disk {
 
     public Boolean white() {
         return color == WHITE;
+    }
+
+    public boolean king() {
+        return this.king;
+    }
+
+    @Override
+    public String toString() {
+        String result = "";
+        if (this.red()) {
+            result += "r";
+        } else if (this.white()) {
+            result += "w";
+        } else {
+            result += "_";
+        }
+        if (this.king()) {
+            result += "k";
+        } else {
+            result += "_";
+        }
+        return result;
     }
 }
