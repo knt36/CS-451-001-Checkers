@@ -1,4 +1,4 @@
-package TextField;
+package ux.TextField;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -6,7 +6,7 @@ import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 
-import Screens.STYLE;
+import ux.Screens.STYLE;
 
 public class TextFieldFactory extends JTextField{
 	public TextFieldFactory() {

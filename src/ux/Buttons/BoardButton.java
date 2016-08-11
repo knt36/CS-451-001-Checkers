@@ -1,10 +1,10 @@
-package Buttons;
+package ux.Buttons;
 
 import java.awt.Color;
 
 import javax.swing.BorderFactory;
 
-import Screens.STYLE;
+import ux.Screens.STYLE;
 import game.Disk;
 
 public class BoardButton extends ButtonFactory {

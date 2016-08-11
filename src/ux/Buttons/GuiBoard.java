@@ -1,4 +1,4 @@
-package Buttons;
+package ux.Buttons;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 
-import Screens.STYLE;
-import Screens.ScrFactory;
+import ux.Screens.STYLE;
+import ux.Screens.ScrFactory;
 
 public class GuiBoard extends ScrFactory {
 	protected static final int NUM_MOVABLE_TILES = 32;

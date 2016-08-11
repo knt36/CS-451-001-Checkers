@@ -1,11 +1,11 @@
-package Buttons;
+package ux.Buttons;
 
 import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 
-import Screens.STYLE;
+import ux.Screens.STYLE;
 
 public class OptionButton extends ButtonFactory{
 

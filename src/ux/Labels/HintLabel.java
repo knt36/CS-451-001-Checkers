@@ -1,4 +1,4 @@
-package Labels;
+package ux.Labels;
 
 import javax.swing.JLabel;
 

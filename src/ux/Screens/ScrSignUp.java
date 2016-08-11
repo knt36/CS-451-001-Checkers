@@ -1,12 +1,12 @@
-package Screens;
+package ux.Screens;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Buttons.OptionButton;
-import TextField.TextField;
+import ux.Buttons.OptionButton;
+import ux.TextField.TextField;
 
 public class ScrSignUp extends ScrFactory{
 	protected TextField userName = new TextField(STRINGS.USERNAME_HINT);

@@ -1,4 +1,4 @@
-package Screens;
+package ux.Screens;
 
 import java.awt.Color;
 
@@ -7,8 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Buttons.OptionButton;
-import Labels.NoteLabel;
+import ux.Buttons.OptionButton;
+import ux.Labels.NoteLabel;
 
 
 public class ScrDeleteConfirm extends ScrFactory{
