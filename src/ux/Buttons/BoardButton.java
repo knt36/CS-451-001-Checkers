@@ -2,14 +2,15 @@ package Buttons;
 
 import java.awt.Color;
 
+import javax.swing.BorderFactory;
+
+import Screens.STYLE;
 import game.Disk;
 
 public class BoardButton extends ButtonFactory {
-	Disk d = null;
-
-	@Override
-	protected Button genButton(Color c, String s) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public BoardButton() {
+		super(STYLE.BOARDCOLOR, "");
+		// TODO Auto-generated constructor stub
+		this.setBorder(BorderFactory.createLineBorder(STYLE.BOARDBORDERLINECOLOR, STYLE.BOARDBORDERSTHICK, true));
+	}	
 }

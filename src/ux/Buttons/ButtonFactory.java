@@ -2,6 +2,11 @@ package Buttons;
 
 import java.awt.Color;
 
-public abstract class ButtonFactory {
-	protected abstract Button genButton(Color c, String s);
+import javax.swing.JButton;
+
+public abstract class ButtonFactory extends JButton {
+	public ButtonFactory(Color c, String s){
+		this.setBackground(c);
+		this.setText(s);
+	}
 }
