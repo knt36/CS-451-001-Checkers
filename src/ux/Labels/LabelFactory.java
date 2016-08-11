@@ -1,10 +1,10 @@
-package Labels;
+package ux.Labels;
 
 import java.awt.Color;
 
 import javax.swing.JLabel;
 
-import Screens.STYLE;
+import ux.Screens.STYLE;
 
 public class LabelFactory extends JLabel{
 	public LabelFactory(String label){

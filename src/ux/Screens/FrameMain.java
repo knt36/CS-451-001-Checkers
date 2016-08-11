@@ -1,4 +1,4 @@
-package Screens;
+package ux.Screens;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;

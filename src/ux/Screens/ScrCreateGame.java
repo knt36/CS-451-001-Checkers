@@ -1,4 +1,4 @@
-package Screens;
+package ux.Screens;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -10,10 +10,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import Buttons.OptionButton;
-import Labels.BulletLabel;
-import Labels.HeaderLabel;
-import TextField.TextField;
+import ux.Buttons.OptionButton;
+import ux.Labels.BulletLabel;
+import ux.Labels.HeaderLabel;
+import ux.TextField.TextField;
 
 public class ScrCreateGame extends ScrFactory {
 	protected TextField gameNameField = new TextField(STRINGS.GAMENAME);

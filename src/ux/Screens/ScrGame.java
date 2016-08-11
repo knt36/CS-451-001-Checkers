@@ -1,14 +1,14 @@
-package Screens;
+package ux.Screens;
 
 import java.awt.Color;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import Buttons.GuiBoard;
-import Buttons.OptionButton;
-import Labels.HeaderLabel;
-import Labels.NoteLabel;
+import ux.Buttons.GuiBoard;
+import ux.Buttons.OptionButton;
+import ux.Labels.HeaderLabel;
+import ux.Labels.NoteLabel;
 
 public class ScrGame extends ScrFactory{
 	protected GuiBoard board = new GuiBoard();

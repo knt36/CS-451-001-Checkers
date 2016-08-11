@@ -1,4 +1,4 @@
-package Screens;
+package ux.Screens;
 
 import java.awt.Color;
 import java.awt.Component;
