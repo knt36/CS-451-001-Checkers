@@ -1,4 +1,4 @@
-package Screens;
+package ux.Screens;
 
 public class FrameCreateGame extends FrameMain{
 	public FrameCreateGame() {

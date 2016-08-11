@@ -1,4 +1,4 @@
-package Screens;
+package ux.Screens;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,9 +13,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.Scrollable;
 
-import Buttons.OptionButton;
-import Labels.BulletLabel;
-import Labels.HeaderLabel;
+import ux.Buttons.OptionButton;
+import ux.Labels.BulletLabel;
+import ux.Labels.HeaderLabel;
+
 public class ScrMainMenu extends ScrFactory{
 	protected HeaderLabel curGameLabel = new HeaderLabel(STRINGS.CURGAMELABEL);
 	//Bullets

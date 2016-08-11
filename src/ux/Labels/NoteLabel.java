@@ -1,9 +1,9 @@
-package Labels;
+package ux.Labels;
 
 import javax.swing.JLabel;
 
-import Screens.STRINGS;
-import Screens.STYLE;
+import ux.Screens.STRINGS;
+import ux.Screens.STYLE;
 
 public class NoteLabel extends LabelFactory {
 

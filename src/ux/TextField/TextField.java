@@ -1,4 +1,4 @@
-package TextField;
+package ux.TextField;
 
 
 import java.awt.event.ActionListener;
@@ -8,7 +8,7 @@ import java.awt.event.FocusListener;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import Screens.STYLE;
+import ux.Screens.STYLE;
 
 public class TextField extends TextFieldFactory{
 	public TextField() {

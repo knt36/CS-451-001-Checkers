@@ -1,4 +1,4 @@
-package Screens;
+package ux.Screens;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,10 +11,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Buttons.OptionButton;
-import Labels.HeaderLabel;
-import Labels.TitleLabel;
-import TextField.TextField;
+import ux.Buttons.OptionButton;
+import ux.Labels.HeaderLabel;
+import ux.Labels.TitleLabel;
+import ux.TextField.TextField;
 
 public class ScrLogin extends ScrFactory{
 	protected OptionButton signUpBut = new OptionButton(STYLE.GREEN,STRINGS.SIGNUP);

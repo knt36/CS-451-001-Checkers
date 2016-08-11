@@ -1,8 +1,8 @@
-package Labels;
+package ux.Labels;
 
 import javax.swing.JLabel;
 
-import Screens.STYLE;
+import ux.Screens.STYLE;
 
 public class TitleLabel extends LabelFactory {
 
