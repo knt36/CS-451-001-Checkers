@@ -60,6 +60,7 @@ public class GuiBoard extends ScrFactory {
 			board.add(b);
 			//Sets index so it knows its location on the board
 			b.index = i;
+			
 			b.addActionListener(new ActionListener() {
 				
 				@Override
@@ -83,47 +84,6 @@ public class GuiBoard extends ScrFactory {
 		repaintBoard();
 	}
 	
-	public void setBoardtest(Game game){
-		this.board.clear();
-		for(int i =0 ; i <game.board.size(); i ++){
-			final BoardButton b;
-			 if (game.board.get(i).white()){
-				if(game.board.get(i).king()){
-					b = new BoardButton(Color.white,true);
-				}
-				else{
-					b = new BoardButton(Color.white,false);
-				}
-			}else {
-				//Empty Space
-				b = new BoardButton();
-			}
-			board.add(b);
-			//Sets index so it knows its location on the board
-			b.index = i;
-			b.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-					if(discSelected){
-						//Making a move
-						prevButton.setBackground(STYLE.BOARDCOLOR);
-						notifyAllListenerBoard(prevButton.index, b.index);
-						discSelected = false;
-					}
-					else {
-						//Selecting  a piece
-						b.setBackground(STYLE.BOARDSELECTEDCLR);
-						discSelected = true;
-						prevButton = b;
-					}
-				}
-			});
-		}
-		repaintBoard();
-	}
-//dumb comment
 	public void repaintBoard(){
 		this.removeAll();
 		this.constr.gridx=0;

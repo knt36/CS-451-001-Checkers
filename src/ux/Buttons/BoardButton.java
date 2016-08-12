@@ -15,6 +15,7 @@ import game.Disk;
 import javafx.scene.shape.Circle;
 
 public class BoardButton extends ButtonFactory {
+	
 	protected int index = -1;
 	protected Color c = null;
 	protected boolean k = false;
@@ -33,6 +34,13 @@ public class BoardButton extends ButtonFactory {
 		this.k = king;
 	}
 	
+	public BoardButton(Color c, boolean king, int num){
+		super(STYLE.BOARDCOLOR, "");
+		// TODO Auto-generated constructor stub
+		this.setBorder(BorderFactory.createLineBorder(STYLE.BOARDBORDERLINECOLOR, STYLE.BOARDBORDERSTHICK, true));
+		this.c = c;
+		this.k = king;
+	}
 	@Override
 	protected void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
@@ -66,5 +74,10 @@ public class BoardButton extends ButtonFactory {
 				   g2d.fill(crown2);
 			   }
 		   }
+		   if(debug.Screens.BoardNumbers){
+			   g.setColor(Color.black);
+			   g.drawString(""+index, (int)(this.getSize().getWidth()/2)- g.getFontMetrics().stringWidth(index+"")/2, (int)(this.getSize().getHeight()/2));
+		   }
+		   
 	}
 }
