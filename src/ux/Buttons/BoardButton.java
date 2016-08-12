@@ -11,7 +11,6 @@ import com.sun.javafx.css.Stylesheet;
 
 import ux.Labels.NoteLabel;
 import ux.Screens.STYLE;
-import ux.Screens.Timing;
 import game.Disk;
 import javafx.scene.shape.Circle;
 
