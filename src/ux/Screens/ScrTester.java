@@ -7,6 +7,8 @@ import java.nio.charset.MalformedInputException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import game.Game;
+
 public class ScrTester {
 	public static void main (String args []){ 
 		FrameMain createGame = new FrameCreateGame();
@@ -29,6 +31,6 @@ public class ScrTester {
 		deleteFr.addComp(new ScrDeleteConfirm());
 		
 		FrameMain gameFr = new FrameMain();
-		gameFr.addComp(new ScrGame());
+		gameFr.addComp(new ScrGame(new Game("BattleGround", "Rachel", "Khoi")));
 	}
 }
