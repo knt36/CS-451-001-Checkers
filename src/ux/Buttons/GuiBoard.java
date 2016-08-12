@@ -123,7 +123,7 @@ public class GuiBoard extends ScrFactory {
 		}
 		repaintBoard();
 	}
-
+//dumb comment
 	public void repaintBoard(){
 		this.removeAll();
 		this.constr.gridx=0;

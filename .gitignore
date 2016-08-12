@@ -94,3 +94,8 @@ ENV/
 
 # Ignore Art Work
 /Artwork/
+
+#java
+*.class
+*.classpath
+*.project
