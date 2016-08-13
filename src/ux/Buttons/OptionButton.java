@@ -1,13 +1,20 @@
-package Buttons;
+package ux.Buttons;
 
 import java.awt.Color;
+import java.awt.Dimension;
+
+import javax.swing.BorderFactory;
+
+import ux.Screens.STYLE;
 
 public class OptionButton extends ButtonFactory{
 
-	@Override
-	protected Button genButton(Color c, String s) {
-		// TODO Auto-generated method stub
-		return null;
+	public OptionButton(Color c, String s) {
+		super(c, s);
+		this.setPreferredSize(new Dimension(200, 50));
+		this.setFont(STYLE.OPTBUTFONT);
+		this.setBorder(BorderFactory.createLineBorder(STYLE.OPTIONBORDER, STYLE.OPTIONBORDERSIZE, true));
+		this.setForeground(STYLE.OPTIONTEXTCOLOR);
+		// TODO Auto-generated constructor stub
 	}
-	
 }

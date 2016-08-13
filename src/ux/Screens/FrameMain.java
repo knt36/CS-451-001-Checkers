@@ -31,7 +31,7 @@ public class FrameMain extends JFrame{
 		return super.add(comp);
 	}
 	
-	public void addComp(Component comp){
+	protected void addComp(Component comp){
 		super.add(comp, this.constr);
 		this.validate();
 		this.repaint();

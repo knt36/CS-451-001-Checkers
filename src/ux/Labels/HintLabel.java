@@ -1,11 +1,11 @@
-package Labels;
+package ux.Labels;
+
+import javax.swing.JLabel;
 
 public class HintLabel extends LabelFactory {
 
-	@Override
-	Label genLabel(String label) {
-		// TODO Auto-generated method stub
-		return null;
+	public HintLabel(String label) {
+		super(label);
+		// TODO Auto-generated constructor stub
 	}
-
 }
