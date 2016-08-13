@@ -1,14 +1,24 @@
 package network;
 
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
 /**
  *
  */
 public class Utils {
+
+
     public Boolean send(Object data) {
         return false;
     }
 
-    private String hash(String str) {
+    private String hash(String str, String salt) {
         return null;
     }
 
