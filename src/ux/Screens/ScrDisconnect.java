@@ -1,16 +1,12 @@
 package ux.Screens;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import ux.Buttons.OptionButton;
 import ux.Labels.NoteLabel;
+import ux.Utilities.Timing;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ScrDisconnect extends ScrFactory {
 	protected OptionButton quitBut = new OptionButton(Color.RED, STRINGS.QUITBUT);
@@ -20,6 +16,7 @@ public class ScrDisconnect extends ScrFactory {
 	public ScrDisconnect() {
 		// TODO Auto-generated constructor stub
 		//Something is wrong with centering of the text
+		//get the time the window opened
 		this.constr.anchor = constr.CENTER;
 		this.constr.gridwidth = 2;
 		this.add(msg);
@@ -29,12 +26,16 @@ public class ScrDisconnect extends ScrFactory {
 		this.add(quitBut);
 		this.constr.gridx++;
 		this.add(this.dcTime);
-		quitBut.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("quit button pressed");
+
+		Thread t = new Thread(new Timing(this.dcTime));
+		t.start();
+        quitBut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("quit button pressed");
                 System.exit(0);
-			}
-		});
+            }
+        });
 	}
+
 }

@@ -16,6 +16,24 @@ public class Disk {
         this.king = king;
     }
 
+    public static Disk fromString(String s) {
+        if (s.startsWith("r")) {
+            if (s.endsWith("k")) {
+                return RED_KING;
+            } else {
+                return RED_DISK;
+            }
+        } else if (s.startsWith("w")) {
+            if (s.endsWith("k")) {
+                return WHITE_KING;
+            } else {
+                return WHITE_DISK;
+            }
+        } else {
+            return EMPTY;
+        }
+    }
+
     public Disk inverse() {
         if (this.red()) {
             return WHITE_DISK;
