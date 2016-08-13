@@ -45,4 +45,8 @@ public class Player {
             return RED;
         }
     }
+
+    public Boolean nobody() {
+        return this.name == null || this.name.equals("");
+    }
 }
