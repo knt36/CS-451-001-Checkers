@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import ux.Buttons.OptionButton;
 import ux.TextField.TextField;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,7 +17,7 @@ public class ScrSignUp extends ScrFactory{
 	protected TextField passWord = new TextField(STRINGS.PASSWORD_HINT);
 	
 	protected OptionButton createBt = new OptionButton(STYLE.GREEN, STRINGS.CREATE);
-	public ScrSignUp() {
+	public ScrSignUp(Frame frame, Frame login) {
 		// TODO Auto-generated constructor stub
 		this.constr.fill=this.constr.HORIZONTAL;
 		this.add(this.userName);
@@ -32,6 +33,8 @@ public class ScrSignUp extends ScrFactory{
 				System.out.println("create user");
                 FrameMain mainMenu = new FrameMain();
                 mainMenu.addComp(new ScrMainMenu());
+                frame.dispose();
+                login.dispose();
 			}
 		});
 	}

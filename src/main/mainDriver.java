@@ -8,7 +8,7 @@ import ux.Screens.*;
 public class mainDriver {
     public static void main (String args []){
         FrameMain loginFr = new FrameMain();
-        loginFr.addComp(new ScrLogin());
+        loginFr.addComp(new ScrLogin(loginFr));
 
     }
 }
