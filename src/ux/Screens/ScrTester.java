@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class ScrTester {
-	public static void main (String args []){ 
+	public static void hi (String args []){
 		FrameMain createGame = new FrameCreateGame();
 		createGame.addComp(new ScrCreateGame());
 		

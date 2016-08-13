@@ -122,12 +122,12 @@ public class mySQLConverter {
 
             while (uprs.next()) {
                 uprs.updateString("name", game.name);
-                uprs.updateInt("turn", game.turn);
-                uprs.updateInt("p0", game.p1);
-                uprs.updateInt("p1", game.p2);
+                //uprs.updateInt("turn", game.turn);
+                //uprs.updateInt("p0", game.p1);
+                //uprs.updateInt("p1", game.p2);
                 //uprs.updateInt("state", game.state);
-                uprs.updateInt("invite", game.invite);
-                uprs.updateInt("first", game.first);
+                //uprs.updateInt("invite", game.invite);
+                //uprs.updateInt("first", game.first);
 
                 uprs.updateRow();
             }

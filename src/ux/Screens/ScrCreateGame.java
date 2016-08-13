@@ -1,6 +1,8 @@
 package ux.Screens;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -50,6 +52,12 @@ public class ScrCreateGame extends ScrFactory {
 		this.constr.gridy++;
 		this.constr.fill = constr.NONE;
 		this.add(this.startBut);
+		startBut.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Start button pressed");
+			}
+		});
 	}
 	
 }

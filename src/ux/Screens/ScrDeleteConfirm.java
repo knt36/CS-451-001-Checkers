@@ -1,6 +1,8 @@
 package ux.Screens;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,7 +20,7 @@ public class ScrDeleteConfirm extends ScrFactory{
 	NoteLabel msg = new NoteLabel(STRINGS.PERMADELETE); 
 	public ScrDeleteConfirm() {
 		// TODO Auto-generated constructor stub
-		//The button fills horizontal unlike everything else. This is intended or  I have to increaes the original frame size.
+		//The button fills horizontal unlike everything else. This is intended or  I have to increase the original frame size.
 		this.constr.gridwidth =2;
 		this.add(msg);
 		this.constr.gridwidth=1;
@@ -27,5 +29,18 @@ public class ScrDeleteConfirm extends ScrFactory{
 		this.add(this.okBut);
 		this.constr.gridx++;
 		this.add(this.quitBut);
+		okBut.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("ok button pressed");
+			}
+		});
+		quitBut.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("quit button pressed");
+
+			}
+		});
 	}
 }

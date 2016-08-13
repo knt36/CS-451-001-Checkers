@@ -2,6 +2,8 @@ package ux.Screens;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -39,6 +41,31 @@ public class ScrMainMenu extends ScrFactory{
 		this.add(leftPanel());
 		this.constr.gridx++;
 		this.add(rightPanel());
+		contBt.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Continue Button pressed");
+			}
+		});
+		newGameBt.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("New game button pressed");
+			}
+		});
+		helpBt.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("help button pressed");
+			}
+		});
+		quitBt.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+                System.out.println("quit button pressed");
+                System.exit(0);
+			}
+		});
 	}
 	
 	public ScrFactory leftPanel(){

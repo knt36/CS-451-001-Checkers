@@ -1,6 +1,8 @@
 package ux.Screens;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,5 +35,24 @@ public class ScrGame extends ScrFactory{
 		this.constr.gridy++;
 		this.add(endBt);
 		this.constr.gridy++;
+		endBt.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			    System.out.println("end button pressed");
+			}
+		});
+		helpBt.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			    System.out.println("help button pressed");
+			}
+		});
+		quitBt.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+                System.out.println("quit button pressed");
+                System.exit(0);
+			}
+		});
 	}
 }

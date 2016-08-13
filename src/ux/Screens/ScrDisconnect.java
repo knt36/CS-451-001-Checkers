@@ -1,6 +1,8 @@
 package ux.Screens;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -27,5 +29,12 @@ public class ScrDisconnect extends ScrFactory {
 		this.add(quitBut);
 		this.constr.gridx++;
 		this.add(this.dcTime);
+		quitBut.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("quit button pressed");
+                System.exit(0);
+			}
+		});
 	}
 }
