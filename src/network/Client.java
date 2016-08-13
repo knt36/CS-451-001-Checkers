@@ -18,7 +18,7 @@ public class Client extends Observable {
     private static SSLSocket sslSocket;
     private static PrintWriter out;
     private static BufferedReader in;
-
+    /*
     static {
         try {
             sslSocket = (SSLSocket) sslsocketfactory.createSocket(SERVER_HOSTNAME, SERVER_PORT);
@@ -28,10 +28,46 @@ public class Client extends Observable {
             e.printStackTrace();
         }
     }
-    public String token;
-    private Utils utils = new Utils();
+    */
+    public String token = "";
 
-    public Boolean login(String username, String password) {
+    public boolean sendLogin(String username, String password) {
+        LoginRequest newLogin = new LoginRequest(username, password);
+        String serialized = Utils.serialize(newLogin);
+        return (sendData(serialized));
+    }
+
+    public boolean sendAccountCreate(String username, String password){
         return false;
     }
+
+    private boolean sendData(String data){
+        boolean ret = false;
+        try {
+            sslSocket = (SSLSocket) sslsocketfactory.createSocket(SERVER_HOSTNAME, SERVER_PORT);
+            out = new PrintWriter(sslSocket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(sslSocket.getInputStream()));
+            ret = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            ret = false;
+        } finally {
+            try {
+                if (sslSocket != null) {
+                    sslSocket.close();
+                }
+                if (out != null) {
+                    out.close();
+                }
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException e){
+                // This is not fatal, but where there's smoke there's fire!
+                e.printStackTrace();
+            }
+        }
+        return ret;
+    }
+
 }

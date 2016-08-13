@@ -15,14 +15,17 @@ public class Utils {
 
 
     public Boolean send(Object data) {
+        //TODO implement send -- not sure if this is needed
         return false;
     }
 
     private String hash(String str, String salt) {
+        //TODO implement hash
         return null;
     }
 
     public Boolean verifyHash(String hash, String data) {
+        //TODO implement verifyHash
         return false;
     }
 
@@ -30,14 +33,17 @@ public class Utils {
     }
 
     private Boolean isWellFormed(String json) {
+        //TODO implement isWellFormed
         return false;
     }
 
-    private String serialize(Object data) {
+    static String serialize(Object data) {
+        //TODO implement serialize
         return null;
     }
 
-    private Object deserialize(String json) {
+    static Object deserialize(String json) {
+        //TODO implement deserialize
         return null;
     }
 }

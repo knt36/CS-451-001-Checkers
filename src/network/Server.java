@@ -13,7 +13,6 @@ import com.sun.net.ssl.internal.ssl.Provider;
  *
  */
 public class Server {
-    private Utils utils = new Utils();
 
     int SERVER_PORT = 4443; // Port where the SSL Server needs to listen for new requests from the client
 
@@ -55,9 +54,6 @@ public class Server {
             exp.printStackTrace();
             return null;
         }
-
-
-
     }
 
     private void createUserRecord(String username, String token) {
