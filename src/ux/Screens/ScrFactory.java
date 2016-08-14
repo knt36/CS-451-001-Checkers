@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class ScrFactory extends JPanel {
+	protected JFrame frame = null;
 	protected GridBagConstraints constr = new GridBagConstraints();
 	public ScrFactory() {
 		// TODO Auto-generated constructor stub
@@ -29,7 +30,7 @@ public class ScrFactory extends JPanel {
 	public Component add(Component comp) {
 		// TODO Auto-generated method stub
 		super.add(comp,this.constr);
-		this.validate();
+		this.revalidate();
 		this.repaint();
 		return(comp);
 	}

@@ -25,6 +25,7 @@ public class STRINGS {
 	public static final String DELETECONFIRMBUT = "Ok";
 	public static final String PERMADELETE = "This will permanently delete the game";
 	public static final String ENDGAME = "End Game";
+	public static final String CANCELBUT = "Cancel";
 	
 	
 }

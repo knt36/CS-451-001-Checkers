@@ -2,6 +2,8 @@ package ux.Screens;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.Scrollable;
 
+import game.Game;
 import ux.Buttons.OptionButton;
 import ux.Labels.BulletLabel;
 import ux.Labels.HeaderLabel;
@@ -39,6 +42,48 @@ public class ScrMainMenu extends ScrFactory{
 		this.add(leftPanel());
 		this.constr.gridx++;
 		this.add(rightPanel());
+		
+		//Adding Button listners
+		quitBt.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				//Exits out of program entirely
+				System.exit(0);
+			}
+		});
+		helpBt.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				FrameNotify fn = new FrameNotify();
+				//Not sure what goes into here since we agreed it was going to be html page
+				fn.add(new JLabel("Help- not sure what is in here since we said html"));
+			}
+		});
+		newGameBt.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				FrameCreateGame fcg = new FrameCreateGame();
+				fcg.add(new ScrCreateGame());
+			}
+		});
+	contBt.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			//Selects Unique Type of Game and then opens it. Game info from the database. For now it'll just open a generic one
+			FrameGame fg = new FrameGame();
+			fg.add(new ScrGame(new Game("DeathMatch", "Khoi", "Racheal")));
+			//Need to title the game to its name. Temporarily make a label at the top.
+			fg.setTitle("DeathMatch");
+		}
+	});
 	}
 	
 	public ScrFactory leftPanel(){

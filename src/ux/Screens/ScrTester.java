@@ -12,25 +12,25 @@ import game.Game;
 public class ScrTester {
 	public static void main (String args []){ 
 		FrameMain createGame = new FrameCreateGame();
-		createGame.addComp(new ScrCreateGame());
+		createGame.add(new ScrCreateGame());
 		
 		FrameMain mainMenu = new FrameMain();
-		mainMenu.addComp(new ScrMainMenu());
+		mainMenu.add(new ScrMainMenu());
 		
 		FrameMain loginFr = new FrameMain();
-		loginFr.addComp(new ScrLogin());
+		loginFr.add(new ScrLogin());
 		
 		FrameMain signupFr = new FrameSignUp();
-		signupFr.addComp(new ScrSignUp());
+		signupFr.add(new ScrSignUp());
 		
 		FrameMain disconnectFr = new FrameNotify();
-		disconnectFr.addComp(new ScrDisconnect());
+		disconnectFr.add(new ScrDisconnect());
 		
 
 		FrameMain deleteFr = new FrameNotify();
-		deleteFr.addComp(new ScrDeleteConfirm());
+		deleteFr.add(new ScrDeleteConfirm());
 		
 		FrameMain gameFr = new FrameMain();
-		gameFr.addComp(new ScrGame(new Game("BattleGround", "Rachel", "Khoi")));
+		gameFr.add(new ScrGame(new Game("BattleGround", "Rachel", "Khoi")));
 	}
 }
