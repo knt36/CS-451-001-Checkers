@@ -11,16 +11,21 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import game.Game;
 import ux.Buttons.OptionButton;
+import ux.CheckBox.CheckBoxFactory;
 import ux.Labels.BulletLabel;
 import ux.Labels.HeaderLabel;
 import ux.TextField.TextField;
 
 public class ScrCreateGame extends ScrFactory {
 	protected TextField gameNameField = new TextField(STRINGS.GAMENAME);
+	protected TextField searchUserName = new TextField(STRINGS.SEARCHUSER);
 	
+	protected HeaderLabel gameLabel = new HeaderLabel("Game");
 	protected HeaderLabel usersLabel = new HeaderLabel(STRINGS.HEADERUSERS);
 	//Bullets
 		ScrFactory usersArea = new ScrFactory();
@@ -28,18 +33,22 @@ public class ScrCreateGame extends ScrFactory {
 		
 	protected ArrayList<BulletLabel> usersList = new ArrayList<>();
 	
-	protected JCheckBox allUsers = new JCheckBox();
+	protected CheckBoxFactory allUsers = new CheckBoxFactory(STRINGS.ALLUSERSLABEL);
 	protected OptionButton startBut = new OptionButton(STYLE.GREEN,STRINGS.START);
 	
 	public ScrCreateGame() {
 		// TODO Auto-generated constructor stub
 		this.constr.fill = constr.HORIZONTAL;
+		this.add(gameLabel);
+		this.constr.gridy++;
 		this.add(gameNameField);
 		this.constr.gridy++;
 		this.constr.weighty = 0;
 		this.constr.fill=constr.BOTH;
 		this.constr.anchor = this.constr.ABOVE_BASELINE;
 		this.add(usersLabel);
+		this.constr.gridy++;
+		this.add(this.searchUserName);
 		this.constr.gridy++;
 		this.constr.weighty = 1;
 		this.constr.fill = constr.HORIZONTAL;
@@ -51,12 +60,16 @@ public class ScrCreateGame extends ScrFactory {
 		}
 		this.add(usersScroll);
 		this.constr.gridy++;
+		
+		this.add(this.allUsers);
+		
+		
+		this.constr.gridy++;
 		this.constr.fill = constr.NONE;
 		this.add(this.startBut);
 		
 		//Add button functionality
 		this.startBut.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -66,6 +79,27 @@ public class ScrCreateGame extends ScrFactory {
 				fg.setTitle("DeathMatch");
 				fg.add(new ScrGame(new Game("DeathMatch", "Rachel", "Khoi")));
 				frame.dispose();
+			}
+		});
+		
+		//Add autofill functionality
+		this.searchUserName.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
 			}
 		});
 	}
