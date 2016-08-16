@@ -29,4 +29,12 @@ public class AcctCreateRequest {
         this.password = password;
     }
 
+    @Override
+    public String toString() {
+        return "AcctCreateRequest{" +
+                "TYPE='" + TYPE + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

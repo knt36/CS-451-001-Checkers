@@ -28,4 +28,13 @@ public class LoginRequest {
         this.password = suppliedPassword;
         this.username = suppliedUsername;
     }
+
+    @Override
+    public String toString() {
+        return "LoginRequest{" +
+                "TYPE='" + TYPE + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }
