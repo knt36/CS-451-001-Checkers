@@ -15,7 +15,7 @@ import ux.Labels.NoteLabel;
 
 public class ScrDeleteConfirm extends ScrFactory{
 	protected OptionButton okBut = new OptionButton(STYLE.GREEN,STRINGS.DELETECONFIRMBUT);
-	protected OptionButton quitBut = new OptionButton(Color.red,STRINGS.QUITBUT);
+	protected OptionButton quitBut = new OptionButton(Color.red,STRINGS.CANCELBUT);
 	
 	NoteLabel msg = new NoteLabel(STRINGS.PERMADELETE); 
 	public ScrDeleteConfirm() {
@@ -29,17 +29,26 @@ public class ScrDeleteConfirm extends ScrFactory{
 		this.add(this.okBut);
 		this.constr.gridx++;
 		this.add(this.quitBut);
-		okBut.addActionListener(new ActionListener() {
+		
+		//Add button functionality
+		this.okBut.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("ok button pressed");
+				// TODO Auto-generated method stub
+				//Server call to delete the game
+				
+				//Then exits out of the delete confirmation page
+				frame.dispose();
 			}
 		});
-		quitBut.addActionListener(new ActionListener() {
+		this.quitBut.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("quit button pressed");
-
+				// TODO Auto-generated method stub
+				//Delete the message box without doing anything if action is canceled / quited
+				frame.dispose();
 			}
 		});
 	}

@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import game.Game;
 import ux.Buttons.OptionButton;
 import ux.Labels.BulletLabel;
 import ux.Labels.HeaderLabel;
@@ -52,10 +53,19 @@ public class ScrCreateGame extends ScrFactory {
 		this.constr.gridy++;
 		this.constr.fill = constr.NONE;
 		this.add(this.startBut);
-		startBut.addActionListener(new ActionListener() {
+		
+		//Add button functionality
+		this.startBut.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Start button pressed");
+				// TODO Auto-generated method stub
+				//Saves the game to the server
+				//Opens the game in question
+				FrameGame fg = new FrameGame();
+				fg.setTitle("DeathMatch");
+				fg.add(new ScrGame(new Game("DeathMatch", "Rachel", "Khoi")));
+				frame.dispose();
 			}
 		});
 	}

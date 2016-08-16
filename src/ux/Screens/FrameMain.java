@@ -26,11 +26,23 @@ public class FrameMain extends JFrame{
 	public Component add(Component comp) {
 		// TODO Auto-generated method stub
 		super.add(comp, this.constr);
-		this.validate();
+		//Everytime you add a component to the frame, if it is a ScrFactory made frame,
+		//It will give the screen the reference to the frame that it is in for closing purposes mostly.
+		if(comp instanceof ScrFactory){
+			((ScrFactory)comp).frame = this;
+		}
+		this.revalidate();
 		this.repaint();
-		return super.add(comp);
+		return null;
 	}
-	
+
+	@Override
+	public void removeAll() {
+		// TODO Auto-generated method stub
+		super.removeAll();
+		revalidate();
+		repaint();
+}	
 	public void addComp(Component comp){
 		super.add(comp, this.constr);
 		this.validate();

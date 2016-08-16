@@ -7,5 +7,6 @@ public class FrameNotify extends FrameMain {
 		// TODO Auto-generated constructor stub
 		super();
 		setSize(new Dimension(500, 400));
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 }
