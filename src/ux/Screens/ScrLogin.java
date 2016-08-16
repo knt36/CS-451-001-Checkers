@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -29,6 +31,25 @@ public class ScrLogin extends ScrFactory{
 		this.add(leftPanel());
 		this.constr.gridx++;
 		this.add(rightPanel());
+		this.signUpBut.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				FrameSignUp fs = new FrameSignUp();
+				fs.add(new ScrSignUp());
+			}
+		});
+		this.signInBut.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				frame.dispose();
+				FrameMain fm = new FrameMain();
+				fm.add(new ScrMainMenu());
+			}
+		});
+	
 	}
 	
 	public JPanel rightPanel(){
