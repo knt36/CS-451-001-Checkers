@@ -25,54 +25,27 @@ public class ScrMainMenu extends ScrFactory{
 	//Bullets
 	ScrFactory curGameArea = new ScrFactory();
 	JScrollPane curGameScroll = new JScrollPane(curGameArea);
-	
-	
+
+
 	protected HeaderLabel pubGameLabel = new HeaderLabel(STRINGS.PUBGAMELABEL);
 	//Bullets
 	ScrFactory pubGameArea = new ScrFactory();
 	JScrollPane pubGameScroll = new JScrollPane(pubGameArea);
-	
+
 	protected OptionButton contBt = new OptionButton(STYLE.GREEN,STRINGS.CONTINUEBUT);
 	protected OptionButton newGameBt = new OptionButton(STYLE.GREEN,STRINGS.NEW_GAMEBUT);
 	protected OptionButton helpBt = new OptionButton(STYLE.GREEN,STRINGS.HELPBUT);
 	protected OptionButton quitBt= new OptionButton(Color.red,STRINGS.QUITBUT);
-	
+
 	public ScrMainMenu() {
 		// TODO Auto-generated constructor stub
 		this.add(leftPanel());
 		this.constr.gridx++;
 		this.add(rightPanel());
-<<<<<<< HEAD
-		contBt.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Continue Button pressed");
-			}
-		});
-		newGameBt.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("New game button pressed");
-			}
-		});
-		helpBt.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("help button pressed");
-			}
-		});
-		quitBt.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-                System.out.println("quit button pressed");
-                System.exit(0);
-			}
-		});
-=======
-		
+
 		//Adding Button listners
 		quitBt.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -81,7 +54,7 @@ public class ScrMainMenu extends ScrFactory{
 			}
 		});
 		helpBt.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -91,7 +64,7 @@ public class ScrMainMenu extends ScrFactory{
 			}
 		});
 		newGameBt.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -99,21 +72,20 @@ public class ScrMainMenu extends ScrFactory{
 				fcg.add(new ScrCreateGame());
 			}
 		});
-	contBt.addActionListener(new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			//Selects Unique Type of Game and then opens it. Game info from the database. For now it'll just open a generic one
-			FrameGame fg = new FrameGame();
-			fg.add(new ScrGame(new Game("DeathMatch", "Khoi", "Racheal")));
-			//Need to title the game to its name. Temporarily make a label at the top.
-			fg.setTitle("DeathMatch");
-		}
-	});
->>>>>>> b8aad3e1a66de505b7bf454b90256ecd1f880b5b
+		contBt.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				//Selects Unique Type of Game and then opens it. Game info from the database. For now it'll just open a generic one
+				FrameGame fg = new FrameGame();
+				fg.add(new ScrGame(new Game("DeathMatch", "Khoi", "Racheal")));
+				//Need to title the game to its name. Temporarily make a label at the top.
+				fg.setTitle("DeathMatch");
+			}
+		});
 	}
-	
+
 	public ScrFactory leftPanel(){
 		ScrFactory left = new ScrFactory();
 		left.constr.fill = left.constr.NONE;
@@ -126,14 +98,14 @@ public class ScrMainMenu extends ScrFactory{
 		left.add(quitBt);
 		return(left);
 	}
-	
+
 	public ScrFactory rightPanel(){
 		ScrFactory right = new ScrFactory();
 		right.constr.fill = right.constr.HORIZONTAL;
 		right.constr.weighty = 0;
 		right.add(curGameLabel);
 		right.constr.gridy++;
-		
+
 		//Bullets
 		right.constr.fill = right.constr.BOTH;
 		this.curGameArea.constr.fill= curGameArea.constr.HORIZONTAL;
@@ -145,14 +117,14 @@ public class ScrMainMenu extends ScrFactory{
 			this.curGameArea.constr.gridy++;
 		}
 		right.add(this.curGameScroll);
-		
-		
+
+
 		right.constr.gridy++;
 		right.constr.fill = right.constr.HORIZONTAL;
 		right.constr.weighty = 0;
 		right.add(pubGameLabel);
 		right.constr.gridy++;
-		
+
 		//Bullets
 		right.constr.fill = right.constr.BOTH;
 		this.pubGameArea.constr.fill= pubGameArea.constr.HORIZONTAL;
@@ -163,8 +135,8 @@ public class ScrMainMenu extends ScrFactory{
 			this.pubGameArea.constr.gridy++;
 		}
 		right.add(this.pubGameScroll);
-		
+
 		return(right);
 	}
-	
+
 }
