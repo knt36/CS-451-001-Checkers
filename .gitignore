@@ -91,3 +91,11 @@ ENV/
 /src/.idea/
 /CS-451-001-Checkers.iml
 /out/
+
+# Ignore Art Work
+/Artwork/
+
+#java
+*.class
+*.classpath
+*.project

@@ -1,5 +1,8 @@
 package ux.Screens;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,6 +25,21 @@ public class ScrSignUp extends ScrFactory{
 		this.constr.gridy++;
 		this.constr.fill = constr.NONE;
 		this.add(createBt);
+		
+		//Add button functionalities
+		this.createBt.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				//Add the network adding user function into here
+				
+				//Need to address some error handling for already existing users.
+				
+				//Exit signup screen
+				frame.dispose();
+			}
+		});
 	}
 	
 }
