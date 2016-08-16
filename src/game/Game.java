@@ -221,7 +221,7 @@ public class Game extends Observable {
      * @return True if the game is public and waiting for another player.
      */
     public Boolean isPublicGame() {
-        return this.p2.getName().equals("");
+        return this.p2.nobody();
     }
 
     /**

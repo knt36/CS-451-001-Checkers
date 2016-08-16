@@ -21,7 +21,7 @@ public class STRINGS {
 	public static final String HEADERUSERS = "Users";
 	public static final String START = "Start";
 	public static final String DISCONNECTMSG = "Cannot connect to server Retrying...";
-	public static final String DCTIME = "# Minutes";
+	public static final String DCTIME = "HH:MM:SS";
 	public static final String DELETECONFIRMBUT = "Ok";
 	public static final String PERMADELETE = "This will permanently delete the game";
 	public static final String ENDGAME = "End Game";

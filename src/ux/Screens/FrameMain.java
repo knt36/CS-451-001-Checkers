@@ -35,11 +35,17 @@ public class FrameMain extends JFrame{
 		this.repaint();
 		return null;
 	}
+
 	@Override
 	public void removeAll() {
 		// TODO Auto-generated method stub
 		super.removeAll();
 		revalidate();
 		repaint();
+}	
+	public void addComp(Component comp){
+		super.add(comp, this.constr);
+		this.validate();
+		this.repaint();
 	}
 }
