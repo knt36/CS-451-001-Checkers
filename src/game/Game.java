@@ -142,14 +142,7 @@ public class Game extends Observable {
      * @return Jumped square coordinate.
      */
     public static Integer jumpedSquare(Integer src, Integer dst) {
-        Integer move = Math.floorDiv(dst - src, 2);
-        Integer lshift = Math.floorDiv(src % 8, 4);
-        Integer rshift = Math.abs(lshift - 1);
-        if (dst < src) {
-            return src + move - lshift;
-        } else {
-            return src + move + rshift;
-        }
+        return src + Math.floorDiv(dst - src, 2) - Math.floorDiv(src % 8, 4) + 1;
     }
 
     /**
