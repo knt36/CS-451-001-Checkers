@@ -33,8 +33,6 @@ public class Server {
         //In a proper system, we'd have a way of "black-boxing" this key. However, this
         // is not too important for now.
         System.setProperty("javax.net.ssl.keyStorePassword","checkers");
-        // Enable debugging to view the handshake and communication which happens between the SSLClient and the SSLServer
-        System.setProperty("javax.net.debug","all");
         // Initialize the Server Socket
         SSLServerSocketFactory sslServerSocketfactory = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
         SSLServerSocket sslServerSocket = null;

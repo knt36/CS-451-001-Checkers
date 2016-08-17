@@ -12,8 +12,8 @@ import java.util.Observable;
  *
  */
 public class Client extends Observable {
-    private static String SERVER_HOSTNAME = "www.centralark.org";
-    private static int SERVER_PORT = 0;
+    private static final String SERVER_HOSTNAME = "www.centralark.org";
+    private static final int SERVER_PORT = 4443;
     private static SSLSocketFactory sslsocketfactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
     private static SSLSocket sslSocket;
     private static PrintWriter out;
@@ -46,9 +46,15 @@ public class Client extends Observable {
     private boolean sendData(String data){
         boolean ret = false;
         try {
-            sslSocket = (SSLSocket) sslsocketfactory.createSocket(SERVER_HOSTNAME, SERVER_PORT);
+         //   System.setProperty("javax.net.ssl.trustStore","client.jks");
+         //   System.setProperty("javax.net.ssl.trustStorePassword", "checkers");
+
+         //   sslSocket = (SSLSocket) sslsocketfactory.createSocket(SERVER_HOSTNAME, SERVER_PORT);
+         //   sslSocket.setEnabledCipherSuites(new String[] {"TLS_RSA_WITH_AES_128_CBC_SHA"});
             out = new PrintWriter(sslSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(sslSocket.getInputStream()));
+            out.write(data);
+            out.flush();
             ret = true;
         } catch (IOException e) {
             e.printStackTrace();
