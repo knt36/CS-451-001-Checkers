@@ -1,10 +1,12 @@
 package network;
 
+import com.google.gson.JsonElement;
+
 /**
  *
  */
 public interface Serializable {
-    public Serializable fromJson(String json);
-
     public String toJson();
+
+    public JsonElement toJsonElement();
 }

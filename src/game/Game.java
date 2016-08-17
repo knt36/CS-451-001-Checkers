@@ -1,9 +1,7 @@
 package game;
 
-import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import network.Serializable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,7 +11,7 @@ import static game.Color.RED;
 import static game.Disk.*;
 import static game.MoveStatus.*;
 
-public class Game extends Observable implements Serializable {
+public class Game extends Observable {
     protected static Integer boardSize = 32;
     protected static Integer columns = (int) Math.sqrt(boardSize / 2);
     protected static Integer width = columns * 2;
@@ -168,6 +166,33 @@ public class Game extends Observable implements Serializable {
         return Arrays.stream(stateBlob.split(",")).map(Disk::fromString).collect(Collectors.toList());
     }
 
+    public static Game fromJson(JsonElement json) {
+        try {
+            JsonObject root = json.getAsJsonObject();
+            Player turn = new Player(root.get("red").getAsString(), RED);
+            String u1 = root.get("p1").getAsString();
+            Player p1;
+            Player p2;
+            if (u1.equals(turn.getName())) {
+                p1 = new Player(turn);
+                p2 = p1.opponent(root.get("p2").getAsString());
+            } else {
+                p2 = new Player(turn);
+                p1 = p2.opponent(u1);
+            }
+            List<Disk> board = deserializeBoard(root.get("board").getAsString());
+            String name = root.get("name").getAsString();
+            String moveString = root.get("moves").getAsString();
+            List<Integer> moves = new ArrayList<>();
+            if (!moveString.isEmpty()) {
+                moves = Arrays.stream(moveString.split(",")).map(Integer::valueOf).collect(Collectors.toList());
+            }
+            return new Game(name, p1, p2, board, turn, moves);
+        } catch (IllegalStateException | UnsupportedOperationException e) {
+            return null;
+        }
+    }
+
     /**
      * Constructs a new game with two players
      * @param name Unique game name
@@ -209,7 +234,7 @@ public class Game extends Observable implements Serializable {
             this.board = board;
         }
 
-        if (!turn.equals(p1) && !turn.equals(p2)) {
+        if (!turn.getName().equals(p1.getName()) && !turn.getName().equals(p2.getName())) {
             throw new IllegalArgumentException("Turn must be either p1 or p2");
         }
         this.turn = turn;
@@ -376,32 +401,7 @@ public class Game extends Observable implements Serializable {
         return this.board.stream().map(Disk::toString).collect(Collectors.joining(","));
     }
 
-    @Override
-    public Serializable fromJson(String json) {
-        try {
-            JsonObject root = new JsonParser().parse(json).getAsJsonObject();
-            Player turn = new Player(root.get("red").getAsString(), RED);
-            String u1 = root.get("p1").getAsString();
-            Player p1;
-            Player p2;
-            if (u1.equals(turn.getName())) {
-                p1 = new Player(turn);
-                p2 = p1.opponent(root.get("p2").getAsString());
-            } else {
-                p2 = new Player(turn);
-                p1 = p2.opponent(u1);
-            }
-            List<Disk> board = deserializeBoard(root.get("board").getAsString());
-            String name = root.get("name").getAsString();
-            List<Integer> moves = Arrays.stream(root.get("moves").getAsString().split(",")).map(Integer::valueOf).collect(Collectors.toList());
-            return new Game(name, p1, p2, board, turn, moves);
-        } catch (IllegalStateException | UnsupportedOperationException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public String toJson() {
+    public JsonElement toJson() {
         JsonObject root = new JsonObject();
         root.addProperty("turn", this.turn.getName());
         root.addProperty("p1", this.p1.getName());
@@ -410,6 +410,6 @@ public class Game extends Observable implements Serializable {
         root.addProperty("name", this.name);
         root.addProperty("moves", this.lastMove.stream().map(Object::toString).collect(Collectors.joining(",")));
         root.addProperty("red", this.red().getName());
-        return new Gson().toJson(root);
+        return root;
     }
 }
