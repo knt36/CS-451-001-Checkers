@@ -6,7 +6,6 @@ import game.Player;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -44,7 +43,7 @@ public class DBWrapper {
         String turn = rs.getString("turn");
         String red = rs.getString("red");
 
-        List<Disk> state = Arrays.stream(stateBlob.split(",")).map(Disk::fromString).collect(Collectors.toList());
+        List<Disk> state = Game.deserializeBoard(stateBlob);
 
         Player p1;
         Player p2;
@@ -150,10 +149,8 @@ public class DBWrapper {
     public void saveGame(Game game) {
         String query = "INSERT INTO Games (name, p1, p2, state, turn, red) VALUES (?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE p1=?, p2=?, state=?, turn=?, red=?";
-        String state = game.board.stream().map(d -> d.toString()).collect(Collectors.joining(","));
-        String red = game.p1.getName();
-        if (game.p2.getColor().equals(RED))
-            red = game.p2.getName();
+        String state = game.serializeBoard();
+        String red = game.red().getName();
         try {
             PreparedStatement stmt = this.conn.prepareStatement(query);
             stmt.setString(1, game.name);
