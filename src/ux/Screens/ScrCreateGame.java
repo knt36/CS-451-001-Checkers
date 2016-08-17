@@ -84,22 +84,39 @@ public class ScrCreateGame extends ScrFactory {
 		
 		//Add autofill functionality
 		this.searchUserName.getDocument().addDocumentListener(new DocumentListener() {
-			
+			ArrayList<String> userNames = new ArrayList<>();
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				// TODO Auto-generated method stub
-				
+				action(e);
 			}
 			
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				// TODO Auto-generated method stub
-				
+				action(e);
 			}
 			
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				// TODO Auto-generated method stub
+				action(e);
+			}
+			
+			public void action(DocumentEvent e){
+				try{
+					String s = searchUserName.getText();
+					if(s.length()==3){
+						//Get the database info for the names
+					} else if(s.length()<3){
+						//Do nothing
+					} else{
+						//if it is greater than 3 then just search off the list you have now
+						
+					}
+				}catch(Exception b){
+					
+				}
 			}
 		});
 	}
