@@ -33,12 +33,14 @@ public class Client extends Observable {
 
     public boolean sendLogin(String username, String password) {
         LoginRequest newLogin = new LoginRequest(username, password);
-        String serialized = Utils.serialize(newLogin);
+        String serialized = newLogin.toString();
         return (sendData(serialized));
     }
 
     public boolean sendAccountCreate(String username, String password){
-        return false;
+        AcctCreateRequest newAcct = new AcctCreateRequest(username, password);
+        String serialized = newAcct.toString();
+        return (sendData(serialized));
     }
 
     private boolean sendData(String data){
