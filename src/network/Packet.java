@@ -46,7 +46,11 @@ public class Packet {
             JsonObject root = new JsonParser().parse(json).getAsJsonObject();
             String token = root.get("token").getAsString();
             String type = root.get("type").getAsString();
-            Object data = fromJson.get(type).apply(root.get("data"));
+            Function<JsonElement, Object> func = fromJson.get(type);
+            if (func == null) {
+                return null;
+            }
+            Object data = func.apply(root.get("data"));
             return new Packet(token, data);
         } catch (IllegalStateException | UnsupportedOperationException e) {
             return null;
@@ -56,6 +60,10 @@ public class Packet {
     public String toJson() {
         JsonObject root = new JsonObject();
         root.addProperty("token", token);
+        Function<Object, JsonElement> func = toJson.get(data.getClass());
+        if (func == null) {
+            return null;
+        }
         root.add("data", toJson.get(data.getClass()).apply(data));
         root.addProperty("type", data.getClass().getSimpleName());
         return new Gson().toJson(root);

@@ -1,3 +1,5 @@
+package network;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,11 +11,11 @@ import java.net.Socket;
  *
  * This is the thread handler for the server.
  */
-public class GameHandler extends Thread{
+public class ServerReceiver extends Thread {
     private Socket socket;
     private int clientNumber;
 
-    public GameHandler(Socket socket, int clientNumber) {
+    public ServerReceiver(Socket socket, int clientNumber) {
         this.socket = socket;
         this.clientNumber = clientNumber;
         log("New connection with client# " + clientNumber + " at " + socket);
@@ -21,16 +23,9 @@ public class GameHandler extends Thread{
 
     public void run() {
         try {
-
-            // Decorate the streams so we can send characters
-            // and not just bytes.  Ensure output is flushed
-            // after every newline.
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
-            // Get messages from the client, line by line; return them
-            // capitalized
+            // Get messages from the client, line by line
             while (true) {
                 String input = in.readLine();
                 if (input == null || input.equals(".")) {

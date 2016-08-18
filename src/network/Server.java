@@ -1,14 +1,8 @@
+package network;
+
+import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
-
-import java.io.*;
-import java.security.Security;
-import java.security.PrivilegedActionException;
-
-import javax.net.ssl.*;
-import com.sun.net.ssl.*;
-import com.sun.net.ssl.internal.ssl.Provider;
-//import network.GameHandler;
+//import network.ServerReceiver;
 
 
 /**
@@ -17,10 +11,6 @@ import com.sun.net.ssl.internal.ssl.Provider;
 public class Server {
     static int SERVER_PORT = 4443;
     // Port where the SSL Server needs to listen for new requests from the client
-
-    public String generateToken() {
-        return null;
-    }
 
     /**
      * Returns a functional SSL socket. Code taken from the OWASP wiki, the definitive guide to secure programming.
@@ -33,11 +23,15 @@ public class Server {
         ServerSocket listener = new ServerSocket(SERVER_PORT);
         try {
             while (true) {
-                new GameHandler(listener.accept(), clientNumber++).start();
+                new ServerReceiver(listener.accept(), clientNumber++).start();
             }
         } finally {
             listener.close();
         }
+    }
+
+    public String generateToken() {
+        return null;
     }
 
     /*
