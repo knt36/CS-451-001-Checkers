@@ -22,15 +22,15 @@ public class Packet {
     static {
         toJson = new HashMap<>();
         toJson.put(Game.class, game -> ((Game) game).toJson());
-        toJson.put(AcctCreateRequest.class, req -> ((AcctCreateRequest) req).toJson());
-        toJson.put(Acknowledgement.class, req -> ((Acknowledgement) req).toJson());
-        toJson.put(LoginRequest.class, req -> ((LoginRequest) req).toJson());
+        toJson.put(SignUp.class, req -> ((SignUp) req).toJson());
+        toJson.put(Ack.class, req -> ((Ack) req).toJson());
+        toJson.put(Login.class, req -> ((Login) req).toJson());
 
         fromJson = new HashMap<>();
         fromJson.put(Game.class.getSimpleName(), Game::fromJson);
-        fromJson.put(AcctCreateRequest.class.getSimpleName(), AcctCreateRequest::fromJson);
-        fromJson.put(Acknowledgement.class.getSimpleName(), Acknowledgement::fromJson);
-        fromJson.put(LoginRequest.class.getSimpleName(), LoginRequest::fromJson);
+        fromJson.put(SignUp.class.getSimpleName(), SignUp::fromJson);
+        fromJson.put(Ack.class.getSimpleName(), Ack::fromJson);
+        fromJson.put(Login.class.getSimpleName(), Login::fromJson);
     }
 
     private String token;
@@ -42,7 +42,7 @@ public class Packet {
     }
 
     public static Packet perror(String msg) {
-        return new Packet("", new Acknowledgement(msg, false));
+        return new Packet("", new Ack(msg, false));
     }
 
     public static String error(String msg) {
