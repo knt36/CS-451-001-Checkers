@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 
 import game.Game;
 import game.MoveStatus;
+import game.Player;
 import javafx.scene.shape.Circle;
 import ux.Buttons.GuiBoard;
 import ux.Buttons.ListenerBoard;
@@ -138,14 +139,22 @@ public class ScrGame extends ScrFactory{
 				// TODO Auto-generated method stub
 				//Detects a move has been made on the board and then tries to move it in the game
 				MoveStatus result = game.move(start, finish);
-				
 				if(result.success()){
 					//there may be more jumps but the board is updated
 					board.setBoard(game);
-					setTurnText();
+					
 					revalidate();
 					repaint();
 					}
+				
+				Player winner = game.winner();
+				if(winner != null){
+					//There is a winner
+					setWinner(winner);
+				}
+				else{
+					setTurnText();
+				}
 			}
 		});
 		
@@ -183,9 +192,7 @@ public class ScrGame extends ScrFactory{
 	public void setTurnText(){
 		this.playerTurn.setText(this.game.turn.getName()+this.turnIndicator);
 		Color c = null;
-		
 		changeTurnColorIndicator();
-		
 	}
 	
 	public void changeTurnColorIndicator(){
@@ -196,5 +203,10 @@ public class ScrGame extends ScrFactory{
 			this.turnColorIndicator.setBackground(Color.white);
 			this.turnColorIndicator.setForeground(Color.black);
 		}
+	}
+	
+	public void setWinner(Player winner){
+		System.out.println("Winner!");
+		this.turnColorIndicator.setText(winner.getName() + " " + STRINGS.GRATZWINNER);
 	}
 }

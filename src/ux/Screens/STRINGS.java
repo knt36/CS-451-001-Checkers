@@ -28,6 +28,7 @@ public class STRINGS {
 	public static final String CANCELBUT = "Cancel";
 	public static final String ALLUSERSLABEL = "All Users";
 	public static final String SEARCHUSER = "Search User";
+	public static final String GRATZWINNER = "WON!";
 	
 	
 }
