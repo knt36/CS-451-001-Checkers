@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import game.Game;
+import game.GameManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,15 +23,21 @@ public class Packet {
     static {
         toJson = new HashMap<>();
         toJson.put(Game.class, game -> ((Game) game).toJson());
-        toJson.put(SignUp.class, req -> ((SignUp) req).toJson());
+        toJson.put(Signup.class, req -> ((Signup) req).toJson());
         toJson.put(Ack.class, req -> ((Ack) req).toJson());
         toJson.put(Login.class, req -> ((Login) req).toJson());
+        toJson.put(GameManager.class, req -> ((GameManager) req).toJson());
+        toJson.put(GameRequest.class, req -> ((GameRequest) req).toJson());
+        toJson.put(GameListRequest.class, req -> ((GameListRequest) req).toJson());
 
         fromJson = new HashMap<>();
         fromJson.put(Game.class.getSimpleName(), Game::fromJson);
-        fromJson.put(SignUp.class.getSimpleName(), SignUp::fromJson);
+        fromJson.put(Signup.class.getSimpleName(), Signup::fromJson);
         fromJson.put(Ack.class.getSimpleName(), Ack::fromJson);
         fromJson.put(Login.class.getSimpleName(), Login::fromJson);
+        fromJson.put(GameManager.class.getSimpleName(), GameManager::fromJson);
+        fromJson.put(GameRequest.class.getSimpleName(), GameRequest::fromJson);
+        fromJson.put(GameListRequest.class.getSimpleName(), GameListRequest::fromJson);
     }
 
     private String token;
