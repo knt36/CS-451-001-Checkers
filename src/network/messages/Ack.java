@@ -8,21 +8,21 @@ import com.google.gson.JsonObject;
  *
  * State is true or false,
  */
-public class Acknowledgement {
+public class Ack {
     private Boolean success;
     private String message;
 
-    public Acknowledgement(String message, Boolean success) {
+    public Ack(String message, Boolean success) {
         this.message = message;
         this.success = success;
     }
 
-    public static Acknowledgement fromJson(JsonElement json) {
+    public static Ack fromJson(JsonElement json) {
         try {
             JsonObject root = json.getAsJsonObject();
             String message = root.get("message").getAsString();
             Boolean success = root.get("success").getAsBoolean();
-            return new Acknowledgement(message, success);
+            return new Ack(message, success);
         } catch (Exception e) {
             return null;
         }

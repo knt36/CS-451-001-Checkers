@@ -2,10 +2,10 @@ package network;
 
 import database.DBWrapper;
 import game.Game;
-import network.messages.AcctCreateRequest;
-import network.messages.Acknowledgement;
-import network.messages.LoginRequest;
+import network.messages.Ack;
+import network.messages.Login;
 import network.messages.Packet;
+import network.messages.SignUp;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -62,11 +62,11 @@ public class ServerThread extends Thread {
         if (type == Game.class) {
             DBWrapper db = new DBWrapper();
             db.saveGame((Game) packet.getData());
-            return new Packet(packet.getToken(), new Acknowledgement("Saved game", true));
-        } else if (type == LoginRequest.class) {
-            return new Packet(generateToken(), new Acknowledgement("Logged in", true));
-        } else if (type == AcctCreateRequest.class) {
-            return new Packet(generateToken(), new Acknowledgement("Created user", true));
+            return new Packet(packet.getToken(), new Ack("Saved game", true));
+        } else if (type == Login.class) {
+            return new Packet(generateToken(), new Ack("Logged in", true));
+        } else if (type == SignUp.class) {
+            return new Packet(generateToken(), new Ack("Created user", true));
         }
         return Packet.perror("Invalid message type");
     }

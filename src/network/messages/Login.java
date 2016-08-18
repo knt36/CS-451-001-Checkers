@@ -4,25 +4,27 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
+ *
+ * POJO for login requests.
  */
-public class AcctCreateRequest {
+public class Login {
     private String username;
     private String password;
 
-    public AcctCreateRequest() {
+    public Login() {
     }
 
-    public AcctCreateRequest(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public Login(String suppliedUsername, String suppliedPassword) {
+        this.password = suppliedPassword;
+        this.username = suppliedUsername;
     }
 
-    public static AcctCreateRequest fromJson(JsonElement json) {
+    public static Login fromJson(JsonElement json) {
         try {
             JsonObject root = json.getAsJsonObject();
             String username = root.get("username").getAsString();
             String password = root.get("password").getAsString();
-            return new AcctCreateRequest(username, password);
+            return new Login(username, password);
         } catch (Exception e) {
             return null;
         }
@@ -36,21 +38,8 @@ public class AcctCreateRequest {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    @Override
-    public String toString() {
-        return "AcctCreateRequest{" +
-                "TYPE=Create" +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
     }
 
     public JsonElement toJson() {
