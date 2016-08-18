@@ -397,6 +397,29 @@ public class Game extends Observable {
         }
     }
 
+    private Boolean moves(Player player) {
+        if (!board.stream().anyMatch(d -> d.getColor().equals(player.getColor()))) {
+            return false;
+        }
+        for (int i = 0; i < 32; i++) {
+            if (!adjMoves(i).isEmpty() || !jmpMoves(i).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Player winner() {
+        if (!moves(p1)) {
+            return p2;
+        } else if (!moves(p2)) {
+            return p1;
+        } else {
+            return null;
+        }
+    }
+
+
     public String serializeBoard() {
         return this.board.stream().map(Disk::toString).collect(Collectors.joining(","));
     }
