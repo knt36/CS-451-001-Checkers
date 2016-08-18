@@ -1,4 +1,4 @@
-package network;
+package network.messages;
 
 import game.Game;
 import org.junit.Test;
