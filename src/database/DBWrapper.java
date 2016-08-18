@@ -1,4 +1,4 @@
-package network;
+package database;
 
 import game.Disk;
 import game.Game;

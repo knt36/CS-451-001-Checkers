@@ -1,4 +1,4 @@
-package network;
+package database;
 
 import java.sql.Date;
 import java.time.LocalDate;

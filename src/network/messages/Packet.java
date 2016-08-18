@@ -1,4 +1,4 @@
-package network;
+package network.messages;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;

@@ -1,31 +1,28 @@
-package network;
+package network.messages;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
- * Created by mblaho on 8/13/16.
- *
- * POJO for login requests.
  */
-public class LoginRequest {
+public class AcctCreateRequest {
     private String username;
     private String password;
 
-    public LoginRequest() {
+    public AcctCreateRequest() {
     }
 
-    public LoginRequest(String suppliedUsername, String suppliedPassword) {
-        this.password = suppliedPassword;
-        this.username = suppliedUsername;
+    public AcctCreateRequest(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
-    public static LoginRequest fromJson(JsonElement json) {
+    public static AcctCreateRequest fromJson(JsonElement json) {
         try {
             JsonObject root = json.getAsJsonObject();
             String username = root.get("username").getAsString();
             String password = root.get("password").getAsString();
-            return new LoginRequest(username, password);
+            return new AcctCreateRequest(username, password);
         } catch (Exception e) {
             return null;
         }
@@ -39,14 +36,18 @@ public class LoginRequest {
         this.username = username;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
 
     @Override
     public String toString() {
-        return "LoginRequest{" +
-                "TYPE='Login'" +
+        return "AcctCreateRequest{" +
+                "TYPE=Create" +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';

@@ -1,11 +1,9 @@
-package network;
+package network.messages;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
- * Created by mblaho on 8/16/16.
- *
  * POJO for Server acknowledgement.
  *
  * State is true or false,

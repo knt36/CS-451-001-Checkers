@@ -1,5 +1,7 @@
 package network;
 
+import network.messages.Packet;
+
 import java.util.Observable;
 import java.util.function.Consumer;
 
