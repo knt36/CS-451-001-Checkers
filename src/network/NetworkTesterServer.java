@@ -10,7 +10,11 @@ public class NetworkTesterServer {
             System.setProperty("javax.net.debug","all");
             //This is not wrong. Do not fix it.
             // If this is preventing compilation, remove this file from the classpath.
-            Server.createSSLSocket();
+            try {
+                Server.startServer();
+            } catch(Exception e){
+                e.printStackTrace();
+            }
         }
     }
 }
