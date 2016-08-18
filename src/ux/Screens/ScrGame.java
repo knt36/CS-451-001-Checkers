@@ -8,6 +8,7 @@ import java.awt.geom.Ellipse2D;
 import java.util.Date;
 import java.util.Timer;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -52,6 +53,10 @@ public class ScrGame extends ScrFactory{
 		this.constr.gridy++;
 		this.add(endBt);
 		this.constr.gridy++;
+		
+		//Set color of turn indicator
+		this.changeTurnColorIndicator();
+		turnColorIndicator.setBorder(BorderFactory.createLoweredBevelBorder());
 		
 		//Set label data
 		this.playerTurn.setText(game.turn.getName()+turnIndicator);
@@ -179,6 +184,11 @@ public class ScrGame extends ScrFactory{
 		this.playerTurn.setText(this.game.turn.getName()+this.turnIndicator);
 		Color c = null;
 		
+		changeTurnColorIndicator();
+		
+	}
+	
+	public void changeTurnColorIndicator(){
 		if(this.game.turn.getColor() == RED){
 			this.turnColorIndicator.setBackground(Color.red);
 			this.turnColorIndicator.setForeground(Color.black);
@@ -186,6 +196,5 @@ public class ScrGame extends ScrFactory{
 			this.turnColorIndicator.setBackground(Color.white);
 			this.turnColorIndicator.setForeground(Color.black);
 		}
-		
 	}
 }
