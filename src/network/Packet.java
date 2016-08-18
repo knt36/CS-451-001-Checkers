@@ -41,6 +41,14 @@ public class Packet {
         this.data = data;
     }
 
+    public static Packet perror(String msg) {
+        return new Packet("", new Acknowledgement(msg, false));
+    }
+
+    public static String error(String msg) {
+        return perror(msg).toJson();
+    }
+
     public static Packet fromJson(String json) {
         try {
             JsonObject root = new JsonParser().parse(json).getAsJsonObject();
@@ -75,5 +83,9 @@ public class Packet {
 
     public Class getType() {
         return this.data.getClass();
+    }
+
+    public String getToken() {
+        return token;
     }
 }
