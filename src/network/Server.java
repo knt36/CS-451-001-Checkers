@@ -1,29 +1,22 @@
 package network;
 
-import java.net.Socket;
+import java.io.IOException;
+import java.net.ServerSocket;
 
 /**
  *
  */
 public class Server {
-    private Utils utils = new Utils();
+    private static int SERVER_PORT = 4443;
 
-    public String generateToken() {
-        return null;
-    }
-
-    public Socket createSSLSocket() {
-        return null;
-    }
-
-    private void createUserRecord(String username, String token) {
-    }
-
-    private Boolean destroyToken(String token) {
-        return false;
-    }
-
-    private Boolean pruneTokens() {
-        return false;
+    public static void startServer() throws IOException {
+        ServerSocket listener = new ServerSocket(SERVER_PORT);
+        try {
+            while (true) {
+                new ServerThread(listener.accept()).start();
+            }
+        } finally {
+            listener.close();
+        }
     }
 }

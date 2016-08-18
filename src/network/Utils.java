@@ -17,17 +17,6 @@ public class Utils {
     }
 
     private void acknowledge(int error) {
-    }
 
-    private Boolean isWellFormed(String json) {
-        return false;
-    }
-
-    private String serialize(Object data) {
-        return null;
-    }
-
-    private Object deserialize(String json) {
-        return null;
     }
 }

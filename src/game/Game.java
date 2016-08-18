@@ -1,9 +1,9 @@
 package game;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Set;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -142,14 +142,7 @@ public class Game extends Observable {
      * @return Jumped square coordinate.
      */
     public static Integer jumpedSquare(Integer src, Integer dst) {
-        Integer move = Math.floorDiv(dst - src, 2);
-        Integer lshift = Math.floorDiv(src % 8, 4);
-        Integer rshift = Math.abs(lshift - 1);
-        if (dst < src) {
-            return src + move - lshift;
-        } else {
-            return src + move + rshift;
-        }
+        return src + Math.floorDiv(dst - src, 2) - Math.floorDiv(src % 8, 4) + 1;
     }
 
     /**
@@ -166,6 +159,37 @@ public class Game extends Observable {
             return WHITE_KING;
         } else {
             return disk;
+        }
+    }
+
+    public static List<Disk> deserializeBoard(String stateBlob) {
+        return Arrays.stream(stateBlob.split(",")).map(Disk::fromString).collect(Collectors.toList());
+    }
+
+    public static Game fromJson(JsonElement json) {
+        try {
+            JsonObject root = json.getAsJsonObject();
+            Player turn = new Player(root.get("red").getAsString(), RED);
+            String u1 = root.get("p1").getAsString();
+            Player p1;
+            Player p2;
+            if (u1.equals(turn.getName())) {
+                p1 = new Player(turn);
+                p2 = p1.opponent(root.get("p2").getAsString());
+            } else {
+                p2 = new Player(turn);
+                p1 = p2.opponent(u1);
+            }
+            List<Disk> board = deserializeBoard(root.get("board").getAsString());
+            String name = root.get("name").getAsString();
+            String moveString = root.get("moves").getAsString();
+            List<Integer> moves = new ArrayList<>();
+            if (!moveString.isEmpty()) {
+                moves = Arrays.stream(moveString.split(",")).map(Integer::valueOf).collect(Collectors.toList());
+            }
+            return new Game(name, p1, p2, board, turn, moves);
+        } catch (IllegalStateException | UnsupportedOperationException e) {
+            return null;
         }
     }
 
@@ -210,7 +234,7 @@ public class Game extends Observable {
             this.board = board;
         }
 
-        if (!turn.equals(p1) && !turn.equals(p2)) {
+        if (!turn.getName().equals(p1.getName()) && !turn.getName().equals(p2.getName())) {
             throw new IllegalArgumentException("Turn must be either p1 or p2");
         }
         this.turn = turn;
@@ -363,5 +387,29 @@ public class Game extends Observable {
 
     public Disk getDisk(Integer coord) {
         return board.get(coord);
+    }
+
+    public Player red() {
+        if (this.p1.getColor().equals(RED)) {
+            return p1;
+        } else {
+            return p2;
+        }
+    }
+
+    public String serializeBoard() {
+        return this.board.stream().map(Disk::toString).collect(Collectors.joining(","));
+    }
+
+    public JsonElement toJson() {
+        JsonObject root = new JsonObject();
+        root.addProperty("turn", this.turn.getName());
+        root.addProperty("p1", this.p1.getName());
+        root.addProperty("p2", this.p2.getName());
+        root.addProperty("board", serializeBoard());
+        root.addProperty("name", this.name);
+        root.addProperty("moves", this.lastMove.stream().map(Object::toString).collect(Collectors.joining(",")));
+        root.addProperty("red", this.red().getName());
+        return root;
     }
 }
