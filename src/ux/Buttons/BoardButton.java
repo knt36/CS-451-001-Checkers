@@ -7,12 +7,9 @@ import java.awt.geom.Ellipse2D;
 
 import javax.swing.BorderFactory;
 
-import com.sun.javafx.css.Stylesheet;
-
 import ux.Labels.NoteLabel;
 import ux.Screens.STYLE;
 import game.Disk;
-import javafx.scene.shape.Circle;
 
 public class BoardButton extends ButtonFactory {
 	
