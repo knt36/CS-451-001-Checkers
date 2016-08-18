@@ -1,3 +1,5 @@
+#!/bin/bash
+
 JC="javac"
 JVM="java"
 if [ "$1" = "server" ]
