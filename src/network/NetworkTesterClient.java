@@ -8,8 +8,6 @@ public class NetworkTesterClient {
        // while (true) {
             System.setProperty("javax.net.debug","all");
             Client client = new Client();
-            client.sendAccountCreate("test", "test");
-            client.sendLogin("test", "test");
        // }
     }
 }

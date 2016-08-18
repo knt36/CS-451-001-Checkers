@@ -1,3 +1,4 @@
+import java.net.ServerSocket;
 import java.net.Socket;
 
 import java.io.*;
@@ -7,13 +8,15 @@ import java.security.PrivilegedActionException;
 import javax.net.ssl.*;
 import com.sun.net.ssl.*;
 import com.sun.net.ssl.internal.ssl.Provider;
+//import network.GameHandler;
+
+
 /**
  *
  */
 public class Server {
-
-    static int SERVER_PORT = 4443; // Port where the SSL Server needs to listen for new requests from the client
-
+    static int SERVER_PORT = 4443;
+    // Port where the SSL Server needs to listen for new requests from the client
 
     public String generateToken() {
         return null;
@@ -24,6 +27,20 @@ public class Server {
      *
      * @return functional SSL socket OR NULL in the case of an exception.
      */
+
+    public static void startServer() throws IOException {
+        int clientNumber = 0;
+        ServerSocket listener = new ServerSocket(SERVER_PORT);
+        try {
+            while (true) {
+                new GameHandler(listener.accept(), clientNumber++).start();
+            }
+        } finally {
+            listener.close();
+        }
+    }
+
+    /*
     public static void createSSLSocket() {
         SSLSocket sslSocket;
         // Registering the JSSE provider
@@ -57,9 +74,11 @@ public class Server {
             exp.printStackTrace();
             }
         }
-
+    */
     private void createUserRecord(String username, String token) {
     }
+
+
 
     private Boolean destroyToken(String token) {
         return false;
