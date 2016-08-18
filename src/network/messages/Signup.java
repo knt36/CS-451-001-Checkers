@@ -5,24 +5,24 @@ import com.google.gson.JsonObject;
 
 /**
  */
-public class SignUp {
+public class Signup {
     private String username;
     private String password;
 
-    public SignUp() {
+    public Signup() {
     }
 
-    public SignUp(String username, String password) {
+    public Signup(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public static SignUp fromJson(JsonElement json) {
+    public static Signup fromJson(JsonElement json) {
         try {
             JsonObject root = json.getAsJsonObject();
             String username = root.get("username").getAsString();
             String password = root.get("password").getAsString();
-            return new SignUp(username, password);
+            return new Signup(username, password);
         } catch (Exception e) {
             return null;
         }
