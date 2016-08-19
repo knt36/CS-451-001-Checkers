@@ -1,5 +1,6 @@
 package network;
 
+import network.messages.Message;
 import network.messages.Packet;
 
 import java.util.Observable;
@@ -16,8 +17,8 @@ public class Client extends Observable {
 
     }
 
-    public void send(Object obj, Consumer<Packet> callback) {
-        Packet packet = new Packet(token, obj);
+    public void send(Message message, Consumer<Packet> callback) {
+        Packet packet = new Packet(token, message);
         String json = packet.toJson();
         if (json == null) {
             callback.accept(Packet.perror("Invalid data"));
