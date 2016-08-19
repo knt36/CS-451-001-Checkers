@@ -5,6 +5,8 @@ import ux.Labels.NoteLabel;
 import ux.Utilities.Timing;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ScrDisconnect extends ScrFactory {
 	protected OptionButton quitBut = new OptionButton(Color.RED, STRINGS.QUITBUT);
@@ -27,6 +29,13 @@ public class ScrDisconnect extends ScrFactory {
 
 		Thread t = new Thread(new Timing(this.dcTime));
 		t.start();
+        quitBut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("quit button pressed");
+                System.exit(0);
+            }
+        });
 	}
 
 }

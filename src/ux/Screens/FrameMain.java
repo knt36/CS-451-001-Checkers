@@ -19,7 +19,7 @@ public class FrameMain extends JFrame{
 		this.setVisible(true);
 		this.setBackground(STYLE.BACKGROUND);
 		this.show();
-		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
 	}
 	
 	@Override
