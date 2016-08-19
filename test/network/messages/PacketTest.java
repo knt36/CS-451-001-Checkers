@@ -17,7 +17,6 @@ public class PacketTest {
         System.out.println(json);
         Packet result = Packet.fromJson(json);
         // Just pulling out board so I don't have to write an equals method that will never get used
-        assertEquals(Game.class, result.getType());
         assertEquals(
                 ((Game) test.getData()).board,
                 ((Game) result.getData()).board

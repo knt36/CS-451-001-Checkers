@@ -17,7 +17,7 @@ public class STRINGS {
 	public static final String CURGAMELABEL = "Current Games";
 	public static final String PUBGAMELABEL = "Public Games";
 	public static final String BULLETCHAR = "�";
-	public static final String GAMENAME = "game user";
+	public static final String GAMENAME = "game name";
 	public static final String HEADERUSERS = "Users";
 	public static final String START = "Start";
 	public static final String DISCONNECTMSG = "Cannot connect to server Retrying...";

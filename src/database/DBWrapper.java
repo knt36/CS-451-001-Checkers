@@ -17,7 +17,7 @@ import static game.Color.WHITE;
  */
 
 public class DBWrapper {
-    private static final String user = "checker";
+    private static final String name = "checker";
     private static final String password = "C01l3e18999";
     private static final String database = "Checker";
     private static final String port = "3306";
@@ -26,7 +26,7 @@ public class DBWrapper {
     public DBWrapper() {
         this.conn = null;
         Properties connectionProps = new Properties();
-        connectionProps.put("user", user);
+        connectionProps.put("name", name);
         connectionProps.put("password", password);
         try {
             this.conn = DriverManager.getConnection("jdbc:mysql://" + database + ":" + port + "/", connectionProps);
@@ -36,7 +36,7 @@ public class DBWrapper {
     }
 
     private static Game gameFromSQL(ResultSet rs) throws SQLException {
-        String name = rs.getString("user");
+        String name = rs.getString("name");
         String u1 = rs.getString("p1");
         String u2 = rs.getString("p2");
         String stateBlob = rs.getString("state");
@@ -62,7 +62,7 @@ public class DBWrapper {
 
     private static Credentials credentialsFromSQL(ResultSet rs) throws SQLException {
         return new Credentials(
-                rs.getString("user"),
+                rs.getString("name"),
                 rs.getString("password"),
                 rs.getString("token"),
                 rs.getDate("tokenDate")
@@ -91,7 +91,7 @@ public class DBWrapper {
 
     public Game getGame(String name) {
         Game result = null;
-        String query = "SELECT user, p1, p2, state, turn, red FROM Games WHERE user=?";
+        String query = "SELECT name, p1, p2, state, turn, red FROM Games WHERE name=?";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(query);
             stmt.setString(1, name);
@@ -115,7 +115,7 @@ public class DBWrapper {
 
     public List<Game> getGames(String username) {
         List<Game> result = new ArrayList<>();
-        String query = "SELECT user, p1, p2, state, turn, red FROM Games WHERE p1=? OR p2=?";
+        String query = "SELECT name, p1, p2, state, turn, red FROM Games WHERE p1=? OR p2=?";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(query);
             stmt.setString(1, username);
@@ -132,7 +132,7 @@ public class DBWrapper {
 
     public Credentials getUser(String name) {
         Credentials result = null;
-        String query = "SELECT user, password, token, tokenDate FROM Users WHERE user=?";
+        String query = "SELECT name, password, token, tokenDate FROM Users WHERE name=?";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(query);
             stmt.setString(1, name);
@@ -147,7 +147,7 @@ public class DBWrapper {
     }
 
     public void saveGame(Game game) {
-        String query = "INSERT INTO Games (user, p1, p2, state, turn, red) VALUES (?, ?, ?, ?, ?, ?) " +
+        String query = "INSERT INTO Games (name, p1, p2, state, turn, red) VALUES (?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE p1=?, p2=?, state=?, turn=?, red=?";
         String state = game.serializeBoard();
         String red = game.red().getName();
@@ -171,7 +171,7 @@ public class DBWrapper {
     }
 
     public void saveUser(Credentials credentials) {
-        String query = "INSERT INTO Users (user, password, token, tokenDate) VALUES (?, ?, ?, ?) " +
+        String query = "INSERT INTO Users (name, password, token, tokenDate) VALUES (?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE password=?, token=?, tokenDate=?";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(query);
