@@ -132,7 +132,7 @@ public class DBWrapper {
 
     public Credentials getUser(String name) {
         Credentials result = null;
-        String query = "SELECT name, password, token, tokenDate FROM Users WHERE user=?";
+        String query = "SELECT name, password, token, tokenDate FROM Users WHERE name=?";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(query);
             stmt.setString(1, name);
