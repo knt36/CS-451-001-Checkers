@@ -3,16 +3,15 @@ package network;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Random;
 
-import static java.nio.charset.Charset.*;
+import static java.nio.charset.Charset.defaultCharset;
 
 /**
- * TODO: Write unit tests for this bitch
+ * Unit tested 8/19/16, 100% methods, 14/16 lines
  */
 public class Utils {
     private static final int ITERATIONS = 100;
@@ -59,6 +58,7 @@ public class Utils {
             return new String(res, defaultCharset());
 
         } catch( NoSuchAlgorithmException | InvalidKeySpecException e ) {
+            // Something's gone VERY VERY WRONG!!!
             throw new RuntimeException( e );
         }
 
