@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 public class Client extends Observable {
     public static Client client = new Client();
     private String token = "";
-
+    private String username = null;
     private Client() {
 
     }
@@ -26,7 +26,15 @@ public class Client extends Observable {
         sendData(json, callback);
     }
 
-    private void sendData(String data, Consumer<Packet> callback) {
+    public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	private void sendData(String data, Consumer<Packet> callback) {
         new ClientThread(data, callback).start();
     }
 

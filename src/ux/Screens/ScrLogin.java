@@ -13,6 +13,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import network.Client;
+import network.messages.Ack;
+import network.messages.Login;
+import network.messages.Packet;
 import ux.Buttons.OptionButton;
 import ux.Labels.HeaderLabel;
 import ux.Labels.TitleLabel;
@@ -44,12 +48,27 @@ public class ScrLogin extends ScrFactory{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				frame.dispose();
-				FrameMain fm = new FrameMain();
-				fm.add(new ScrMainMenu());
+				Packet login = new Packet("", new Login(userName.getText(), passWord.getText()));
+				System.out.println(login.toJson());
+				Client.client.send((Login) login.getData(), (p)->networkLogin(p));
 			}
 		});
 
+	}
+	
+	public void networkLogin(Packet p ){
+		System.out.println("Never falled");
+		Ack k = (Ack)p.getData();
+		if(k.getSuccess()){
+			//this login is successful;
+			frame.dispose();
+			FrameMain fm = new FrameMain();
+			fm.add(new ScrMainMenu());
+		}else{
+			//this login has failed
+			FrameNotify fn = new FrameNotify();
+			fn.add(new ScrNotify(k.getMessage()));
+		}
 	}
 
 	public JPanel rightPanel(){
