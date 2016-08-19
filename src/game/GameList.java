@@ -3,6 +3,8 @@ package game;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import network.messages.Message;
+import network.messages.MessageTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,20 +14,20 @@ import java.util.stream.Stream;
 /**
  *
  */
-public class GameManager {
+public class GameList implements Message {
     public List<Game> current;
     public List<Game> pub;
 
-    public GameManager(List<Game> pub, List<Game> current) {
+    public GameList(List<Game> pub, List<Game> current) {
         this.pub = pub;
         this.current = current;
     }
 
-    public static GameManager fromJson(JsonElement json) {
+    public static GameList fromJson(JsonElement json) {
         JsonObject root = json.getAsJsonObject();
         List<Game> pub = gameList(root.get("public").getAsJsonArray());
         List<Game> current = gameList(root.get("public").getAsJsonArray());
-        return new GameManager(pub, current);
+        return new GameList(pub, current);
     }
 
     private static JsonArray listToArray(List<Game> games) {
@@ -51,5 +53,10 @@ public class GameManager {
         root.add("public", listToArray(pub));
         root.add("current", listToArray(current));
         return root;
+    }
+
+    @Override
+    public MessageTypes type() {
+        return MessageTypes.GAME_LIST;
     }
 }

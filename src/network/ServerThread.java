@@ -3,9 +3,8 @@ package network;
 import database.DBWrapper;
 import game.Game;
 import network.messages.Ack;
-import network.messages.Login;
+import network.messages.Message;
 import network.messages.Packet;
-import network.messages.SignUp;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -58,15 +57,16 @@ public class ServerThread extends Thread {
     }
 
     public Packet process(Packet packet) {
-        Class type = packet.getType();
-        if (type == Game.class) {
-            DBWrapper db = new DBWrapper();
-            db.saveGame((Game) packet.getData());
-            return new Packet(packet.getToken(), new Ack("Saved game", true));
-        } else if (type == Login.class) {
-            return new Packet(generateToken(), new Ack("Logged in", true));
-        } else if (type == SignUp.class) {
-            return new Packet(generateToken(), new Ack("Created user", true));
+        Message message = packet.getData();
+        switch (packet.getData().type()) {
+            case GAME:
+                DBWrapper db = new DBWrapper();
+                db.saveGame((Game) message);
+                return new Packet(packet.getToken(), new Ack("Saved game", true));
+            case LOGIN:
+                return new Packet(generateToken(), new Ack("Logged in", true));
+            case SIGNUP:
+                return new Packet(generateToken(), new Ack("Created user", true));
         }
         return Packet.perror("Invalid message type");
     }

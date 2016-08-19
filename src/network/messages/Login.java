@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 /**
  * POJO for login requests.
  */
-public class Login {
+public class Login implements Message {
     private String username;
     private String password;
 
@@ -46,5 +46,10 @@ public class Login {
         root.addProperty("username", username);
         root.addProperty("password", password);
         return root;
+    }
+
+    @Override
+    public MessageTypes type() {
+        return MessageTypes.LOGIN;
     }
 }

@@ -2,8 +2,13 @@ package game;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import network.messages.Message;
+import network.messages.MessageTypes;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -11,7 +16,7 @@ import static game.Color.RED;
 import static game.Disk.*;
 import static game.MoveStatus.*;
 
-public class Game extends Observable {
+public class Game implements Message {
     protected static Integer boardSize = 32;
     protected static Integer columns = (int) Math.sqrt(boardSize / 2);
     protected static Integer width = columns * 2;
@@ -36,7 +41,7 @@ public class Game extends Observable {
     }
 
     /**
-     * Creates a new private game between two players. Player name order does not matter as colors will be randomized.
+     * Creates a new private game between two players. Player user order does not matter as colors will be randomized.
      *
      * @param name Unique game name
      * @param u1   Username of the first player.
@@ -434,5 +439,10 @@ public class Game extends Observable {
         root.addProperty("moves", this.lastMove.stream().map(Object::toString).collect(Collectors.joining(",")));
         root.addProperty("red", this.red().getName());
         return root;
+    }
+
+    @Override
+    public MessageTypes type() {
+        return MessageTypes.GAME;
     }
 }

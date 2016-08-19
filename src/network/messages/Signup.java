@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 
 /**
  */
-public class Signup {
+public class Signup implements Message {
     private String username;
     private String password;
 
@@ -49,5 +49,10 @@ public class Signup {
         root.addProperty("username", username);
         root.addProperty("password", password);
         return root;
+    }
+
+    @Override
+    public MessageTypes type() {
+        return MessageTypes.SIGNUP;
     }
 }
