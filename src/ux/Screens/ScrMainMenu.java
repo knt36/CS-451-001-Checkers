@@ -20,7 +20,7 @@ import ux.Buttons.OptionButton;
 import ux.Labels.BulletLabel;
 import ux.Labels.HeaderLabel;
 
-public class ScrMainMenu extends ScrFactory{
+public class ScrMainMenu extends ScrFactory {
 	protected HeaderLabel curGameLabel = new HeaderLabel(STRINGS.CURGAMELABEL);
 	//Bullets
 	ScrFactory curGameArea = new ScrFactory();
@@ -32,10 +32,10 @@ public class ScrMainMenu extends ScrFactory{
 	ScrFactory pubGameArea = new ScrFactory();
 	JScrollPane pubGameScroll = new JScrollPane(pubGameArea);
 
-	protected OptionButton contBt = new OptionButton(STYLE.GREEN,STRINGS.CONTINUEBUT);
-	protected OptionButton newGameBt = new OptionButton(STYLE.GREEN,STRINGS.NEW_GAMEBUT);
-	protected OptionButton helpBt = new OptionButton(STYLE.GREEN,STRINGS.HELPBUT);
-	protected OptionButton quitBt= new OptionButton(Color.red,STRINGS.QUITBUT);
+	protected OptionButton contBt = new OptionButton(STYLE.GREEN, STRINGS.CONTINUEBUT);
+	protected OptionButton newGameBt = new OptionButton(STYLE.GREEN, STRINGS.NEW_GAMEBUT);
+	protected OptionButton helpBt = new OptionButton(STYLE.GREEN, STRINGS.HELPBUT);
+	protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
 
 	public ScrMainMenu() {
 		// TODO Auto-generated constructor stub
@@ -79,14 +79,14 @@ public class ScrMainMenu extends ScrFactory{
 				// TODO Auto-generated method stub
 				//Selects Unique Type of Game and then opens it. Game info from the database. For now it'll just open a generic one
 				FrameGame fg = new FrameGame();
-				fg.add(new ScrGame(new Game("DeathMatch", "Khoi", "Racheal")));
+				fg.add(new ScrGame(new Game("DeathMatch", "Khoi", "Rachel")));
 				//Need to title the game to its name. Temporarily make a label at the top.
 				fg.setTitle("DeathMatch");
 			}
 		});
 	}
 
-	public ScrFactory leftPanel(){
+	public ScrFactory leftPanel() {
 		ScrFactory left = new ScrFactory();
 		left.constr.fill = left.constr.NONE;
 		left.add(contBt);
@@ -96,10 +96,10 @@ public class ScrMainMenu extends ScrFactory{
 		left.add(helpBt);
 		left.constr.gridy++;
 		left.add(quitBt);
-		return(left);
+		return (left);
 	}
 
-	public ScrFactory rightPanel(){
+	public ScrFactory rightPanel() {
 		ScrFactory right = new ScrFactory();
 		right.constr.fill = right.constr.HORIZONTAL;
 		right.constr.weighty = 0;
@@ -108,10 +108,10 @@ public class ScrMainMenu extends ScrFactory{
 
 		//Bullets
 		right.constr.fill = right.constr.BOTH;
-		this.curGameArea.constr.fill= curGameArea.constr.HORIZONTAL;
+		this.curGameArea.constr.fill = curGameArea.constr.HORIZONTAL;
 		right.constr.weighty = 1;
 		this.curGameScroll.setMinimumSize(new Dimension(0, 300));
-		for(int i = 0 ; i < 10; i ++){
+		for (int i = 0; i < 10; i++) {
 			BulletLabel lb = new BulletLabel("Current Game");
 			this.curGameArea.add(lb);
 			this.curGameArea.constr.gridy++;
@@ -127,16 +127,16 @@ public class ScrMainMenu extends ScrFactory{
 
 		//Bullets
 		right.constr.fill = right.constr.BOTH;
-		this.pubGameArea.constr.fill= pubGameArea.constr.HORIZONTAL;
+		this.pubGameArea.constr.fill = pubGameArea.constr.HORIZONTAL;
 		right.constr.weighty = 1;
 		this.pubGameScroll.setMinimumSize(new Dimension(0, 300));
-		for(int i = 0 ; i < 10 ; i ++){
+		for (int i = 0; i < 10; i++) {
 			this.pubGameArea.add(new BulletLabel("Public Game"));
 			this.pubGameArea.constr.gridy++;
 		}
 		right.add(this.pubGameScroll);
 
-		return(right);
+		return (right);
 	}
 
 }
