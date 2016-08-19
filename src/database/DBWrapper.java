@@ -36,7 +36,7 @@ public class DBWrapper {
     }
 
     private static Game gameFromSQL(ResultSet rs) throws SQLException {
-        String name = rs.getString("user");
+        String name = rs.getString("name");
         String u1 = rs.getString("p1");
         String u2 = rs.getString("p2");
         String stateBlob = rs.getString("state");
@@ -62,7 +62,7 @@ public class DBWrapper {
 
     private static Credentials credentialsFromSQL(ResultSet rs) throws SQLException {
         return new Credentials(
-                rs.getString("user"),
+                rs.getString("name"),
                 rs.getString("password"),
                 rs.getString("token"),
                 rs.getDate("tokenDate")
@@ -132,7 +132,7 @@ public class DBWrapper {
 
     public Credentials getUser(String name) {
         Credentials result = null;
-        String query = "SELECT user, password, token, tokenDate FROM Users WHERE user=?";
+        String query = "SELECT name, password, token, tokenDate FROM Users WHERE user=?";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(query);
             stmt.setString(1, name);
@@ -171,7 +171,7 @@ public class DBWrapper {
     }
 
     public void saveUser(Credentials credentials) {
-        String query = "INSERT INTO Users (user, password, token, tokenDate) VALUES (?, ?, ?, ?) " +
+        String query = "INSERT INTO Users (name, password, token, tokenDate) VALUES (?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE password=?, token=?, tokenDate=?";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(query);
