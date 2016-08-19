@@ -7,10 +7,10 @@ import com.google.gson.JsonPrimitive;
  *
  */
 public class GameListRequest implements Message {
-    public String name;
+    public String user;
 
-    public GameListRequest(String name) {
-        this.name = name;
+    public GameListRequest(String user) {
+        this.user = user;
     }
 
     public static GameListRequest fromJson(JsonElement json) {
@@ -18,7 +18,7 @@ public class GameListRequest implements Message {
     }
 
     public JsonElement toJson() {
-        return new JsonPrimitive(name);
+        return new JsonPrimitive(user);
     }
 
     @Override
