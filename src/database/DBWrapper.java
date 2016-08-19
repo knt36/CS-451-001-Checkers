@@ -15,7 +15,6 @@ import static game.Color.WHITE;
 
 /**
  */
-
 public class DBWrapper {
     private static final String user = "checker";
     private static final String password = "C01l3e18999";
