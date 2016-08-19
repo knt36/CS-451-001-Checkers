@@ -1,16 +1,17 @@
 package network;
 
+import database.Credentials;
 import database.DBWrapper;
 import game.Game;
-import network.messages.Ack;
-import network.messages.Message;
-import network.messages.Packet;
+import game.GameList;
+import network.messages.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.UUID;
 
 /**
  * This is the thread handler for the server.
@@ -58,21 +59,64 @@ public class ServerThread extends Thread {
 
     public Packet process(Packet packet) {
         Message message = packet.getData();
+        String token = packet.getToken();
         switch (packet.getData().type()) {
             case GAME:
-                DBWrapper db = new DBWrapper();
-                db.saveGame((Game) message);
-                return new Packet(packet.getToken(), new Ack("Saved game", true));
+                return new Packet(token, updateGame((Game) message));
             case LOGIN:
-                return new Packet(generateToken(), new Ack("Logged in", true));
+                token = login((Login) message);
+                if(token != null && !token.equals("")) {
+                    return new Packet(token, new Ack("Logged in", true));
+                } else {
+                    return new Packet("", new Ack("Incorrect username or password", false));
+                }
             case SIGNUP:
-                return new Packet(generateToken(), new Ack("Created user", true));
+                token = signup((Signup) message);
+                if(token != null && !token.equals("")) {
+                    return new Packet(token, new Ack("Logged in", true));
+                } else {
+                    return new Packet("", new Ack("Incorrect username or password", false));
+                }
+            case GAME_LIST_REQUEST:
+                GameList gameList = getGameList((GameListRequest) message);
+                return new Packet(token, gameList);
+            case GAME_REQUEST:
+                Game game = getGame((GameRequest) message);
+                return new Packet(token, game);
         }
         return Packet.perror("Invalid message type");
     }
 
-    public String generateToken() {
-        return null;
+    private Game updateGame(Game clientGame) {
+        DBWrapper db = new DBWrapper();
+        Game serverGame = db.getGame(clientGame.name);
+        if(serverGame.move(clientGame).success()) {
+            db.saveGame(serverGame);
+        }
+        // Whether the update happened or not, the server version is the source of truth, so send it back down
+        return serverGame;
+    }
+
+    // Returns token if successful, else null or ""
+    private String login(Login login) {
+        DBWrapper db = new DBWrapper();
+        return UUID.randomUUID().toString();
+    }
+
+    // Returns token if successful, else null or ""
+    private String signup(Signup signup) {
+        DBWrapper db = new DBWrapper();
+        return login(signup);
+    }
+
+    private GameList getGameList(GameListRequest request) {
+        DBWrapper db = new DBWrapper();
+        return new GameList(db.getPublicGames(request.user), db.getPrivateGames(request.user));
+    }
+
+    private Game getGame(GameRequest request) {
+        DBWrapper db = new DBWrapper();
+        return db.getGame(request.name);
     }
 
     private void createUserRecord(String username, String token) {
