@@ -91,7 +91,7 @@ public class DBWrapper {
 
     public Game getGame(String name) {
         Game result = null;
-        String query = "SELECT user, p1, p2, state, turn, red FROM Games WHERE user=?";
+        String query = "SELECT name, p1, p2, state, turn, red FROM Games WHERE name=?";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(query);
             stmt.setString(1, name);
@@ -115,7 +115,7 @@ public class DBWrapper {
 
     public List<Game> getGames(String username) {
         List<Game> result = new ArrayList<>();
-        String query = "SELECT user, p1, p2, state, turn, red FROM Games WHERE p1=? OR p2=?";
+        String query = "SELECT name, p1, p2, state, turn, red FROM Games WHERE p1=? OR p2=?";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(query);
             stmt.setString(1, username);
@@ -147,7 +147,7 @@ public class DBWrapper {
     }
 
     public void saveGame(Game game) {
-        String query = "INSERT INTO Games (user, p1, p2, state, turn, red) VALUES (?, ?, ?, ?, ?, ?) " +
+        String query = "INSERT INTO Games (name, p1, p2, state, turn, red) VALUES (?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE p1=?, p2=?, state=?, turn=?, red=?";
         String state = game.serializeBoard();
         String red = game.red().getName();
