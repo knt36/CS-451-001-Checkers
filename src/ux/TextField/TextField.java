@@ -1,8 +1,12 @@
 package ux.TextField;
 
 
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 import ux.Screens.STYLE;
 

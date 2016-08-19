@@ -1,18 +1,20 @@
 package ux.Screens;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import network.Client;
-import network.messages.Ack;
-import network.messages.Login;
-import network.messages.Message;
-import network.messages.MessageTypes;
-import network.messages.Packet;
 import ux.Buttons.OptionButton;
+import ux.Labels.HeaderLabel;
 import ux.Labels.TitleLabel;
 import ux.TextField.TextField;
 
@@ -42,26 +44,12 @@ public class ScrLogin extends ScrFactory{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				//Access the network
-				Client.client.send(new Login(userName.getText(), passWord.getText()), (p) -> networkLogin(p));
-			}
-		});
-	
-	}
-	
-	public void networkLogin(Packet p){
-		Message m = p.getData();
-		if(m.type()==MessageTypes.LOGIN){
-			Ack ak = (Ack)m;
-			if(ak.getSuccess()){
 				frame.dispose();
 				FrameMain fm = new FrameMain();
 				fm.add(new ScrMainMenu());
-			}else{
-				FrameNotify fn = new FrameNotify();
-				fn.add(new ScrNotify(ak.getMessage()));
 			}
-		}
+		});
+	
 	}
 	
 	public JPanel rightPanel(){

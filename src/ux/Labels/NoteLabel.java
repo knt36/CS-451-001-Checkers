@@ -1,5 +1,7 @@
 package ux.Labels;
 
+import javax.swing.JLabel;
+
 import ux.Screens.STRINGS;
 import ux.Screens.STYLE;
 

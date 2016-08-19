@@ -1,20 +1,9 @@
 package game;
 
-import static game.Color.RED;
-import static game.Disk.EMPTY;
-import static game.Disk.RED_DISK;
-import static game.Disk.RED_KING;
-import static game.Disk.WHITE_DISK;
-import static game.Disk.WHITE_KING;
-import static game.MoveStatus.ADJ;
-import static game.MoveStatus.EMPTY_SRC;
-import static game.MoveStatus.INVALID_MOVE;
-import static game.MoveStatus.INVALID_STATE;
-import static game.MoveStatus.JMP;
-import static game.MoveStatus.JMP_INCOMPLETE;
-import static game.MoveStatus.JMP_WRONG_DISK;
-import static game.MoveStatus.OUT_OF_BOARD;
-import static game.MoveStatus.WRONG_TURN;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import network.messages.Message;
+import network.messages.MessageTypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,11 +12,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import network.messages.Message;
-import network.messages.MessageTypes;
+import static game.Color.RED;
+import static game.Disk.*;
+import static game.MoveStatus.*;
 
 public class Game implements Message {
     protected static Integer boardSize = 32;

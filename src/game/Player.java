@@ -1,10 +1,8 @@
 package game;
 
-import static game.Color.NONE;
-import static game.Color.RED;
-import static game.Color.WHITE;
-
 import java.util.concurrent.ThreadLocalRandom;
+
+import static game.Color.*;
 
 public class Player {
     private final String name;

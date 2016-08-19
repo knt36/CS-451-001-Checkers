@@ -1,16 +1,15 @@
 package game;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import network.messages.Message;
+import network.messages.MessageTypes;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import network.messages.Message;
-import network.messages.MessageTypes;
 
 /**
  *

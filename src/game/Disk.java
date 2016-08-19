@@ -1,8 +1,6 @@
 package game;
 
-import static game.Color.NONE;
-import static game.Color.RED;
-import static game.Color.WHITE;
+import static game.Color.*;
 
 public class Disk {
     public static final Disk RED_DISK = new Disk(RED, false);

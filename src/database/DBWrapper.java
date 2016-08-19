@@ -1,21 +1,17 @@
 package database;
 
-import static game.Color.RED;
-import static game.Color.WHITE;
+import game.Disk;
+import game.Game;
+import game.Player;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-import game.Disk;
-import game.Game;
-import game.Player;
+import static game.Color.RED;
+import static game.Color.WHITE;
 
 /**
  */

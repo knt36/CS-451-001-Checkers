@@ -5,11 +5,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class FrameMain extends JFrame{
 	protected GridBagConstraints constr = new GridBagConstraints();
 	public FrameMain() {
-		
 		// TODO Auto-generated constructor stub
 		this.setLayout(new GridBagLayout());
 		constr.weightx=1;
