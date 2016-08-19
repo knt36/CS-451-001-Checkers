@@ -2,8 +2,13 @@ package game;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import network.messages.Message;
+import network.messages.MessageTypes;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -11,7 +16,7 @@ import static game.Color.RED;
 import static game.Disk.*;
 import static game.MoveStatus.*;
 
-public class Game extends Observable {
+public class Game implements Message {
     protected static Integer boardSize = 32;
     protected static Integer columns = (int) Math.sqrt(boardSize / 2);
     protected static Integer width = columns * 2;
@@ -26,7 +31,7 @@ public class Game extends Observable {
     /**
      * Creates a new public game with the initiating player. Colors will be randomized.
      *
-     * @param name Unique game name
+     * @param name Unique game user
      * @param u1   Username of the player who created the game
      */
     public Game(String name, String u1) {
@@ -36,9 +41,9 @@ public class Game extends Observable {
     }
 
     /**
-     * Creates a new private game between two players. Player name order does not matter as colors will be randomized.
+     * Creates a new private game between two players. Player user order does not matter as colors will be randomized.
      *
-     * @param name Unique game name
+     * @param name Unique game user
      * @param u1   Username of the first player.
      * @param u2   Username of the second player.
      */
@@ -51,7 +56,7 @@ public class Game extends Observable {
     /**
      * Creates game object from existing game data. Will throw exceptions for invalid data.
      *
-     * @param name  Unique game name
+     * @param name  Unique game user
      * @param p1    First player
      * @param p2    Second player. Must have opposite color of first player
      * @param board Board state. Must have 32 spaces and <= 12 red and <= 12 white disks.
@@ -181,7 +186,7 @@ public class Game extends Observable {
                 p1 = p2.opponent(u1);
             }
             List<Disk> board = deserializeBoard(root.get("board").getAsString());
-            String name = root.get("name").getAsString();
+            String name = root.get("user").getAsString();
             String moveString = root.get("moves").getAsString();
             List<Integer> moves = new ArrayList<>();
             if (!moveString.isEmpty()) {
@@ -195,7 +200,7 @@ public class Game extends Observable {
 
     /**
      * Constructs a new game with two players
-     * @param name Unique game name
+     * @param name Unique game user
      * @param p1 First player
      * @param p2 Second player. Must be the opposite color of the first player
      */
@@ -211,7 +216,7 @@ public class Game extends Observable {
 
     /**
      * Constructs a game from components if state is valid, otherwise throws IllegalArgumentException.
-     * @param name Unique game name
+     * @param name Unique game user
      * @param p1 First player
      * @param p2 Second player. Must have opposite color of first player.
      * @param board Board state. Must have 32 squares, <= 12 white disks, and <= 12 red disks
@@ -430,9 +435,14 @@ public class Game extends Observable {
         root.addProperty("p1", this.p1.getName());
         root.addProperty("p2", this.p2.getName());
         root.addProperty("board", serializeBoard());
-        root.addProperty("name", this.name);
+        root.addProperty("user", this.name);
         root.addProperty("moves", this.lastMove.stream().map(Object::toString).collect(Collectors.joining(",")));
         root.addProperty("red", this.red().getName());
         return root;
+    }
+
+    @Override
+    public MessageTypes type() {
+        return MessageTypes.GAME;
     }
 }

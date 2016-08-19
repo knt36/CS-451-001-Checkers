@@ -1,41 +1,28 @@
 package ux.Screens;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.Scrollable;
-
 import game.Game;
 import ux.Buttons.OptionButton;
 import ux.Labels.BulletLabel;
 import ux.Labels.HeaderLabel;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 public class ScrMainMenu extends ScrFactory{
 	protected HeaderLabel curGameLabel = new HeaderLabel(STRINGS.CURGAMELABEL);
+	protected HeaderLabel pubGameLabel = new HeaderLabel(STRINGS.PUBGAMELABEL);
+	protected OptionButton contBt = new OptionButton(STYLE.GREEN, STRINGS.CONTINUEBUT);
+	protected OptionButton newGameBt = new OptionButton(STYLE.GREEN, STRINGS.NEW_GAMEBUT);
+	protected OptionButton helpBt = new OptionButton(STYLE.GREEN, STRINGS.HELPBUT);
+	protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
 	//Bullets
 	ScrFactory curGameArea = new ScrFactory();
 	JScrollPane curGameScroll = new JScrollPane(curGameArea);
-	
-	
-	protected HeaderLabel pubGameLabel = new HeaderLabel(STRINGS.PUBGAMELABEL);
 	//Bullets
 	ScrFactory pubGameArea = new ScrFactory();
 	JScrollPane pubGameScroll = new JScrollPane(pubGameArea);
-	
-	protected OptionButton contBt = new OptionButton(STYLE.GREEN,STRINGS.CONTINUEBUT);
-	protected OptionButton newGameBt = new OptionButton(STYLE.GREEN,STRINGS.NEW_GAMEBUT);
-	protected OptionButton helpBt = new OptionButton(STYLE.GREEN,STRINGS.HELPBUT);
-	protected OptionButton quitBt= new OptionButton(Color.red,STRINGS.QUITBUT);
 	
 	public ScrMainMenu() {
 		// TODO Auto-generated constructor stub
@@ -80,7 +67,7 @@ public class ScrMainMenu extends ScrFactory{
 			//Selects Unique Type of Game and then opens it. Game info from the database. For now it'll just open a generic one
 			FrameGame fg = new FrameGame();
 			fg.add(new ScrGame(new Game("DeathMatch", "Khoi", "Racheal")));
-			//Need to title the game to its name. Temporarily make a label at the top.
+			//Need to title the game to its user. Temporarily make a label at the top.
 			fg.setTitle("DeathMatch");
 		}
 	});
