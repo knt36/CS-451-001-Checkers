@@ -79,7 +79,7 @@ public class ScrMainMenu extends ScrFactory {
 				// TODO Auto-generated method stub
 				//Selects Unique Type of Game and then opens it. Game info from the database. For now it'll just open a generic one
 				FrameGame fg = new FrameGame();
-				fg.add(new ScrGame(new Game("DeathMatch", "Khoi", "Racheal")));
+				fg.add(new ScrGame(new Game("DeathMatch", "Khoi", "Rachel")));
 				//Need to title the game to its name. Temporarily make a label at the top.
 				fg.setTitle("DeathMatch");
 			}
