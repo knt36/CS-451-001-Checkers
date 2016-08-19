@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import game.Game;
-import game.GameManager;
+import game.GameList;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,9 +16,9 @@ import java.util.function.Function;
  */
 public class Packet {
     // Function should be 'public static Object fromJson(JsonElement json) {}'
-    private static Map<String, Function<JsonElement, Object>> fromJson;
+    private static Map<String, Function<JsonElement, Message>> fromJson;
     // Function should be 'public JsonElement toJson() {}'
-    private static Map<Class, Function<Object, JsonElement>> toJson;
+    private static Map<Class, Function<Message, JsonElement>> toJson;
 
     static {
         toJson = new HashMap<>();
@@ -26,7 +26,7 @@ public class Packet {
         toJson.put(Signup.class, req -> ((Signup) req).toJson());
         toJson.put(Ack.class, req -> ((Ack) req).toJson());
         toJson.put(Login.class, req -> ((Login) req).toJson());
-        toJson.put(GameManager.class, req -> ((GameManager) req).toJson());
+        toJson.put(GameList.class, req -> ((GameList) req).toJson());
         toJson.put(GameRequest.class, req -> ((GameRequest) req).toJson());
         toJson.put(GameListRequest.class, req -> ((GameListRequest) req).toJson());
 
@@ -35,15 +35,15 @@ public class Packet {
         fromJson.put(Signup.class.getSimpleName(), Signup::fromJson);
         fromJson.put(Ack.class.getSimpleName(), Ack::fromJson);
         fromJson.put(Login.class.getSimpleName(), Login::fromJson);
-        fromJson.put(GameManager.class.getSimpleName(), GameManager::fromJson);
+        fromJson.put(GameList.class.getSimpleName(), GameList::fromJson);
         fromJson.put(GameRequest.class.getSimpleName(), GameRequest::fromJson);
         fromJson.put(GameListRequest.class.getSimpleName(), GameListRequest::fromJson);
     }
 
     private String token;
-    private Object data;
+    private Message data;
 
-    public Packet(String token, Object data) {
+    public Packet(String token, Message data) {
         this.token = token;
         this.data = data;
     }
@@ -61,11 +61,11 @@ public class Packet {
             JsonObject root = new JsonParser().parse(json).getAsJsonObject();
             String token = root.get("token").getAsString();
             String type = root.get("type").getAsString();
-            Function<JsonElement, Object> func = fromJson.get(type);
+            Function<JsonElement, Message> func = fromJson.get(type);
             if (func == null) {
                 return null;
             }
-            Object data = func.apply(root.get("data"));
+            Message data = func.apply(root.get("data"));
             return new Packet(token, data);
         } catch (IllegalStateException | UnsupportedOperationException e) {
             return null;
@@ -75,7 +75,7 @@ public class Packet {
     public String toJson() {
         JsonObject root = new JsonObject();
         root.addProperty("token", token);
-        Function<Object, JsonElement> func = toJson.get(data.getClass());
+        Function<Message, JsonElement> func = toJson.get(data.getClass());
         if (func == null) {
             return null;
         }
@@ -84,12 +84,8 @@ public class Packet {
         return new Gson().toJson(root);
     }
 
-    public Object getData() {
+    public Message getData() {
         return this.data;
-    }
-
-    public Class getType() {
-        return this.data.getClass();
     }
 
     public String getToken() {

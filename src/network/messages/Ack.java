@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
  *
  * State is true or false,
  */
-public class Ack {
+public class Ack implements Message {
     private Boolean success;
     private String message;
 
@@ -33,5 +33,10 @@ public class Ack {
         root.addProperty("message", message);
         root.addProperty("success", success);
         return root;
+    }
+
+    @Override
+    public MessageTypes type() {
+        return MessageTypes.ACK;
     }
 }
