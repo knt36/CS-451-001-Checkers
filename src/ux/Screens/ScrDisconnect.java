@@ -1,10 +1,10 @@
 package ux.Screens;
 
+import java.awt.Color;
+
 import ux.Buttons.OptionButton;
 import ux.Labels.NoteLabel;
 import ux.Utilities.Timing;
-
-import java.awt.*;
 
 public class ScrDisconnect extends ScrFactory {
 	protected OptionButton quitBut = new OptionButton(Color.RED, STRINGS.QUITBUT);

@@ -1,7 +1,5 @@
 package ux.Labels;
 
-import javax.swing.JLabel;
-
 public class ButtonLabel extends LabelFactory {
 
 	public ButtonLabel(String label) {

@@ -7,9 +7,7 @@ import java.awt.geom.Ellipse2D;
 
 import javax.swing.BorderFactory;
 
-import ux.Labels.NoteLabel;
 import ux.Screens.STYLE;
-import game.Disk;
 
 public class BoardButton extends ButtonFactory {
 	

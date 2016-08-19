@@ -1,14 +1,15 @@
 package network;
 
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
+import static java.nio.charset.Charset.defaultCharset;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Random;
 
-import static java.nio.charset.Charset.defaultCharset;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 /**
  * Unit tested 8/19/16, 100% methods, 14/16 lines

@@ -1,16 +1,16 @@
 package network;
 
-import database.DBWrapper;
-import game.Game;
-import network.messages.Ack;
-import network.messages.Message;
-import network.messages.Packet;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+
+import database.DBWrapper;
+import game.Game;
+import network.messages.Ack;
+import network.messages.Message;
+import network.messages.Packet;
 
 /**
  * This is the thread handler for the server.

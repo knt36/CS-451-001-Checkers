@@ -5,7 +5,6 @@ import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
 
 public class STYLE {
 	public static final Border DEFAULTBORDER = BorderFactory.createLineBorder(STYLE.PANELBORDERCOLOR, STYLE.PANELBORDERSIZE, true);

@@ -1,12 +1,12 @@
 package ux.Buttons;
 
 
-import ux.Screens.FrameMain;
-import ux.Screens.FrameNotify;
-import ux.Screens.ScrDeleteConfirm;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import ux.Screens.FrameMain;
+import ux.Screens.FrameNotify;
+import ux.Screens.ScrNotify;
 
 
 /**
@@ -20,6 +20,6 @@ public class EndGameListener implements ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
         //pop open a dialog, this will handle
         FrameMain deleteFr = new FrameNotify();
-        deleteFr.addComp(new ScrDeleteConfirm());
+        deleteFr.addComp(new ScrNotify());
     }
 }
