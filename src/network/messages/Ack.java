@@ -9,7 +9,23 @@ import com.google.gson.JsonObject;
  * State is true or false,
  */
 public class Ack implements Message {
-    private Boolean success;
+    public Boolean getSuccess() {
+		return success;
+	}
+
+	public void setSuccess(Boolean success) {
+		this.success = success;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	private Boolean success;
     private String message;
 
     public Ack(String message, Boolean success) {
