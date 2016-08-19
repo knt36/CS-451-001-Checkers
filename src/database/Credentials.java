@@ -41,4 +41,6 @@ public class Credentials {
     public String password() {
         return salt + ":" + hash;
     }
+
+    public void updateTokenDate() { this.tokenDate = Date.valueOf(LocalDate.now()); }
 }

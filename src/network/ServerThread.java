@@ -100,12 +100,30 @@ public class ServerThread extends Thread {
     // Returns token if successful, else null or ""
     private String login(Login login) {
         DBWrapper db = new DBWrapper();
-        return UUID.randomUUID().toString();
+        String u = login.getUsername();
+        String p = login.getPassword();
+
+        Credentials savedUser = db.getUser(u);
+        // no user exists with this username
+        if (savedUser == null){ return ""; }
+        // password verification failed.
+        if (!Utils.verifyHash(p, u, savedUser.salt)){ return ""; }
+
+        String token = UUID.randomUUID().toString();
+        savedUser.token = token;
+        savedUser.updateTokenDate();
+        db.saveUser(savedUser);
+
+        return token;
     }
 
     // Returns token if successful, else null or ""
     private String signup(Signup signup) {
         DBWrapper db = new DBWrapper();
+        String u = signup.getUsername();
+        Credentials savedUser = db.getUser(u);
+        // no user exists with this username
+        if (savedUser != null){ return ""; }
         return login(signup);
     }
 
@@ -129,5 +147,4 @@ public class ServerThread extends Thread {
     private Boolean pruneTokens() {
         return false;
     }
-
 }
