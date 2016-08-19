@@ -38,7 +38,7 @@ public class TextField extends TextFieldFactory{
 				// TODO Auto-generated method stub
 				setText("");
 				setForeground(STYLE.TEXTFIELDCOLOR);
-				System.out.println("Focused gained");
+				//System.out.println("Focused gained");
 			}
 		});
 	}

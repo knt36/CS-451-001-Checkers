@@ -20,7 +20,7 @@ public class ScrDeleteConfirm extends ScrFactory{
 	NoteLabel msg = new NoteLabel(STRINGS.PERMADELETE); 
 	public ScrDeleteConfirm() {
 		// TODO Auto-generated constructor stub
-		//The button fills horizontal unlike everything else. This is intended or  I have to increaes the original frame size.
+		//The button fills horizontal unlike everything else. This is intended or  I have to increase the original frame size.
 		this.constr.gridwidth =2;
 		this.add(msg);
 		this.constr.gridwidth=1;
