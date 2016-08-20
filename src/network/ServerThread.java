@@ -1,5 +1,6 @@
 package network;
 
+import database.Credentials;
 import database.DBWrapper;
 import database.UserList;
 import game.Game;
@@ -129,11 +130,40 @@ public class ServerThread extends Thread {
 
     // Returns token if successful, else null or ""
     private String login(Login login) {
-        return UUID.randomUUID().toString();
+        DBWrapper db = new DBWrapper();
+        String u = login.getUsername();
+        String p = login.getPassword();
+
+        Credentials savedUser = db.getUser(u);
+        // no user exists with this username
+        if (savedUser == null){ return ""; }
+        // password verification failed.
+        if (!Utils.verifyHash(p, u, savedUser.salt)){ return ""; }
+
+        String token = UUID.randomUUID().toString();
+        savedUser.token = token;
+        savedUser.updateTokenDate();
+        db.saveUser(savedUser);
+
+        return token;
     }
 
     // Returns token if successful, else null or ""
     private String signup(Signup signup) {
+        DBWrapper db = new DBWrapper();
+        String username = signup.getUsername();
+        Credentials savedUser = db.getUser(username);
+        // no user exists with this username
+        if (savedUser != null){ return ""; }
+        //Begin updating this credential object with new info
+        String password = signup.getPassword();
+        String salt = Utils.generateSalt();
+        String hash = Utils.hash(password, salt);
+        // Create the Credentials object
+        savedUser = new Credentials(username, salt, hash);
+        // Save it
+        db.saveUser(savedUser);
+        // Proceed to the login flow to generate a token
         return login(signup);
     }
 
