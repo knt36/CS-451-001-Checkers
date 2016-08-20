@@ -17,6 +17,11 @@ import javax.swing.Scrollable;
 
 import game.Game;
 import game.GameList;
+import network.Client;
+import network.messages.Ack;
+import network.messages.GameListRequest;
+import network.messages.Message;
+import network.messages.Packet;
 import ux.Buttons.OptionButton;
 import ux.Labels.BulletGameLabel;
 import ux.Labels.HeaderLabel;
@@ -126,6 +131,7 @@ public class ScrMainMenu extends ScrFactory {
 	}
 	
 	public void refreshGameList(){
+        Client.client.send(new GameListRequest(Client.client.getUsername()), (p)->networkGameListRefresh(p));
 		this.curGameArea.removeAll();
 		this.pubGameArea.removeAll();
 		if(this.gameList == null){
@@ -220,5 +226,21 @@ public class ScrMainMenu extends ScrFactory {
 		revalidate();
 		repaint();
 	}
+
+    private void networkGameListRefresh(Packet p) {
+        Message message = p.getData();
+        switch (message.type()) {
+            case GAME_LIST:
+                this.gameList = (GameList) message;
+            case ACK:
+                Ack ack = (Ack) message;
+                //Creation failed
+                System.out.println("Something failed");
+                FrameNotify fn = new FrameNotify();
+                fn.add(new ScrNotify(ack.getMessage()));
+            default:
+                System.out.println("Unexpected message from server: " + p.toJson());
+        }
+    }
 
 }

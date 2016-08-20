@@ -22,14 +22,21 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import game.Game;
+import game.GameList;
 import game.Player;
 import network.Client;
+import network.messages.Ack;
+import network.messages.GameRequest;
+import network.messages.Message;
+import network.messages.Packet;
 import ux.Buttons.OptionButton;
 import ux.CheckBox.CheckBoxFactory;
 import ux.Labels.BulletLabel;
 import ux.Labels.GroupBulletLabel;
 import ux.Labels.HeaderLabel;
 import ux.TextField.TextField;
+
+import static network.messages.MessageTypes.ACK;
 
 public class ScrCreateGame extends ScrFactory {
 	protected TextField gameNameField = new TextField(STRINGS.GAMENAME);
@@ -154,22 +161,18 @@ public class ScrCreateGame extends ScrFactory {
 				//Saves the game to the server
 				//Opens the game in question
 				if(allUsers.isSelected()){
-					FrameGame fg = new FrameGame();
-					fg.add(new ScrGame(new Game(gameNameField.getText(), Client.client.getUsername(), "User")));
-					frame.dispose();
+                    Client.client.send(new Game(gameNameField.getText(), Client.client.getUsername()), (p)->networkGameRequest(p));
 				}else {
 					if(selectedUserForGame != -1){
 						//A player has been selected since it is not -1
-						FrameGame fg = new FrameGame();
-						fg.add(new ScrGame(new Game(gameNameField.getText(), Client.client.getUsername(), playerList.get(selectedUserForGame).getName())));
-						frame.dispose();
+                        Client.client.send(new Game(gameNameField.getText(), Client.client.getUsername(), playerList.get(selectedUserForGame).getName()), (p)->networkGame(p));
 					}else{
 						FrameNotify fn = new FrameNotify();
 						fn.add(new ScrNotify("Either select a player or checkbox for all players..."));
 					}
 				}
-				
-				//On the creation of a game, it has to write to the database
+
+
 				
 			}
 		});
@@ -200,13 +203,14 @@ public class ScrCreateGame extends ScrFactory {
 					String s = searchUserName.getText();
 					if(s.length()==3){
 						//Get the database info for the names
-						System.out.println("Text is 3 long");
+						System.out.println(s);
+                        //Client.client.send(new UserListRequest(s), (p)->networkGameRequest(p));
 					} else if(s.length()<3){
 						//Do nothing
-						System.out.println("Text is less 3 long");
+						System.out.println(s);
 					} else{
 						//if it is greater than 3 then just search off the list you have now
-						System.out.println("Text is greater 3 long");
+						System.out.println(s);
 					}
 				}catch(Exception b){
 					
@@ -214,5 +218,29 @@ public class ScrCreateGame extends ScrFactory {
 			}
 		});
 	}
-	
+
+    private void networkGame(Packet p) {
+
+    }
+
+    private void networkGameRequest(Packet p) {
+        Message message = p.getData();
+        switch (message.type()) {
+            case GAME:
+                Game game = (Game) message;
+                FrameGame fg = new FrameGame();
+                fg.add(new ScrGame(new Game(game)));
+                frame.dispose();
+            case ACK:
+                Ack ack = (Ack) message;
+                //Creation failed
+                System.out.println("Something failed");
+                FrameNotify fn = new FrameNotify();
+                fn.add(new ScrNotify(ack.getMessage()));
+            default:
+                System.out.println("Unexpected message from server: " + p.toJson());
+        }
+    }
+
+
 }

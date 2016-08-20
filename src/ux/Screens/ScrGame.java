@@ -20,6 +20,10 @@ import game.Game;
 import game.MoveStatus;
 import game.Player;
 import javafx.scene.shape.Circle;
+import network.Client;
+import network.messages.Ack;
+import network.messages.Message;
+import network.messages.Packet;
 import ux.Buttons.GuiBoard;
 import ux.Buttons.ListenerBoard;
 import ux.Buttons.OptionButton;
@@ -79,7 +83,9 @@ public class ScrGame extends ScrFactory{
 					setTurnText();
 					revalidate();
 					repaint();
-					}
+                    //send to server
+                    Client.client.send(new Game(game), (p)->networkGame(p));
+                }
 			}
 		});
 		
@@ -113,7 +119,29 @@ public class ScrGame extends ScrFactory{
 		});
 	
 	}
-	public void setTurnText(){
+
+    private void networkGame(Packet p) {
+        Message message = p.getData();
+        switch (message.type()) {
+            case GAME:
+                Game game = (Game) message;
+                System.out.print("update Game board");
+                board.setBoard(game);
+                setTurnText();
+                revalidate();
+                repaint();
+            case ACK:
+                Ack ack = (Ack) message;
+                //Creation failed
+                System.out.println("Something failed");
+                FrameNotify fn = new FrameNotify();
+                fn.add(new ScrNotify(ack.getMessage()));
+            default:
+                System.out.println("Unexpected message from server: " + p.toJson());
+        }
+    }
+
+    public void setTurnText(){
 		if(this.game.winner()!=null){
 			//there is a winner
 			Player winner = this.game.winner();
