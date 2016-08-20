@@ -25,7 +25,7 @@ public class Utils {
      *
      * @return  salt as string
      */
-    public String generateSalt() {
+    public static String generateSalt() {
         final Random r = new SecureRandom();
         byte[] salt = new byte[32];
         r.nextBytes(salt);
@@ -46,7 +46,7 @@ public class Utils {
      * @return  PBKDF2 hash to be stored in the database with the salt.
      *
      */
-    private String hash(String p, String s, int iterations, int keyLength) {
+    private static String hash(String p, String s, int iterations, int keyLength) {
         //Conver
         final byte[] salt = s.getBytes(defaultCharset());
         final char[] password = p.toCharArray();
@@ -74,7 +74,7 @@ public class Utils {
      * @return  PBKDF2 hash to be stored in the database with the salt.
      *
      */
-    public String hash(String p, String s){
+    public static String hash(String p, String s){
         return hash(p, s, ITERATIONS, KEY_LENGTH);
     }
 
@@ -88,7 +88,7 @@ public class Utils {
      * @return  true if the password and salt go together, false if they do not
      *
      */
-    public Boolean verifyHash(String password, String hash, String salt) {
+    public static Boolean verifyHash(String password, String hash, String salt) {
         return hash.equals(hash(password, salt));
     }
 }

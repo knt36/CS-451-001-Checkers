@@ -33,14 +33,14 @@ public class Client extends Observable {
     }
 
     public String getUsername() {
-		return username;
-	}
+        return username;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	private void sendData(String data, Consumer<Packet> callback) {
+    private void sendData(String data, Consumer<Packet> callback) {
         new ClientThread(data, callback).start();
     }
 
