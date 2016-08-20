@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Date;
 import java.util.Timer;
 
@@ -110,6 +112,7 @@ public class ScrGame extends ScrFactory{
 				//Idk some surrendering conditions before leaving the game server or just delete the game period.
 			}
 		});
+	
 	}
 	public void setTurnText(){
 		if(this.game.winner()!=null){
