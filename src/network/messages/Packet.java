@@ -22,7 +22,7 @@ public class Packet {
     static {
         fromJson = new HashMap<>();
         fromJson.put(Game.class.getSimpleName(), Game::fromJson);
-        fromJson.put(Signup.class.getSimpleName(), Signup::fromJson);
+        fromJson.put(Signup.class.getSimpleName(), Signup::signupFromJson);
         fromJson.put(Ack.class.getSimpleName(), Ack::fromJson);
         fromJson.put(Login.class.getSimpleName(), Login::fromJson);
         fromJson.put(GameList.class.getSimpleName(), GameList::fromJson);

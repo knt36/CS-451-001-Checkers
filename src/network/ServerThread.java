@@ -77,15 +77,15 @@ public class ServerThread extends Thread {
         switch (packet.getData().type()) {
             case GAME:
                 return new Packet(token, updateGame((Game) message));
-            case LOGIN:
-                token = login((Login) message);
-                if(token != null && !token.equals("")) {
+            case SIGNUP:
+                token = signup((Signup) message);
+                if (token != null && !token.equals("")) {
                     return new Packet(token, new Ack("Logged in", true));
                 } else {
                     return Packet.perror("Incorrect username or password");
                 }
-            case SIGNUP:
-                token = signup((Signup) message);
+            case LOGIN:
+                token = login((Login) message);
                 if(token != null && !token.equals("")) {
                     return new Packet(token, new Ack("Logged in", true));
                 } else {
