@@ -43,19 +43,20 @@ public class ServerThread extends Thread {
             System.out.println("Got " + input);
             if (packet == null || packet.getData() == null) {
                 out.write(Packet.error("Could not parse data"));
-                return; // Error from client side, nothing to do
             }
             Packet result = process(packet);
             String output = result.toJson();
             if (output == null) {
-                return; // We fucked up, this is bad
+                output = Packet.error("Server error, failed to process data");
             }
+            System.out.println("Sending: " + output);
             out.write(output + "\n");
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
+                System.out.println("Closing Socket");
                 socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -124,16 +125,4 @@ public class ServerThread extends Thread {
         DBWrapper db = new DBWrapper();
         return db.getGame(request.name);
     }
-
-    private void createUserRecord(String username, String token) {
-    }
-
-    private Boolean destroyToken(String token) {
-        return false;
-    }
-
-    private Boolean pruneTokens() {
-        return false;
-    }
-
 }
