@@ -45,8 +45,16 @@ public class BoardButton extends ButtonFactory {
 		   Graphics2D g2d = (Graphics2D)g;
 		   // Assume x, y, and diameter are instance variables.
 		   //Set for border
-		   int x = STYLE.SIZEDISC;
-		   int y = STYLE.SIZEDISC;
+		   //System.out.println("X: " + this.getSize().width);
+		   //System.out.println("Y: " + this.getSize().height);
+		   int x = (int)(this.getSize().width*0.9);
+		   int y = (int)(this.getSize().height*0.9);
+		   //Get the biggest circle withut ruining the circle
+		   if(x > y){
+			   x = y;
+		   }else{
+			   y = x;
+		   }
 		   if(c != null){
 			   g.setColor(Color.black);
 			   Ellipse2D.Double circle1 = new Ellipse2D.Double((0-x/2)+ this.getSize().getWidth()/2,(0-y/2)+this.getSize().getHeight()/2,x,y);
