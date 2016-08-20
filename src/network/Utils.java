@@ -3,12 +3,11 @@ package network;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Random;
-
-import static java.nio.charset.Charset.defaultCharset;
 
 /**
  * Unit tested 8/19/16, 100% methods, 14/16 lines
@@ -27,10 +26,11 @@ public class Utils {
      */
     public static String generateSalt() {
         final Random r = new SecureRandom();
-        byte[] salt = new byte[32];
+        byte[] salt = new byte[8];
         r.nextBytes(salt);
         //byte[] saltEncoded = Base64.getEncoder().encode(salt);
-        return new String(salt, defaultCharset());
+        //System.out.println("GENERATED SALT: " + toHex(salt));
+        return toHex(salt);
     }
     /**
      * This is the internal hashing function.
@@ -38,6 +38,8 @@ public class Utils {
      *              !!!INTERNAL USE ONLY!!!
      *
      * --- DO NOT UNDER ANY CIRCUMSTANCES CALL THIS DIRECTLY!---
+     *
+     * Taken from the OWASP Secure Java Coding Guide
      *
      * @param   p the password to be hashed
      * @param   s the salt that goes with this hash
@@ -49,7 +51,8 @@ public class Utils {
      */
     private static String hash(String p, String s, int iterations, int keyLength) {
         //final byte[] salt = Base64.getDecoder().decode(s);
-        final byte[] salt = s.getBytes();
+        final byte[] salt = fromHex(s);
+        //System.out.println("SALT: " + s);
         final char[] password = p.toCharArray();
         try {
             SecretKeyFactory skf = SecretKeyFactory.getInstance( "PBKDF2WithHmacSHA512" );
@@ -57,7 +60,8 @@ public class Utils {
             SecretKey key = skf.generateSecret( spec );
             byte[] hash = key.getEncoded();
             //byte[] hashEncoded = Base64.getEncoder().encode(hash);
-            return new String(hash, defaultCharset());
+            //System.out.println("HASH: " + toHex(hash));
+            return toHex(hash);
 
         } catch( NoSuchAlgorithmException | InvalidKeySpecException e ) {
             // Something's gone VERY VERY WRONG!!!
@@ -94,4 +98,38 @@ public class Utils {
 
         return hash.equals(hash(password, salt));
     }
+
+    /**
+     * This converts Bytes to hex strings. Written by jtan189@Github.
+     * [https://gist.github.com/jtan189/3804290]
+     *
+     * @param array salt or hash to convert
+     * @return hex string that can be stored in a database.
+     */
+    private static String toHex(byte[] array) {
+        BigInteger bi = new BigInteger(1, array);
+        String hex = bi.toString(16);
+        int paddingLength = (array.length * 2) - hex.length();
+        if (paddingLength > 0)
+            return String.format("%0" + paddingLength + "d", 0) + hex;
+        else
+            return hex;
+    }
+
+    /**
+     * This converts hex strings to Byte Arrays. Written by jtan189@Github.
+     *
+     * @param hex hex string that represents a salt or hash
+     * @return byte array to be processed by the Key spec
+     */
+    private static byte[] fromHex(String hex) {
+        byte[] binary = new byte[hex.length() / 2];
+        for (int i = 0; i < binary.length; i++) {
+            binary[i] = (byte) Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
+        }
+        return binary;
+    }
+
+
+
 }

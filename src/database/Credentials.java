@@ -1,9 +1,7 @@
 package database;
 
-import java.nio.charset.Charset;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Base64;
 
 /**
  *
@@ -40,19 +38,19 @@ public class Credentials {
     }
 
     public String getSalt() {
-        return new String(Base64.getDecoder().decode(this.salt), Charset.defaultCharset());
+        return this.salt;
     }
 
     public void setSalt(String salt) {
-        this.salt = new String(Base64.getEncoder().encode(salt.getBytes()), Charset.defaultCharset());
+        this.salt = salt;
     }
 
     public String getHash() {
-        return hash = new String(Base64.getDecoder().decode(this.hash), Charset.defaultCharset());
+        return this.hash;
     }
 
     public void setHash(String hash) {
-        this.hash = new String(Base64.getEncoder().encode(hash.getBytes()), Charset.defaultCharset());
+        this.hash = hash;
     }
 
     public String password() {
