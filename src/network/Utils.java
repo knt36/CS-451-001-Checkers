@@ -74,7 +74,7 @@ public class Utils {
      * @return  PBKDF2 hash to be stored in the database with the salt.
      *
      */
-    public static String hash(String p, String s){
+    public static String hash(String p, String s) {
         return hash(p, s, ITERATIONS, KEY_LENGTH);
     }
 

@@ -42,5 +42,7 @@ public class Credentials {
         return salt + ":" + hash;
     }
 
-    public void updateTokenDate() { this.tokenDate = Date.valueOf(LocalDate.now()); }
+    public void updateTokenDate() {
+        this.tokenDate = Date.valueOf(LocalDate.now());
+    }
 }
