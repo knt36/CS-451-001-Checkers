@@ -11,7 +11,7 @@ public class Signup extends Login {
 
     public static Signup signupFromJson(JsonElement json) {
         Login login = Login.fromJson(json);
-        return (Signup) login;
+        return new Signup(login.getUsername(), login.getPassword());
     }
 
     @Override
