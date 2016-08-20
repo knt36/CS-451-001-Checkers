@@ -21,16 +21,14 @@ public class DBWrapper {
     private static final String password = "C01l3e18999";
     private static final String database = "Checker";
     private static final String port = "3306";
+    private static final String server = "127.0.0.1"; //Local Since The Server Code is running Local
     private Connection conn;
 
     public DBWrapper() {
         this.conn = null;
-        Properties connectionProps = new Properties();
-        connectionProps.put("user", user);
-        connectionProps.put("password", password);
         try {
-            this.conn = DriverManager.getConnection("jdbc:mysql://" + database + ":" + port + "/", connectionProps);
-        } catch (SQLException e) {
+        		this.conn = DriverManager.getConnection("jdbc:mysql://"+server+":"+ port +"/"+database,user,password);
+        	} catch (SQLException e) {
             printSQLException(e);
         }
     }

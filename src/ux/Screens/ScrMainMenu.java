@@ -91,7 +91,7 @@ public class ScrMainMenu extends ScrFactory {
 		//Start refreshing game thread
 		Runnable rt = new ThreadRefreshGameList(this);
 		Thread th = new Thread(rt);
-		th.start();
+		//th.start();
 	}
 
 	public ScrFactory leftPanel() {

@@ -35,7 +35,11 @@ public class ClientThread extends Thread {
             out.write(data + "\n");
             out.flush();
             System.out.println("After read line1");
-            String input = in.readLine();
+            String input = null;
+            while(input == null){
+            	System.out.println("Trying to read");
+            	input = in.readLine();
+            }
             System.out.println("After read line2");
             Packet packet = Packet.fromJson(input);
             if (input == null || input.equals(".")) {
