@@ -148,12 +148,13 @@ public final class DBWrapper {
     public static List<Game> getPrivateGames(String username) {
         Connection conn = null;
         List<Game> result = new ArrayList<>();
-        String sql = "SELECT name, p1, p2, state, turn, red FROM Games WHERE p1=? OR p2=?";
+        String sql = "SELECT name, p1, p2, state, turn, red FROM Games WHERE p1=? OR p2=? AND p2!=?";
         try {
             conn = connect();
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
             stmt.setString(2, username);
+            stmt.setString(3, "");
             ResultSet rs = query(stmt);
             while (rs.next()) {
                 result.add(gameFromSQL(rs));
