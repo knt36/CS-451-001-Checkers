@@ -2,9 +2,7 @@ package network;
 
 import network.messages.Login;
 import network.messages.Message;
-import network.messages.MessageTypes;
 import network.messages.Packet;
-import network.messages.Signup;
 
 import java.util.Observable;
 import java.util.function.Consumer;
@@ -21,14 +19,11 @@ public class Client extends Observable {
     }
 
     public void send(Message message, Consumer<Packet> callback) {
-    	//Assuming username initializers
-    	if(message.type() == MessageTypes.LOGIN){
-    		//Login type message so set the user name to the client user name
-    		this.username = ((Login)message).getUsername();
-    	}else if (message.type() == MessageTypes.SIGNUP){
-    		this.username = ((Signup)message).getUsername();
-    	}
-    	
+        switch (message.type()) {
+            case LOGIN:
+            case SIGNUP:
+                this.username = ((Login) message).getUsername();
+        }
         Packet packet = new Packet(token, message);
         String json = packet.toJson();
         if (json == null) {

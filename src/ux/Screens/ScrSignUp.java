@@ -1,21 +1,15 @@
 package ux.Screens;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import network.Client;
 import network.messages.Ack;
-import network.messages.Login;
+import network.messages.Message;
 import network.messages.Packet;
 import network.messages.Signup;
 import ux.Buttons.OptionButton;
-import ux.TextField.TextField;
 import ux.TextField.UserTextField;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ScrSignUp extends ScrFactory{
 	protected UserTextField userName = new UserTextField(STRINGS.USERNAME_HINT);
@@ -52,22 +46,26 @@ public class ScrSignUp extends ScrFactory{
 	}
 	
 	public void networkSignup(Packet p){
-		Ack k = (Ack)p.getData();
-		if(k.getSuccess()){
-			//Username and password made successfully.
-			FrameMain fm = new FrameMain();
-			fm.add(new ScrMainMenu());
-			FrameNotify fn = new FrameNotify();
-			fn.add(new ScrNotify(k.getMessage()));
-			frame.link.dispose();
-			frame.dispose();
-			
-			
-		}else {
-			//Creation failed
-			System.out.println("Something failed");
-			FrameNotify fn = new FrameNotify();
-			fn.add(new ScrNotify(k.getMessage()));
+		Message message = p.getData();
+		switch (message.type()) {
+			case ACK:
+				Ack ack = (Ack) message;
+				if (ack.getSuccess()) {
+					//Username and password made successfully.
+					FrameMain fm = new FrameMain();
+					fm.add(new ScrMainMenu());
+					FrameNotify fn = new FrameNotify();
+					fn.add(new ScrNotify(ack.getMessage()));
+					frame.link.dispose();
+					frame.dispose();
+				} else {
+					//Creation failed
+					System.out.println("Something failed");
+					FrameNotify fn = new FrameNotify();
+					fn.add(new ScrNotify(ack.getMessage()));
+				}
+			default:
+				System.out.println("Unexpected message from server: " + p.toJson());
 		}
 	}
 

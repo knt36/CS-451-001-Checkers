@@ -4,6 +4,7 @@ import game.GameList;
 import network.Client;
 import network.messages.Ack;
 import network.messages.GameListRequest;
+import network.messages.Message;
 import network.messages.Packet;
 
 public class ThreadRefreshGameList implements Runnable {
@@ -29,16 +30,21 @@ public class ThreadRefreshGameList implements Runnable {
 	}
 	
 	public void networkRefreshGameList(Packet p){
-		Ack a = (Ack)p.getData();
-		GameList g = (GameList)p.getData();
-		if(!a.getSuccess()){
-			FrameNotify fn = new FrameNotify();
-			fn.add(new ScrDisconnect());
-		}else {
-			scr.gameList = g;
-			scr.refreshGameList();
+		Message message = p.getData();
+		switch (message.type()) {
+			case ACK:
+				Ack ack = (Ack) message;
+				GameList g = (GameList) p.getData();
+				if (!ack.getSuccess()) {
+					FrameNotify fn = new FrameNotify();
+					fn.add(new ScrDisconnect());
+				} else {
+					scr.gameList = g;
+					scr.refreshGameList();
+				}
+			default:
+				System.out.println("Unexpected message from server: " + p.toJson());
 		}
-		
 	}
 
 }
