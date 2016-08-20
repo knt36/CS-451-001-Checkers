@@ -106,9 +106,8 @@ public class ScrGame extends ScrFactory{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				FrameNotify fn = new FrameNotify();
-				fn.add(new ScrDeleteConfirm());
-				frame.dispose();
-				
+				frame.OpenLinkFrame(fn, new ScrDeleteConfirm());
+				//Must also delete the game in the database...
 				//Idk some surrendering conditions before leaving the game server or just delete the game period.
 			}
 		});
