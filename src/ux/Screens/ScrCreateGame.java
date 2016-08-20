@@ -76,7 +76,6 @@ public class ScrCreateGame extends ScrFactory {
 				//Saves the game to the server
 				//Opens the game in question
 				FrameGame fg = new FrameGame();
-				fg.setTitle("DeathMatch");
 				fg.add(new ScrGame(new Game("DeathMatch", "Rachel", "Khoi")));
 				frame.dispose();
 			}

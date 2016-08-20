@@ -2,6 +2,7 @@ package ux.Screens;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -16,11 +17,13 @@ import javax.swing.JScrollPane;
 import javax.swing.Scrollable;
 
 import game.Game;
+import game.GameList;
 import ux.Buttons.OptionButton;
 import ux.Labels.BulletLabel;
 import ux.Labels.HeaderLabel;
 
 public class ScrMainMenu extends ScrFactory {
+	protected GameList gameList = new GameList(new ArrayList<>(), new ArrayList<>());
 	protected HeaderLabel curGameLabel = new HeaderLabel(STRINGS.CURGAMELABEL);
 	//Bullets
 	ScrFactory curGameArea = new ScrFactory();
@@ -84,6 +87,11 @@ public class ScrMainMenu extends ScrFactory {
 				fg.setTitle("DeathMatch");
 			}
 		});
+	
+		//Start refreshing game thread
+		Runnable rt = new ThreadRefreshGameList(this);
+		Thread th = new Thread(rt);
+		th.start();
 	}
 
 	public ScrFactory leftPanel() {
@@ -111,8 +119,8 @@ public class ScrMainMenu extends ScrFactory {
 		this.curGameArea.constr.fill = curGameArea.constr.HORIZONTAL;
 		right.constr.weighty = 1;
 		this.curGameScroll.setMinimumSize(new Dimension(0, 300));
-		for (int i = 0; i < 10; i++) {
-			BulletLabel lb = new BulletLabel("Current Game");
+		for (Game g : this.gameList.current) {
+			BulletLabel lb = new BulletLabel(g.name);
 			this.curGameArea.add(lb);
 			this.curGameArea.constr.gridy++;
 		}
@@ -130,13 +138,34 @@ public class ScrMainMenu extends ScrFactory {
 		this.pubGameArea.constr.fill = pubGameArea.constr.HORIZONTAL;
 		right.constr.weighty = 1;
 		this.pubGameScroll.setMinimumSize(new Dimension(0, 300));
-		for (int i = 0; i < 10; i++) {
-			this.pubGameArea.add(new BulletLabel("Public Game"));
+		for (Game g: gameList.pub) {
+			this.pubGameArea.add(new BulletLabel(g.name));
 			this.pubGameArea.constr.gridy++;
 		}
 		right.add(this.pubGameScroll);
 
 		return (right);
+	}
+	
+	public void refreshGameList(){
+		this.curGameArea.removeAll();
+		this.pubGameArea.removeAll();
+		
+		this.curGameArea.constr.fill = curGameArea.constr.HORIZONTAL;
+		this.curGameScroll.setMinimumSize(new Dimension(0, 300));
+		for (Game g : this.gameList.current) {
+			BulletLabel lb = new BulletLabel(g.name);
+			this.curGameArea.add(lb);
+			this.curGameArea.constr.gridy++;
+		}
+		
+		this.pubGameArea.constr.fill = pubGameArea.constr.HORIZONTAL;
+		this.pubGameScroll.setMinimumSize(new Dimension(0, 300));
+		for (Game g : this.gameList.pub) {
+			BulletLabel lb = new BulletLabel(g.name);
+			this.pubGameArea.add(lb);
+			this.pubGameArea.constr.gridy++;
+		}
 	}
 
 }
