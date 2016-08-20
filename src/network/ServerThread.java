@@ -95,10 +95,9 @@ public class ServerThread extends Thread {
     }
 
     private Game updateGame(Game clientGame) {
-        DBWrapper db = new DBWrapper();
-        Game serverGame = db.getGame(clientGame.name);
+        Game serverGame = DBWrapper.getGame(clientGame.name);
         if(serverGame.move(clientGame).success()) {
-            db.saveGame(serverGame);
+            DBWrapper.saveGame(serverGame);
         }
         // Whether the update happened or not, the server version is the source of truth, so send it back down
         return serverGame;
@@ -106,23 +105,19 @@ public class ServerThread extends Thread {
 
     // Returns token if successful, else null or ""
     private String login(Login login) {
-        DBWrapper db = new DBWrapper();
         return UUID.randomUUID().toString();
     }
 
     // Returns token if successful, else null or ""
     private String signup(Signup signup) {
-        DBWrapper db = new DBWrapper();
         return login(signup);
     }
 
     private GameList getGameList(GameListRequest request) {
-        DBWrapper db = new DBWrapper();
-        return new GameList(db.getPublicGames(request.user), db.getPrivateGames(request.user));
+        return new GameList(DBWrapper.getPublicGames(request.user), DBWrapper.getPrivateGames(request.user));
     }
 
     private Game getGame(GameRequest request) {
-        DBWrapper db = new DBWrapper();
-        return db.getGame(request.name);
+        return DBWrapper.getGame(request.name);
     }
 }

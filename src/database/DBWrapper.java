@@ -16,11 +16,14 @@ import static game.Color.WHITE;
  * We don't do any lengthy operations with the database, so this wraps up connecting and executing queries all into one
  * package
  */
-public class DBWrapper {
+public final class DBWrapper {
     private static final String user = "checker";
     private static final String password = "C01l3e18999";
     private static final String database = "Checker";
     private static final String port = "3306";
+
+    private DBWrapper() {
+    }
 
     private static Connection connect() throws SQLException {
         System.out.println("Connecting to the database");
