@@ -24,11 +24,9 @@ public class DBWrapper {
 
     public DBWrapper() {
         this.conn = null;
-        Properties connectionProps = new Properties();
-        connectionProps.put("user", user);
-        connectionProps.put("password", password);
+	System.out.println("Attempting to get a connection to sql");
         try {
-            this.conn = DriverManager.getConnection("jdbc:mysql://" + database + ":" + port + "/", connectionProps);
+		this.conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Checker",user,password);
         } catch (SQLException e) {
             printSQLException(e);
         }

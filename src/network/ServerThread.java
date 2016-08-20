@@ -32,30 +32,40 @@ public class ServerThread extends Thread {
             String input = in.readLine();
             Packet packet = Packet.fromJson(input);
             Integer retries = 10;
+	System.out.println("Bricke 2");
             while (input == null || input.equals("") || input.equals(".")) {
                 input = in.readLine();
                 retries--;
                 if (retries.equals(0)) {
                     System.out.println("No data received, disconnecting");
-                    return;
+			try{
+				this.socket.close();
+			}catch(Exception e){
+				System.out.println("Failed to close socket on no data recieved");
+			}
+		    return;
                 }
             }
             System.out.println("Got " + input);
             if (packet == null || packet.getData() == null) {
                 out.write(Packet.error("Could not parse data"));
-                return; // Error from client side, nothing to do
             }
+		System.out.println("Brick3");
             Packet result = process(packet);
+		System.out.println("Brick5");
             String output = result.toJson();
+		System.out.println("Brike4");
             if (output == null) {
-                return; // We fucked up, this is bad
+		out.write(Packet.error("Server side error"));
             }
+	System.out.println("Brick 1");
             out.write(output + "\n");
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
+		System.out.println("Closing Socket");
                 socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -66,17 +76,21 @@ public class ServerThread extends Thread {
     public Packet process(Packet packet) {
         Message message = packet.getData();
         String token = packet.getToken();
+	System.out.println("Brike9");
         switch (packet.getData().type()) {
             case GAME:
+		System.out.println("Brick7");
                 return new Packet(token, updateGame((Game) message));
             case LOGIN:
                 token = login((Login) message);
+		System.out.println("Brikck6");
                 if(token != null && !token.equals("")) {
                     return new Packet(token, new Ack("Logged in", true));
                 } else {
                     return new Packet("", new Ack("Incorrect username or password", false));
                 }
             case SIGNUP:
+		System.out.println("Brike10");
                 token = signup((Signup) message);
                 if(token != null && !token.equals("")) {
                     return new Packet(token, new Ack("Logged in", true));
@@ -84,12 +98,15 @@ public class ServerThread extends Thread {
                     return new Packet("", new Ack("Incorrect username or password", false));
                 }
             case GAME_LIST_REQUEST:
+		System.out.println("Brike11");
                 GameList gameList = getGameList((GameListRequest) message);
                 return new Packet(token, gameList);
             case GAME_REQUEST:
+		System.out.println("Brik12");
                 Game game = getGame((GameRequest) message);
                 return new Packet(token, game);
         }
+	System.out.println("Brike13");
         return Packet.perror("Invalid message type");
     }
 
