@@ -134,12 +134,12 @@ public class ScrMainMenu extends ScrFactory {
 	}
 	
 	public void refreshGameList(){
-		this.curGameArea.removeAll();
-		this.pubGameArea.removeAll();
 		if(this.gameList == null){
 			return;
 			// don't do anything since it did not return anything
 		}
+		this.curGameArea.removeAll();
+		this.pubGameArea.removeAll();
 		this.curGameArea.constr.fill = curGameArea.constr.HORIZONTAL;
 		this.curGameScroll.setMinimumSize(new Dimension(0, 300));
 		for (Game g : this.gameList.current) {
@@ -227,7 +227,9 @@ public class ScrMainMenu extends ScrFactory {
 	}
 
     public void networkGameListRefresh(Packet p) {
+    	System.out.println("Game network Game List Refreshed");
         Message message = p.getData();
+        System.out.println(p.getData().toJson().toString());
         switch (message.type()) {
             case GAME_LIST:
                 gameList = (GameList) message;
