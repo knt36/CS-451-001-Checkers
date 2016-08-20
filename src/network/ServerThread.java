@@ -135,12 +135,9 @@ public class ServerThread extends Thread {
     private String login(Login login) {
         System.out.println("Logging in");
         String u = login.getUsername();
-        System.out.println("LOGIN USERNAME IS " + u);
         String p = login.getPassword();
-        System.out.println("LOGIN PASSWORD IS " + p);
         if (!validatePassword(p)) {
             //Password does not meet requirements, we do not need to hash
-            System.out.println("LOGIN PASSWORD " + p + " IS INVALID");
             return "";
         }
         Credentials savedUser = DBWrapper.getUser(u);
@@ -157,7 +154,6 @@ public class ServerThread extends Thread {
         }
 
         String token = UUID.randomUUID().toString();
-        System.out.println("LOGIN TOKEN GENERATED: " + token);
         savedUser.token = token;
         savedUser.updateTokenDate();
         DBWrapper.saveUser(savedUser);
@@ -168,32 +164,25 @@ public class ServerThread extends Thread {
     private String signup(Signup signup) {
         System.out.println("Signing up");
         String username = signup.getUsername();
-        System.out.println("SIGNUP USERNAME IS " + username);
         String password = signup.getPassword();
-        System.out.println("SIGNUP PASSWORD IS " + password);
         Credentials savedUser = DBWrapper.getUser(username);
         if (!validatePassword(password)) {
-            System.out.println("SIGNUP PASSWORD " + password + " IS INVALID");
             //Password does not meet requirements, we do not need to hash
             return "";
         }
         // user already exists with this username
         if (savedUser != null) {
-            System.out.println("SIGNUP: Found user " + username);
             return "";
         }
         //Begin updating this credential object with new info
 
         String salt = Utils.generateSalt();
-        System.out.println("SIGNUP SALT GENERATED: " + salt);
         String hash = Utils.hash(password, salt);
-        System.out.println("SIGNUP HASH GENERATED: " + hash);
         // Create the Credentials object
         savedUser = new Credentials(username, salt, hash);
         // Save it
         DBWrapper.saveUser(savedUser);
         // Proceed to the login flow to generate a token
-        System.out.println("SIGNUP CREDENTIAL USER SAVED, CREDENTIAL OBJECT IS: " + savedUser.toString());
         return login(signup);
     }
 
