@@ -63,4 +63,17 @@ public class Credentials {
     public void updateTokenDate() {
         this.tokenDate = Date.valueOf(LocalDate.now());
     }
+
+    @Override
+    public String toString() {
+        return "Credentials{" +
+                "username='" + username + '\'' +
+                ", token='" + token + '\'' +
+                ", tokenDate=" + tokenDate +
+                ", salt='" + salt + '\'' +
+                ", hash='" + hash + '\'' +
+                ", saltDecoded ='" + getSalt() + '\'' +
+                ", hashDecoded='" + getHash() + '\'' +
+                '}';
+    }
 }
