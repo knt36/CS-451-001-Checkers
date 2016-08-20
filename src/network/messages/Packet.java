@@ -22,13 +22,13 @@ public class Packet {
     static {
         fromJson = new HashMap<>();
         fromJson.put(Game.class.getSimpleName(), Game::fromJson);
-        fromJson.put(Signup.class.getSimpleName(), Signup::fromJson);
+        fromJson.put(Signup.class.getSimpleName(), Signup::signupFromJson);
         fromJson.put(Ack.class.getSimpleName(), Ack::fromJson);
         fromJson.put(Login.class.getSimpleName(), Login::fromJson);
         fromJson.put(GameList.class.getSimpleName(), GameList::fromJson);
         fromJson.put(GameRequest.class.getSimpleName(), GameRequest::fromJson);
         fromJson.put(GameListRequest.class.getSimpleName(), GameListRequest::fromJson);
-        fromJson.put(GameDelete.class.getSimpleName(), GameDelete::fromJson);
+        fromJson.put(GameDelete.class.getSimpleName(), GameDelete::gameDeleteFromJson);
         fromJson.put(UserListRequest.class.getSimpleName(), UserListRequest::fromJson);
         fromJson.put(UserList.class.getSimpleName(), UserList::fromJson);
     }

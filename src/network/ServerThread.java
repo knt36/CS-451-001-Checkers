@@ -30,7 +30,7 @@ public class ServerThread extends Thread {
     @Override
     public void run() {
         try {
-            System.out.println("Connected to client");
+            System.out.println("\nConnected to client");
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             // Get messages from the client, line by line
@@ -78,19 +78,19 @@ public class ServerThread extends Thread {
         switch (packet.getData().type()) {
             case GAME:
                 return new Packet(token, updateGame((Game) message));
+            case SIGNUP:
+                token = signup((Signup) message);
+                if (token != null && !token.equals("")) {
+                    return new Packet(token, new Ack("Logged in", true));
+                } else {
+                    return Packet.perror("Incorrect username or password");
+                }
             case LOGIN:
                 token = login((Login) message);
                 if(token != null && !token.equals("")) {
                     return new Packet(token, new Ack("Logged in", true));
                 } else {
-                    return new Packet("", new Ack("Incorrect username or password", false));
-                }
-            case SIGNUP:
-                token = signup((Signup) message);
-                if(token != null && !token.equals("")) {
-                    return new Packet(token, new Ack("Logged in", true));
-                } else {
-                    return new Packet("", new Ack("Incorrect username or password", false));
+                    return Packet.perror("Incorrect username or password");
                 }
             case GAME_LIST_REQUEST:
                 GameList gameList = getGameList((GameListRequest) message);
@@ -100,11 +100,14 @@ public class ServerThread extends Thread {
                 return new Packet(token, game);
             case GAME_DELETE:
                 Boolean success = deleteGame((GameDelete) message);
+                return new Packet(token, new Ack("Attempted to delete game", success));
             case USER_LIST_REQUEST:
                 UserList userList = getUserList(token, (UserListRequest) message);
                 return new Packet(token, userList);
+            default:
+                System.out.println("Received unexpected message from client");
+                return Packet.perror("Unexpected message");
         }
-        return Packet.perror("Invalid message type");
     }
 
     private Boolean deleteGame(GameDelete game) {
@@ -121,8 +124,7 @@ public class ServerThread extends Thread {
         if (serverGame == null) {
             // TODO: Check if this is the initial state and the users make sense, etc.
             DBWrapper.saveGame(clientGame);
-        } else if (serverGame.move(clientGame).success()) {
-            // TODO: Check that the logged-in user is the user who's moving, etc.
+        } else if (user.equals(serverGame.turn.getName()) && serverGame.move(clientGame).success()) {
             DBWrapper.saveGame(serverGame);
         }
         // Whether the update happened or not, the server version is the source of truth, so send it back down
@@ -131,6 +133,7 @@ public class ServerThread extends Thread {
 
     // Returns token if successful, else null or ""
     private String login(Login login) {
+        System.out.println("Logging in");
         String u = login.getUsername();
         String p = login.getPassword();
         if (!validatePassword(p)) {
@@ -140,10 +143,12 @@ public class ServerThread extends Thread {
         Credentials savedUser = DBWrapper.getUser(u);
         // no user exists with this username
         if (savedUser == null) {
+            System.out.println("Did not find user");
             return "";
         }
         // password verification failed.
         if (!Utils.verifyHash(p, u, savedUser.salt)) {
+            System.out.println("Invalid password");
             return "";
         }
 
@@ -157,6 +162,7 @@ public class ServerThread extends Thread {
 
     // Returns token if successful, else null or ""
     private String signup(Signup signup) {
+        System.out.println("Signing up");
         String username = signup.getUsername();
         String password = signup.getPassword();
         Credentials savedUser = DBWrapper.getUser(username);
@@ -164,8 +170,9 @@ public class ServerThread extends Thread {
             //Password does not meet requirements, we do not need to hash
             return "";
         }
-        // no user exists with this username
+        // user already exists with this username
         if (savedUser != null) {
+            System.out.println("Found user");
             return "";
         }
         //Begin updating this credential object with new info
