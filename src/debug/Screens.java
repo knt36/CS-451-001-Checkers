@@ -1,5 +1,5 @@
 package debug;
 
 public class Screens {
-    public static final boolean BoardNumbers = true;
+    public static final boolean BoardNumbers = false;
 }

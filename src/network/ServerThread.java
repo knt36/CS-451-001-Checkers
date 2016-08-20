@@ -26,30 +26,38 @@ public class ServerThread extends Thread {
     @Override
     public void run() {
         try {
+            System.out.println("Connected to client");
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             // Get messages from the client, line by line
-            while (true) {
-                String input = in.readLine();
-                Packet packet = Packet.fromJson(input);
-                if (input == null || input.equals(".")) {
-                    break;
+            String input = in.readLine();
+            Packet packet = Packet.fromJson(input);
+            Integer retries = 10;
+            while (input == null || input.equals("") || input.equals(".")) {
+                input = in.readLine();
+                retries--;
+                if (retries.equals(0)) {
+                    System.out.println("No data received, disconnecting");
+                    return;
                 }
-                if (packet == null || packet.getData() == null) {
-                    out.write(Packet.error("Could not parse data"));
-                    break; // Error from client side, nothing to do
-                }
-                Packet result = process(packet);
-                String output = result.toJson();
-                if (output == null) {
-                    break; // We fucked up, this is bad
-                }
-                out.write(output);
             }
+            System.out.println("Got " + input);
+            if (packet == null || packet.getData() == null) {
+                out.write(Packet.error("Could not parse data"));
+            }
+            Packet result = process(packet);
+            String output = result.toJson();
+            if (output == null) {
+                output = Packet.error("Server error, failed to process data");
+            }
+            System.out.println("Sending: " + output);
+            out.write(output + "\n");
+            out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
+                System.out.println("Closing Socket");
                 socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -135,16 +143,5 @@ public class ServerThread extends Thread {
     private Game getGame(GameRequest request) {
         DBWrapper db = new DBWrapper();
         return db.getGame(request.name);
-    }
-
-    private void createUserRecord(String username, String token) {
-    }
-
-    private Boolean destroyToken(String token) {
-        return false;
-    }
-
-    private Boolean pruneTokens() {
-        return false;
     }
 }
