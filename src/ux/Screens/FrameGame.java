@@ -15,32 +15,8 @@ public class FrameGame extends FrameMain {
 		// TODO Auto-generated method stub
 		super.add(comp);
 		if(comp instanceof ScrGame){
-		this.addComponentListener(new ComponentListener() {
 			ScrGame sg = (ScrGame)comp;
-			@Override
-			public void componentShown(ComponentEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void componentResized(ComponentEvent e) {
-				// TODO Auto-generated method stub
-				//sg.board.repaintAllButtons();
-			}
-			
-			@Override
-			public void componentMoved(ComponentEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void componentHidden(ComponentEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+			this.setTitle(sg.game.name + ": (" +sg.game.p1.getName() + " vs " + sg.game.p2.getName()+")");
 		}
 		
 		return(comp);

@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.nio.file.attribute.UserPrincipalLookupService;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -118,6 +119,8 @@ public class ScrCreateGame extends ScrFactory {
 				
 				public void action(){
 					selectedUserForGame = selection;
+					//un check the all users
+					allUsers.setSelected(false);
 				}
 			});
 			
@@ -128,7 +131,16 @@ public class ScrCreateGame extends ScrFactory {
 		this.constr.gridy++;
 		
 		this.add(this.allUsers);
-		
+		allUsers.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				//When check all users, should release all buttons....
+				groupBullets.releaseAllButton();
+				selectedUserForGame = -1;
+			}
+		});
 		
 		this.constr.gridy++;
 		this.constr.fill = constr.NONE;

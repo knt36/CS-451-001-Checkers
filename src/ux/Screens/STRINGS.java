@@ -26,7 +26,7 @@ public class STRINGS {
 	public static final String PERMADELETE = "This will permanently delete the game";
 	public static final String ENDGAME = "End Game";
 	public static final String CANCELBUT = "Cancel";
-	public static final String ALLUSERSLABEL = "All Users";
+	public static final String ALLUSERSLABEL = "Public Game";
 	public static final String SEARCHUSER = "Search User";
 	public static final String REDWINS = "RED WINS!";
 	public static final String WHITEWINS = "WHITE WINS!";

@@ -62,4 +62,13 @@ public class GroupBulletLabel {
 			}
 		});
 	}
+	
+	public void releaseAllButton(){
+		for(BulletLabel bt : this.bullets){
+			bt.pressed = false;
+			bt.setForeground(STYLE.BULLETAFTCLICKCLR);
+			bt.revalidate();
+			bt.repaint();
+		}
+	}
 }
