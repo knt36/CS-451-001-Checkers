@@ -32,18 +32,19 @@ public class ClientThread extends Thread {
             socket = new Socket(SERVER_HOSTNAME, SERVER_PORT);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
-            out.write(data);
+            out.write(data + "\n");
             out.flush();
             String input = in.readLine();
+            System.out.println(input);
             Packet packet = Packet.fromJson(input);
             if (input == null || input.equals(".")) {
                 return;
             }
             if (packet == null || packet.getData() == null) {
-                out.write(Packet.error("Could not parse data"));
                 callback.accept(Packet.perror("Could not parse data"));
                 return; // Error from client side, nothing to do
             }
+            Client.client.setToken(packet.getToken());
             callback.accept(packet);
         } catch (IOException e) {
             callback.accept(Packet.perror("Could not connect"));

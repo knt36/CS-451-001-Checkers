@@ -16,7 +16,7 @@ public class STRINGS {
 	public static final String QUITBUT = "Quit";
 	public static final String CURGAMELABEL = "Current Games";
 	public static final String PUBGAMELABEL = "Public Games";
-	public static final String BULLETCHAR = "�";
+	public static final String BULLETCHAR = ">";
 	public static final String GAMENAME = "game name";
 	public static final String HEADERUSERS = "Users";
 	public static final String START = "Start";
@@ -26,8 +26,14 @@ public class STRINGS {
 	public static final String PERMADELETE = "This will permanently delete the game";
 	public static final String ENDGAME = "End Game";
 	public static final String CANCELBUT = "Cancel";
-	public static final String ALLUSERSLABEL = "All Users";
+	public static final String ALLUSERSLABEL = "Public Game";
 	public static final String SEARCHUSER = "Search User";
+	public static final String REDWINS = "RED WINS!";
+	public static final String WHITEWINS = "WHITE WINS!";
+	public static final String WINS = "WINS";
+	protected static final String CREDENTIALLENGTHERROR = "User and password must have a minimum length of 3 characters...";
+	public static final String HEADERSEARCHUSERS = "Search Users";
+
 	
 	
 }

@@ -7,32 +7,48 @@ import game.Player;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
 import static game.Color.RED;
 import static game.Color.WHITE;
 
 /**
+ * We don't do any lengthy operations with the database, so this wraps up connecting and executing queries all into one
+ * package
  */
-
-public class DBWrapper {
+public final class DBWrapper {
     private static final String user = "checker";
     private static final String password = "C01l3e18999";
     private static final String database = "Checker";
     private static final String port = "3306";
-    private Connection conn;
 
-    public DBWrapper() {
-        this.conn = null;
-        Properties connectionProps = new Properties();
-        connectionProps.put("user", user);
-        connectionProps.put("password", password);
-        try {
-            this.conn = DriverManager.getConnection("jdbc:mysql://" + database + ":" + port + "/", connectionProps);
-        } catch (SQLException e) {
-            printSQLException(e);
+    private DBWrapper() {
+    }
+
+    private static Connection connect() throws SQLException {
+        System.out.println("Connecting to the database");
+        return DriverManager.getConnection("jdbc:mysql://127.0.0.1:" + port + "/" + database, user, password);
+    }
+
+    private static void close(Connection conn) {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                printSQLException(e);
+                System.out.println("Failed to close database connection");
+            }
         }
+    }
+
+    private static void update(PreparedStatement stmt) throws SQLException {
+        System.out.println(stmt);
+        stmt.executeUpdate();
+    }
+
+    private static ResultSet query(PreparedStatement stmt) throws SQLException {
+        System.out.println(stmt);
+        return stmt.executeQuery();
     }
 
     private static Game gameFromSQL(ResultSet rs) throws SQLException {
@@ -83,76 +99,110 @@ public class DBWrapper {
         }
     }
 
-    public static boolean ignoreSQLException(String sqlState) {
+    private static boolean ignoreSQLException(String sqlState) {
         // X0Y32: Jar file already exists in schema
         // 42Y55: Table already exists in schema
         return (sqlState != null && (sqlState.equalsIgnoreCase("X0Y32") || sqlState.equalsIgnoreCase("42Y55")));
     }
 
-    public Game getGame(String name) {
+    public static Game getGame(String name) {
+        Connection conn = null;
         Game result = null;
-        String query = "SELECT name, p1, p2, state, turn, red FROM Games WHERE name=?";
+        String sql = "SELECT name, p1, p2, state, turn, red FROM Games WHERE name=?";
         try {
-            PreparedStatement stmt = this.conn.prepareStatement(query);
+            conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, name);
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = query(stmt);
             while (rs.next()) {
                 result = gameFromSQL(rs);
             }
         } catch (SQLException e) {
             printSQLException(e);
+        } finally {
+            close(conn);
         }
         return result;
     }
 
-    public List<Game> getPublicGames(String username) {
+    public static List<Game> getPublicGames(String username) {
         return getGames(username).stream().filter(g -> g.p2.nobody()).collect(Collectors.toList());
     }
 
-    public List<Game> getPrivateGames(String username) {
+    public static List<Game> getPrivateGames(String username) {
         return getGames(username).stream().filter(g -> !g.p2.nobody()).collect(Collectors.toList());
     }
 
-    public List<Game> getGames(String username) {
+    private static List<Game> getGames(String username) {
+        Connection conn = null;
         List<Game> result = new ArrayList<>();
-        String query = "SELECT name, p1, p2, state, turn, red FROM Games WHERE p1=? OR p2=?";
+        String sql = "SELECT name, p1, p2, state, turn, red FROM Games WHERE p1=? OR p2=?";
         try {
-            PreparedStatement stmt = this.conn.prepareStatement(query);
+            conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
             stmt.setString(2, username);
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = query(stmt);
             while (rs.next()) {
                 result.add(gameFromSQL(rs));
             }
         } catch (SQLException e) {
             printSQLException(e);
+        } finally {
+            close(conn);
         }
         return result;
     }
 
-    public Credentials getUser(String name) {
+    public static Credentials getUser(String name) {
+        Connection conn = null;
         Credentials result = null;
-        String query = "SELECT name, password, token, tokenDate FROM Users WHERE name=?";
+        String sql = "SELECT name, password, token, tokenDate FROM Users WHERE name=?";
         try {
-            PreparedStatement stmt = this.conn.prepareStatement(query);
+            conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, name);
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = query(stmt);
             while (rs.next()) {
                 result = credentialsFromSQL(rs);
             }
         } catch (SQLException e) {
             printSQLException(e);
+        } finally {
+            close(conn);
         }
         return result;
     }
 
-    public void saveGame(Game game) {
-        String query = "INSERT INTO Games (name, p1, p2, state, turn, red) VALUES (?, ?, ?, ?, ?, ?) " +
+    public static String getUserByToken(String token) {
+        Connection conn = null;
+        String result = null;
+        String sql = "SELECT name FROM Users WHERE token=?";
+        try {
+            conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, token);
+            ResultSet rs = query(stmt);
+            while (rs.next()) {
+                result = rs.getString("name");
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        } finally {
+            close(conn);
+        }
+        return result;
+    }
+
+    public static void saveGame(Game game) {
+        Connection conn = null;
+        String sql = "INSERT INTO Games (name, p1, p2, state, turn, red) VALUES (?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE p1=?, p2=?, state=?, turn=?, red=?";
         String state = game.serializeBoard();
         String red = game.red().getName();
         try {
-            PreparedStatement stmt = this.conn.prepareStatement(query);
+            conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, game.name);
             stmt.setString(2, game.p1.getName());
             stmt.setString(3, game.p2.getName());
@@ -164,17 +214,21 @@ public class DBWrapper {
             stmt.setString(9, state);
             stmt.setString(10, game.turn.getName());
             stmt.setString(11, red);
-            stmt.executeUpdate();
+            update(stmt);
         } catch (SQLException e) {
             printSQLException(e);
+        } finally {
+            close(conn);
         }
     }
 
-    public void saveUser(Credentials credentials) {
-        String query = "INSERT INTO Users (name, password, token, tokenDate) VALUES (?, ?, ?, ?) " +
+    public static void saveUser(Credentials credentials) {
+        Connection conn = null;
+        String sql = "INSERT INTO Users (name, password, token, tokenDate) VALUES (?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE password=?, token=?, tokenDate=?";
         try {
-            PreparedStatement stmt = this.conn.prepareStatement(query);
+            conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, credentials.username);
             stmt.setString(2, credentials.password());
             stmt.setString(3, credentials.token);
@@ -182,9 +236,50 @@ public class DBWrapper {
             stmt.setString(5, credentials.password());
             stmt.setString(6, credentials.token);
             stmt.setDate(7, credentials.tokenDate);
-            stmt.executeUpdate();
+            update(stmt);
         } catch (SQLException e) {
             printSQLException(e);
+        } finally {
+            close(conn);
         }
+    }
+
+    public static UserList getUsers(String token, String str) {
+        Connection conn = null;
+        List<String> users = new ArrayList<>();
+        String sql = "SELECT name, password, token, tokenDate FROM Users WHERE token!=? AND name LIKE ?";
+        try {
+            conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, token);
+            stmt.setString(2, str + "%");
+            ResultSet rs = query(stmt);
+            while (rs.next()) {
+                users.add(credentialsFromSQL(rs).username);
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        } finally {
+            close(conn);
+        }
+        return new UserList(users);
+    }
+
+    public static Boolean deleteGame(String name) {
+        Connection conn = null;
+        Boolean success = false;
+        String sql = "DELETE FROM Games WHERE name=? LIMIT 1";
+        try {
+            conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, name);
+            update(stmt);
+            success = true;
+        } catch (SQLException e) {
+            printSQLException(e);
+        } finally {
+            close(conn);
+        }
+        return success;
     }
 }

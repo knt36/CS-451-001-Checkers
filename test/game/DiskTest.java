@@ -8,6 +8,51 @@ import static org.junit.Assert.assertEquals;
 
 public class DiskTest {
     @Test
+    public void fromString() throws Exception {
+
+    }
+
+    @Test
+    public void inverse() throws Exception {
+
+    }
+
+    @Test
+    public void empty() throws Exception {
+
+    }
+
+    @Test
+    public void canMoveUp() throws Exception {
+
+    }
+
+    @Test
+    public void canMoveDown() throws Exception {
+
+    }
+
+    @Test
+    public void getColor() throws Exception {
+
+    }
+
+    @Test
+    public void red() throws Exception {
+
+    }
+
+    @Test
+    public void white() throws Exception {
+
+    }
+
+    @Test
+    public void king() throws Exception {
+
+    }
+
+    @Test
     public void EmptyTest() {
         Disk disk = EMPTY;
         assertEquals(EMPTY, disk.inverse());

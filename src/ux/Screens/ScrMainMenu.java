@@ -1,11 +1,11 @@
 package ux.Screens;
-
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -16,11 +16,18 @@ import javax.swing.JScrollPane;
 import javax.swing.Scrollable;
 
 import game.Game;
+import game.GameList;
+import network.Client;
+import network.messages.Ack;
+import network.messages.GameListRequest;
+import network.messages.Message;
+import network.messages.Packet;
 import ux.Buttons.OptionButton;
-import ux.Labels.BulletLabel;
+import ux.Labels.BulletGameLabel;
 import ux.Labels.HeaderLabel;
 
-public class ScrMainMenu extends ScrFactory{
+public class ScrMainMenu extends ScrFactory {
+	protected GameList gameList = null;
 	protected HeaderLabel curGameLabel = new HeaderLabel(STRINGS.CURGAMELABEL);
 	//Bullets
 	ScrFactory curGameArea = new ScrFactory();
@@ -32,10 +39,9 @@ public class ScrMainMenu extends ScrFactory{
 	ScrFactory pubGameArea = new ScrFactory();
 	JScrollPane pubGameScroll = new JScrollPane(pubGameArea);
 
-	protected OptionButton contBt = new OptionButton(STYLE.GREEN,STRINGS.CONTINUEBUT);
-	protected OptionButton newGameBt = new OptionButton(STYLE.GREEN,STRINGS.NEW_GAMEBUT);
-	protected OptionButton helpBt = new OptionButton(STYLE.GREEN,STRINGS.HELPBUT);
-	protected OptionButton quitBt= new OptionButton(Color.red,STRINGS.QUITBUT);
+	protected OptionButton newGameBt = new OptionButton(STYLE.GREEN, STRINGS.NEW_GAMEBUT);
+	protected OptionButton helpBt = new OptionButton(STYLE.GREEN, STRINGS.HELPBUT);
+	protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
 
 	public ScrMainMenu() {
 		// TODO Auto-generated constructor stub
@@ -58,9 +64,12 @@ public class ScrMainMenu extends ScrFactory{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				FrameNotify fn = new FrameNotify();
-				//Not sure what goes into here since we agreed it was going to be html page
-				fn.add(new JLabel("Help- not sure what is in here since we said html"));
+                try {
+                    File htmlFile = new File("help.html");
+                    Desktop.getDesktop().browse(htmlFile.toURI());
+                } catch(IOException error){
+                    //don't open
+                }
 			}
 		});
 		newGameBt.addActionListener(new ActionListener() {
@@ -72,34 +81,25 @@ public class ScrMainMenu extends ScrFactory{
 				fcg.add(new ScrCreateGame());
 			}
 		});
-		contBt.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				//Selects Unique Type of Game and then opens it. Game info from the database. For now it'll just open a generic one
-				FrameGame fg = new FrameGame();
-				fg.add(new ScrGame(new Game("DeathMatch", "Khoi", "Racheal")));
-				//Need to title the game to its name. Temporarily make a label at the top.
-				fg.setTitle("DeathMatch");
-			}
-		});
+		
+		//Start refreshing game thread
+		Runnable rt = new ThreadRefreshGameList(this);
+		Thread th = new Thread(rt);
+		th.start();
 	}
 
-	public ScrFactory leftPanel(){
+	public ScrFactory leftPanel() {
 		ScrFactory left = new ScrFactory();
 		left.constr.fill = left.constr.NONE;
-		left.add(contBt);
-		left.constr.gridy++;
 		left.add(newGameBt);
 		left.constr.gridy++;
 		left.add(helpBt);
 		left.constr.gridy++;
 		left.add(quitBt);
-		return(left);
+		return (left);
 	}
 
-	public ScrFactory rightPanel(){
+	public ScrFactory rightPanel() {
 		ScrFactory right = new ScrFactory();
 		right.constr.fill = right.constr.HORIZONTAL;
 		right.constr.weighty = 0;
@@ -108,14 +108,9 @@ public class ScrMainMenu extends ScrFactory{
 
 		//Bullets
 		right.constr.fill = right.constr.BOTH;
-		this.curGameArea.constr.fill= curGameArea.constr.HORIZONTAL;
+		this.curGameArea.constr.fill = curGameArea.constr.HORIZONTAL;
 		right.constr.weighty = 1;
 		this.curGameScroll.setMinimumSize(new Dimension(0, 300));
-		for(int i = 0 ; i < 10; i ++){
-			BulletLabel lb = new BulletLabel("Current Game");
-			this.curGameArea.add(lb);
-			this.curGameArea.constr.gridy++;
-		}
 		right.add(this.curGameScroll);
 
 
@@ -127,16 +122,127 @@ public class ScrMainMenu extends ScrFactory{
 
 		//Bullets
 		right.constr.fill = right.constr.BOTH;
-		this.pubGameArea.constr.fill= pubGameArea.constr.HORIZONTAL;
+		this.pubGameArea.constr.fill = pubGameArea.constr.HORIZONTAL;
 		right.constr.weighty = 1;
 		this.pubGameScroll.setMinimumSize(new Dimension(0, 300));
-		for(int i = 0 ; i < 10 ; i ++){
-			this.pubGameArea.add(new BulletLabel("Public Game"));
+		right.add(this.pubGameScroll);
+		
+		//Add the bullets
+		refreshGameList();
+
+		return (right);
+	}
+	
+	public void refreshGameList(){
+		this.curGameArea.removeAll();
+		this.pubGameArea.removeAll();
+		if(this.gameList == null){
+			return;
+			// don't do anything since it did not return anything
+		}
+		this.curGameArea.constr.fill = curGameArea.constr.HORIZONTAL;
+		this.curGameScroll.setMinimumSize(new Dimension(0, 300));
+		for (Game g : this.gameList.current) {
+			BulletGameLabel lb = new BulletGameLabel(g.name);
+			lb.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					//Start the selected game
+					FrameGame fg = new FrameGame();
+					fg.add(new ScrGame(g));
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+		
+			this.curGameArea.add(lb);
+			this.curGameArea.constr.gridy++;
+		}
+		
+		this.pubGameArea.constr.fill = pubGameArea.constr.HORIZONTAL;
+		this.pubGameScroll.setMinimumSize(new Dimension(0, 300));
+		for (Game g : this.gameList.pub) {
+			BulletGameLabel lb = new BulletGameLabel(g.name);
+			lb.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					//Start the selected game
+					FrameGame fg = new FrameGame();
+					fg.add(new ScrGame(g));
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+
+				}
+			});
+		
+			this.pubGameArea.add(lb);
 			this.pubGameArea.constr.gridy++;
 		}
-		right.add(this.pubGameScroll);
-
-		return(right);
+		revalidate();
+		repaint();
 	}
+
+    public void networkGameListRefresh(Packet p) {
+        Message message = p.getData();
+        switch (message.type()) {
+            case GAME_LIST:
+                gameList = (GameList) message;
+                refreshGameList();
+                break;
+            case ACK:
+                Ack ack = (Ack) message;
+                //Creation failed
+                System.out.println("Something failed");
+                FrameNotify fn = new FrameNotify();
+                fn.add(new ScrNotify(ack.getMessage()));
+                break;
+            default:
+                System.out.println("Unexpected message from server: " + p.toJson());
+        }
+    }
 
 }

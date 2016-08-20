@@ -11,6 +11,8 @@ import javax.swing.JTextField;
 import ux.Screens.STYLE;
 
 public class TextField extends TextFieldFactory{
+	
+	public boolean userInputedText = false;
 	public TextField() {
 		// TODO Auto-generated constructor stub
 		
@@ -25,9 +27,10 @@ public class TextField extends TextFieldFactory{
 			public void focusLost(FocusEvent e) {
 				// TODO Auto-generated method stub
 				if(getText().length()>0){
-					
+					userInputedText = true;
 				}
 				else{
+					userInputedText = false;
 					setForeground(STYLE.HINTCOLOR);
 					setText(hintFinal);
 				}
@@ -36,9 +39,10 @@ public class TextField extends TextFieldFactory{
 			@Override
 			public void focusGained(FocusEvent e) {
 				// TODO Auto-generated method stub
+				userInputedText = false;
 				setText("");
 				setForeground(STYLE.TEXTFIELDCOLOR);
-				System.out.println("Focused gained");
+				//System.out.println("Focused gained");
 			}
 		});
 	}

@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
+ *
  * POJO for login requests.
  */
 public class Login implements Message {
@@ -35,6 +36,10 @@ public class Login implements Message {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setPassword(String password) {

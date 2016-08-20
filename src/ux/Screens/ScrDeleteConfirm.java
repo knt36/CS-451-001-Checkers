@@ -15,12 +15,12 @@ import ux.Labels.NoteLabel;
 
 public class ScrDeleteConfirm extends ScrFactory{
 	protected OptionButton okBut = new OptionButton(STYLE.GREEN,STRINGS.DELETECONFIRMBUT);
-	protected OptionButton quitBut = new OptionButton(Color.red,STRINGS.CANCELBUT);
+	protected OptionButton cancelBut = new OptionButton(Color.red,STRINGS.CANCELBUT);
 	
 	NoteLabel msg = new NoteLabel(STRINGS.PERMADELETE); 
 	public ScrDeleteConfirm() {
 		// TODO Auto-generated constructor stub
-		//The button fills horizontal unlike everything else. This is intended or  I have to increaes the original frame size.
+		//The button fills horizontal unlike everything else. This is intended or  I have to increase the original frame size.
 		this.constr.gridwidth =2;
 		this.add(msg);
 		this.constr.gridwidth=1;
@@ -28,7 +28,7 @@ public class ScrDeleteConfirm extends ScrFactory{
 		this.constr.fill = this.constr.NONE;
 		this.add(this.okBut);
 		this.constr.gridx++;
-		this.add(this.quitBut);
+		this.add(this.cancelBut);
 		
 		//Add button functionality
 		this.okBut.addActionListener(new ActionListener() {
@@ -40,9 +40,10 @@ public class ScrDeleteConfirm extends ScrFactory{
 				
 				//Then exits out of the delete confirmation page
 				frame.dispose();
+				frame.link.dispose();
 			}
 		});
-		this.quitBut.addActionListener(new ActionListener() {
+		this.cancelBut.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
