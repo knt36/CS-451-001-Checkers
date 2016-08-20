@@ -5,7 +5,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseMotionListener;import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -16,6 +17,7 @@ import ux.Screens.STYLE;
 import ux.Screens.ScrFactory;
 
 public class GuiBoard extends ScrFactory {
+	protected boolean ranBoardListener = false ;
 	protected static final int REDPEICES = 12;
 	protected static final int WHITEPEICES =12;
 	protected static final int NUM_MOVABLE_TILES = 32;
@@ -24,9 +26,10 @@ public class GuiBoard extends ScrFactory {
 	
 	protected boolean discSelected = false;
 	protected BoardButton prevButton = null;
-	
+	protected Game lastGame = null;
 	public GuiBoard(Game game) {
 		// TODO Auto-generated constructor stub
+		this.lastGame = game;
 		this.setPreferredSize(new Dimension(400, 400));
 		this.setBackground(STYLE.BOARD_BACKGROUND_CLR);
 		this.setBorder(BorderFactory.createLineBorder(Color.black, STYLE.BOARDFRAMEBORDERTK));
@@ -60,6 +63,7 @@ public class GuiBoard extends ScrFactory {
 			board.add(b);
 			//Sets index so it knows its location on the board
 			b.index = i;
+			
 			
 			b.addActionListener(new ActionListener() {
 				
@@ -121,4 +125,6 @@ public class GuiBoard extends ScrFactory {
 			listeners.get(i).performAction(start,finish);
 		}
 	}
+	
+
 }

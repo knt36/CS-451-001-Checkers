@@ -8,9 +8,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class FrameMain extends JFrame{
+	protected FrameMain link = null;
+	protected static int instances = 0;
 	protected GridBagConstraints constr = new GridBagConstraints();
 	public FrameMain() {
 		// TODO Auto-generated constructor stub
+		instances ++;
 		this.setLayout(new GridBagLayout());
 		constr.weightx=1;
 		constr.weighty=1;
@@ -47,5 +50,10 @@ public class FrameMain extends JFrame{
 		super.add(comp, this.constr);
 		this.validate();
 		this.repaint();
+	}
+	
+	public void OpenLinkFrame(FrameMain frame, JPanel screen){
+		frame.link = this;
+		frame.add(screen);
 	}
 }
