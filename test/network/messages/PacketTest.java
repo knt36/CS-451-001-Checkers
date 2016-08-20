@@ -1,6 +1,5 @@
 package network.messages;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import game.Game;
 import org.junit.Test;
 
@@ -91,6 +90,7 @@ public class PacketTest {
 
     }
 
+    @Test
     public void GameRequest() throws Exception {
         // Make basic GameRequest's, one constructed, one set
         GameRequest GameRequestTrue = new GameRequest("test");
