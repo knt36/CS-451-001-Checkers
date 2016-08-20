@@ -1,5 +1,6 @@
 package network.messages;
 
+import database.UserList;
 import game.Game;
 import game.GameList;
 
@@ -13,7 +14,10 @@ public enum MessageTypes {
     LOGIN(Login.class),
     SIGNUP(Signup.class),
     GAME(Game.class),
-    GAME_LIST(GameList.class);
+    GAME_LIST(GameList.class),
+    GAME_DELETE(GameDelete.class),
+    USER_LIST_REQUEST(UserListRequest.class),
+    USER_LIST(UserList.class);
 
     public final Class<? extends Message> klass;
 

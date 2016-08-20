@@ -1,15 +1,16 @@
 package game;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import network.messages.Message;
 import network.messages.MessageTypes;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static network.messages.JsonHelper.arrayToList;
+import static network.messages.JsonHelper.listToArray;
 
 /**
  *
@@ -25,23 +26,9 @@ public class GameList implements Message {
 
     public static GameList fromJson(JsonElement json) {
         JsonObject root = json.getAsJsonObject();
-        List<Game> pub = gameList(root.get("public").getAsJsonArray());
-        List<Game> current = gameList(root.get("public").getAsJsonArray());
+        List<Game> pub = arrayToList(root.get("public").getAsJsonArray(), Game::fromJson);
+        List<Game> current = arrayToList(root.get("public").getAsJsonArray(), Game::fromJson);
         return new GameList(pub, current);
-    }
-
-    private static JsonArray listToArray(List<Game> games) {
-        JsonArray array = new JsonArray();
-        games.forEach(g -> array.add(g.toJson()));
-        return array;
-    }
-
-    private static List<Game> gameList(JsonArray array) {
-        List<Game> games = new ArrayList<>();
-        for (JsonElement json : array) {
-            games.add(Game.fromJson(json));
-        }
-        return games;
     }
 
     public List<Game> allGames() {

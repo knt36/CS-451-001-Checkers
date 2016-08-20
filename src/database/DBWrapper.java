@@ -223,4 +223,43 @@ public final class DBWrapper {
             close(conn);
         }
     }
+
+    public static UserList getUsers(String token, String str) {
+        Connection conn = null;
+        List<String> users = new ArrayList<>();
+        String sql = "SELECT name, password, token, tokenDate FROM Users WHERE token!=? AND name LIKE ?";
+        try {
+            conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, token);
+            stmt.setString(2, str + "%");
+            ResultSet rs = query(stmt);
+            while (rs.next()) {
+                users.add(credentialsFromSQL(rs).username);
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        } finally {
+            close(conn);
+        }
+        return new UserList(users);
+    }
+
+    public static Boolean deleteGame(String name) {
+        Connection conn = null;
+        Boolean success = false;
+        String sql = "DELETE FROM Games WHERE name=? LIMIT 1";
+        try {
+            conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, name);
+            update(stmt);
+            success = true;
+        } catch (SQLException e) {
+            printSQLException(e);
+        } finally {
+            close(conn);
+        }
+        return success;
+    }
 }

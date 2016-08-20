@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import database.UserList;
 import game.Game;
 import game.GameList;
 
@@ -17,19 +18,8 @@ import java.util.function.Function;
 public class Packet {
     // Function should be 'public static Object fromJson(JsonElement json) {}'
     private static Map<String, Function<JsonElement, Message>> fromJson;
-    // Function should be 'public JsonElement toJson() {}'
-    private static Map<Class, Function<Message, JsonElement>> toJson;
 
     static {
-        toJson = new HashMap<>();
-        toJson.put(Game.class, game -> ((Game) game).toJson());
-        toJson.put(Signup.class, req -> ((Signup) req).toJson());
-        toJson.put(Ack.class, req -> ((Ack) req).toJson());
-        toJson.put(Login.class, req -> ((Login) req).toJson());
-        toJson.put(GameList.class, req -> ((GameList) req).toJson());
-        toJson.put(GameRequest.class, req -> ((GameRequest) req).toJson());
-        toJson.put(GameListRequest.class, req -> ((GameListRequest) req).toJson());
-
         fromJson = new HashMap<>();
         fromJson.put(Game.class.getSimpleName(), Game::fromJson);
         fromJson.put(Signup.class.getSimpleName(), Signup::fromJson);
@@ -38,6 +28,9 @@ public class Packet {
         fromJson.put(GameList.class.getSimpleName(), GameList::fromJson);
         fromJson.put(GameRequest.class.getSimpleName(), GameRequest::fromJson);
         fromJson.put(GameListRequest.class.getSimpleName(), GameListRequest::fromJson);
+        fromJson.put(GameDelete.class.getSimpleName(), GameDelete::fromJson);
+        fromJson.put(UserListRequest.class.getSimpleName(), UserListRequest::fromJson);
+        fromJson.put(UserList.class.getSimpleName(), UserList::fromJson);
     }
 
     private String token;
@@ -75,11 +68,7 @@ public class Packet {
     public String toJson() {
         JsonObject root = new JsonObject();
         root.addProperty("token", token);
-        Function<Message, JsonElement> func = toJson.get(data.getClass());
-        if (func == null) {
-            return null;
-        }
-        root.add("data", toJson.get(data.getClass()).apply(data));
+        root.add("data", data.toJson());
         root.addProperty("type", data.getClass().getSimpleName());
         return new Gson().toJson(root);
     }

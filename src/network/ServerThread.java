@@ -1,6 +1,7 @@
 package network;
 
 import database.DBWrapper;
+import database.UserList;
 import game.Game;
 import game.GameList;
 import network.messages.*;
@@ -90,8 +91,21 @@ public class ServerThread extends Thread {
             case GAME_REQUEST:
                 Game game = getGame((GameRequest) message);
                 return new Packet(token, game);
+            case GAME_DELETE:
+                Boolean success = deleteGame((GameDelete) message);
+            case USER_LIST_REQUEST:
+                UserList userList = getUserList(token, (UserListRequest) message);
+                return new Packet(token, userList);
         }
         return Packet.perror("Invalid message type");
+    }
+
+    private Boolean deleteGame(GameDelete game) {
+        return DBWrapper.deleteGame(game.name);
+    }
+
+    private UserList getUserList(String token, UserListRequest userListRequest) {
+        return DBWrapper.getUsers(token, userListRequest.str);
     }
 
     private Game updateGame(Game clientGame) {
