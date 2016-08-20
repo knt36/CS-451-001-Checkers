@@ -1,30 +1,22 @@
 package ux.Screens;
 
-import static game.Color.*;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.geom.Ellipse2D;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Date;
-import java.util.Timer;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import game.Game;
 import game.MoveStatus;
 import game.Player;
-import javafx.scene.shape.Circle;
 import ux.Buttons.GuiBoard;
 import ux.Buttons.ListenerBoard;
 import ux.Buttons.OptionButton;
-import ux.Labels.HeaderLabel;
 import ux.Labels.NoteLabel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import static game.Color.RED;
+import static game.Color.WHITE;
+
+//import javafx.scene.shape.Circle;
 
 
 public class ScrGame extends ScrFactory{
