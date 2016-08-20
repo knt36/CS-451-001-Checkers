@@ -174,6 +174,26 @@ public final class DBWrapper {
         return result;
     }
 
+    public static String getUserByToken(String token) {
+        Connection conn = null;
+        String result = null;
+        String sql = "SELECT name FROM Users WHERE token=?";
+        try {
+            conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, token);
+            ResultSet rs = query(stmt);
+            while (rs.next()) {
+                result = rs.getString("name");
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        } finally {
+            close(conn);
+        }
+        return result;
+    }
+
     public static void saveGame(Game game) {
         Connection conn = null;
         String sql = "INSERT INTO Games (name, p1, p2, state, turn, red) VALUES (?, ?, ?, ?, ?, ?) " +
