@@ -15,7 +15,6 @@ public class GameListTest {
         GameList test = new GameList(asList(new Game("blah", "blargh")), asList(new Game("bler", "blee")));
         String json = new Packet("", test).toJson();
         GameList result = (GameList) Packet.fromJson(json).getData();
-        System.out.println(result.pub.toString());
         assertEquals(json, new Packet("", result).toJson());
     }
 }
