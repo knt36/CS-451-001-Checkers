@@ -124,7 +124,7 @@ public final class DBWrapper {
         return result;
     }
 
-    public static List<Game> getPrivateGames(String username) {
+    public static List<Game> getPublicGames(String username) {
         Connection conn = null;
         List<Game> result = new ArrayList<>();
         String sql = "SELECT name, p1, p2, state, turn, red FROM Games WHERE p1!=? AND p2=?";
@@ -145,7 +145,7 @@ public final class DBWrapper {
         return result;
     }
 
-    public static List<Game> getPublicGames(String username) {
+    public static List<Game> getPrivateGames(String username) {
         Connection conn = null;
         List<Game> result = new ArrayList<>();
         String sql = "SELECT name, p1, p2, state, turn, red FROM Games WHERE p1=? OR p2=?";
