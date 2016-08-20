@@ -6,6 +6,7 @@ import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Base64;
 import java.util.Random;
 
 import static java.nio.charset.Charset.defaultCharset;
@@ -29,7 +30,8 @@ public class Utils {
         final Random r = new SecureRandom();
         byte[] salt = new byte[32];
         r.nextBytes(salt);
-        return new String(salt, defaultCharset() );
+        byte[] saltEncoded = Base64.getEncoder().encode(salt);
+        return new String(saltEncoded, defaultCharset());
     }
     /*
      * This is the internal hashing function.
@@ -47,15 +49,15 @@ public class Utils {
      *
      */
     private static String hash(String p, String s, int iterations, int keyLength) {
-        //Conver
         final byte[] salt = s.getBytes(defaultCharset());
         final char[] password = p.toCharArray();
         try {
             SecretKeyFactory skf = SecretKeyFactory.getInstance( "PBKDF2WithHmacSHA512" );
             PBEKeySpec spec = new PBEKeySpec(password, salt, iterations, keyLength);
             SecretKey key = skf.generateSecret( spec );
-            byte[] res = key.getEncoded( );
-            return new String(res, defaultCharset());
+            byte[] hash = key.getEncoded();
+            byte[] hashEncoded = Base64.getEncoder().encode(hash);
+            return new String(hashEncoded, defaultCharset());
 
         } catch( NoSuchAlgorithmException | InvalidKeySpecException e ) {
             // Something's gone VERY VERY WRONG!!!
