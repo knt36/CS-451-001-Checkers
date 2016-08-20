@@ -7,7 +7,6 @@ import game.Player;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
 import static game.Color.RED;
@@ -24,9 +23,9 @@ public class DBWrapper {
 
     public DBWrapper() {
         this.conn = null;
-	System.out.println("Attempting to get a connection to sql");
+        System.out.println("Connecting to the database");
         try {
-		this.conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Checker",user,password);
+            this.conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:" + port + "/" + database, user, password);
         } catch (SQLException e) {
             printSQLException(e);
         }
