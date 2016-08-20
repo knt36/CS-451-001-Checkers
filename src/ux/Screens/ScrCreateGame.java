@@ -36,6 +36,94 @@ public class ScrCreateGame extends ScrFactory {
 	protected TextField searchUserName = new TextField("");
 	
 	protected HeaderLabel gameLabel = new HeaderLabel("Game");
+	public TextField getGameNameField() {
+		return gameNameField;
+	}
+
+	public void setGameNameField(TextField gameNameField) {
+		this.gameNameField = gameNameField;
+	}
+
+	public TextField getSearchUserName() {
+		return searchUserName;
+	}
+
+	public void setSearchUserName(TextField searchUserName) {
+		this.searchUserName = searchUserName;
+	}
+
+	public HeaderLabel getGameLabel() {
+		return gameLabel;
+	}
+
+	public void setGameLabel(HeaderLabel gameLabel) {
+		this.gameLabel = gameLabel;
+	}
+
+	public HeaderLabel getUsersLabel() {
+		return usersLabel;
+	}
+
+	public void setUsersLabel(HeaderLabel usersLabel) {
+		this.usersLabel = usersLabel;
+	}
+
+	public ScrFactory getUsersArea() {
+		return usersArea;
+	}
+
+	public void setUsersArea(ScrFactory usersArea) {
+		this.usersArea = usersArea;
+	}
+
+	public JScrollPane getUsersScroll() {
+		return usersScroll;
+	}
+
+	public void setUsersScroll(JScrollPane usersScroll) {
+		this.usersScroll = usersScroll;
+	}
+
+	public ArrayList<Player> getPlayerList() {
+		return playerList;
+	}
+
+	public void setPlayerList(ArrayList<Player> playerList) {
+		this.playerList = playerList;
+	}
+
+	public ArrayList<BulletLabel> getUsersList() {
+		return usersList;
+	}
+
+	public void setUsersList(ArrayList<BulletLabel> usersList) {
+		this.usersList = usersList;
+	}
+
+	public CheckBoxFactory getAllUsers() {
+		return allUsers;
+	}
+
+	public void setAllUsers(CheckBoxFactory allUsers) {
+		this.allUsers = allUsers;
+	}
+
+	public OptionButton getStartBut() {
+		return startBut;
+	}
+
+	public void setStartBut(OptionButton startBut) {
+		this.startBut = startBut;
+	}
+
+	public int getSelectedUserForGame() {
+		return selectedUserForGame;
+	}
+
+	public void setSelectedUserForGame(int selectedUserForGame) {
+		this.selectedUserForGame = selectedUserForGame;
+	}
+
 	protected HeaderLabel usersLabel = new HeaderLabel( STRINGS.HEADERSEARCHUSERS);
 	//Bullets
 		ScrFactory usersArea = new ScrFactory();

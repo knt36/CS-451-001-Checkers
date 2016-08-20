@@ -1,5 +1,5 @@
-package debug;
+package UXTest;
 
-public class Screens {
-    public static final boolean BoardNumbers = false;
+public class DEBUG_CONTROLS {
+    public static final boolean BoardNumbers = true;
 }
