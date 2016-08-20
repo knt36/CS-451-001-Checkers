@@ -7,24 +7,72 @@ import game.Game;
 import game.GameList;
 import network.messages.*;
 
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * This is the thread handler for the server.
  */
 public class ServerThread extends Thread {
-    private final int MAX_PASSWORD_CHAR = 160;
-    private final int MIN_PASSWORD_CHAR = 8;
+    private static final int MAX_USERNAME_CHAR = 160;
+    private static final int MAX_PASSWORD_CHAR = 160;
+    private static final int MIN_PASSWORD_CHAR = 8;
+    private static final int MIN_USERNAME_CHAR = 3;
+    private static final int MAX_GAMENAME_CHAR = 160;
+    private static final int MIN_GAMENAME_CHAR = 1;
     private Socket socket;
     private String token;
     private String user = null;
     public ServerThread(Socket socket) {
         this.socket = socket;
+    }
+
+    public static boolean validatePassword(String p) {
+        int l = p.length();
+        return !(l < MIN_PASSWORD_CHAR || l > MAX_PASSWORD_CHAR);
+    }
+
+    public static boolean validateUsername(String u) {
+        int l = u.length();
+        // is it too long or too short
+        // did we find whitespace?
+        // is it only printable characters?
+        return !(l < MIN_USERNAME_CHAR || l > MAX_USERNAME_CHAR)
+                && !hasWhiteSpace(u)
+                && isPrintableString(u);
+    }
+
+    public static boolean validateGameName(String g) {
+        int l = g.length();
+        // is it too long or too short
+        // did we find whitespace?
+        // is it only printable characters?
+        return !(l < MIN_GAMENAME_CHAR || l > MAX_GAMENAME_CHAR)
+                && !hasWhiteSpace(g)
+                && isPrintableString(g);
+    }
+
+    private static boolean hasWhiteSpace(String s) {
+        return Pattern.compile("\\s").matcher(s).find();
+    }
+
+    private static boolean isPrintableString(String s) {
+        boolean ret = false;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
+            ret = (!Character.isISOControl(c)) &&
+                    c != KeyEvent.CHAR_UNDEFINED &&
+                    block != null &&
+                    block != Character.UnicodeBlock.SPECIALS;
+        }
+        return ret;
     }
 
     @Override
@@ -118,14 +166,21 @@ public class ServerThread extends Thread {
         return DBWrapper.getUsers(token, userListRequest.str);
     }
 
-    private Game updateGame(Game clientGame) {
+    private Message updateGame(Game clientGame) {
         this.user = DBWrapper.getUserByToken(token);
         Game serverGame = DBWrapper.getGame(clientGame.name);
         if (serverGame == null) {
             // TODO: Check if this is the initial state and the users make sense, etc.
-            DBWrapper.saveGame(clientGame);
+            if (validateGameName(clientGame.name)) {
+                DBWrapper.saveGame(clientGame);
+                serverGame = clientGame;
+            } else {
+                return Packet.perror("Invalid game name").getData();
+            }
         } else if (user.equals(serverGame.turn.getName()) && serverGame.move(clientGame).success()) {
             DBWrapper.saveGame(serverGame);
+        } else {
+            return Packet.perror("Invalid move").getData();
         }
         // Whether the update happened or not, the server version is the source of truth, so send it back down
         return serverGame;
@@ -136,8 +191,8 @@ public class ServerThread extends Thread {
         System.out.println("Logging in");
         String u = login.getUsername();
         String p = login.getPassword();
-        if (!validatePassword(p)) {
-            //Password does not meet requirements, we do not need to hash
+        if (!validatePassword(p) || !validateUsername(u)) {
+            //Password or username does not meet requirements, we do not need to hash
             return "";
         }
         Credentials savedUser = DBWrapper.getUser(u);
@@ -165,17 +220,16 @@ public class ServerThread extends Thread {
         System.out.println("Signing up");
         String username = signup.getUsername();
         String password = signup.getPassword();
-        Credentials savedUser = DBWrapper.getUser(username);
-        if (!validatePassword(password)) {
-            //Password does not meet requirements, we do not need to hash
+        if (!validateUsername(username) || !validatePassword(password)) {
+            //Username Password does not meet requirements, we do not need to hash
             return "";
         }
+        Credentials savedUser = DBWrapper.getUser(username);
         // user already exists with this username
         if (savedUser != null) {
             return "";
         }
         //Begin updating this credential object with new info
-
         String salt = Utils.generateSalt();
         String hash = Utils.hash(password, salt);
         // Create the Credentials object
@@ -200,10 +254,5 @@ public class ServerThread extends Thread {
 
     public String getToken() {
         return token;
-    }
-
-    private boolean validatePassword(String p) {
-        int l = p.length();
-        return !(l < MIN_PASSWORD_CHAR || l > MAX_PASSWORD_CHAR);
     }
 }
