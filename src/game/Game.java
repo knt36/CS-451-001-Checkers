@@ -2,6 +2,7 @@ package game;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import network.Client;
 import network.messages.Message;
 import network.messages.MessageTypes;
 
@@ -337,6 +338,11 @@ public class Game implements Message {
             return EMPTY_SRC;
         }
         if (!this.getDisk(src).getColor().equals(turn.getColor())) {
+            return WRONG_TURN;
+        }
+        String user = Client.client.getUsername();
+        // If user is null, we're the server do don't check
+        if (user != null && !user.equals(turn.getName())) {
             return WRONG_TURN;
         }
         if (adjMoves(src).contains(dst)) {

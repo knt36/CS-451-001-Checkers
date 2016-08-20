@@ -1,22 +1,38 @@
 package ux.Screens;
 
-import game.Game;
-import game.MoveStatus;
-import game.Player;
-import ux.Buttons.GuiBoard;
-import ux.Buttons.ListenerBoard;
-import ux.Buttons.OptionButton;
-import ux.Labels.NoteLabel;
+import static game.Color.*;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Ellipse2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Timer;
 
-import static game.Color.RED;
-import static game.Color.WHITE;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-//import javafx.scene.shape.Circle;
+import game.Game;
+import game.MoveStatus;
+import game.Player;
+import javafx.scene.shape.Circle;
+import network.Client;
+import network.messages.Ack;
+import network.messages.GameDelete;
+import network.messages.Message;
+import network.messages.Packet;
+import ux.Buttons.GuiBoard;
+import ux.Buttons.ListenerBoard;
+import ux.Buttons.OptionButton;
+import ux.Labels.HeaderLabel;
+import ux.Labels.NoteLabel;
 
 
 public class ScrGame extends ScrFactory{
@@ -71,7 +87,9 @@ public class ScrGame extends ScrFactory{
 					setTurnText();
 					revalidate();
 					repaint();
-					}
+                    //send to server
+                    Client.client.send(new Game(game), (p)->networkGame(p));
+                }
 			}
 		});
 		
@@ -88,8 +106,12 @@ public class ScrGame extends ScrFactory{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				FrameNotify fn = new FrameNotify();
-				fn.add(new JLabel("Not sure what html help menu is"));
+                try {
+                    File htmlFile = new File("help.html");
+                    Desktop.getDesktop().browse(htmlFile.toURI());
+                } catch(IOException error){
+                    //don't open
+                }
 			}
 		});
 		this.endBt.addActionListener(new ActionListener() {
@@ -99,13 +121,41 @@ public class ScrGame extends ScrFactory{
 				// TODO Auto-generated method stub
 				FrameNotify fn = new FrameNotify();
 				frame.OpenLinkFrame(fn, new ScrDeleteConfirm());
-				//Must also delete the game in the database...
-				//Idk some surrendering conditions before leaving the game server or just delete the game period.
+				//Must also delete the game in the database
+                Client.client.send(new GameDelete(game.name), (p)->networkGame(p));
 			}
 		});
 	
 	}
-	public void setTurnText(){
+
+    private void networkGame(Packet p) {
+        Message message = p.getData();
+        switch (message.type()) {
+            case GAME:
+                Game game = (Game) message;
+                System.out.print("update Game board");
+                board.setBoard(game);
+                setTurnText();
+                revalidate();
+                repaint();
+                break;
+            case ACK:
+                Ack ack = (Ack) message;
+                if (ack.getSuccess()) {
+                    //delete game was successful
+                    frame.dispose();
+                } else {
+                    //this login has failed
+                    FrameNotify fn = new FrameNotify();
+                    fn.add(new ScrNotify(ack.getMessage()));
+                }
+                break;
+            default:
+                System.out.println("Unexpected message from server: " + p.toJson());
+        }
+    }
+
+    public void setTurnText(){
 		if(this.game.winner()!=null){
 			//there is a winner
 			Player winner = this.game.winner();

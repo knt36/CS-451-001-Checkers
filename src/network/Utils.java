@@ -18,7 +18,7 @@ public class Utils {
     private static final int ITERATIONS = 100;
     private static final int KEY_LENGTH = 256;
 
-    /*
+    /**
      * Returns a salt.
      *
      *  !!!Remember to store this with the password!!!
@@ -33,7 +33,7 @@ public class Utils {
         byte[] saltEncoded = Base64.getEncoder().encode(salt);
         return new String(saltEncoded, defaultCharset());
     }
-    /*
+    /**
      * This is the internal hashing function.
      *
      *              !!!INTERNAL USE ONLY!!!
@@ -49,7 +49,7 @@ public class Utils {
      *
      */
     private static String hash(String p, String s, int iterations, int keyLength) {
-        final byte[] salt = s.getBytes(defaultCharset());
+        final byte[] salt = Base64.getDecoder().decode(s);
         final char[] password = p.toCharArray();
         try {
             SecretKeyFactory skf = SecretKeyFactory.getInstance( "PBKDF2WithHmacSHA512" );
@@ -65,7 +65,7 @@ public class Utils {
         }
 
     }
-    /*
+    /**
      * This is the external hashing function. This calls the internal function
      *
      * ---USE THIS FUNCTION---
@@ -80,7 +80,7 @@ public class Utils {
         return hash(p, s, ITERATIONS, KEY_LENGTH);
     }
 
-    /*
+    /**
      * Verifies a password against a database password hash + salt
      *
      * @param   password the password to be verified
@@ -91,6 +91,7 @@ public class Utils {
      *
      */
     public static Boolean verifyHash(String password, String hash, String salt) {
+
         return hash.equals(hash(password, salt));
     }
 }
