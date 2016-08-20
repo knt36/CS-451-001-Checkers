@@ -9,6 +9,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import game.Game;
+import network.Client;
+import network.messages.Ack;
+import network.messages.GameDelete;
+import network.messages.Message;
+import network.messages.Packet;
 import ux.Buttons.OptionButton;
 import ux.Labels.NoteLabel;
 
@@ -18,7 +24,7 @@ public class ScrDeleteConfirm extends ScrFactory{
 	protected OptionButton cancelBut = new OptionButton(Color.red,STRINGS.CANCELBUT);
 	
 	NoteLabel msg = new NoteLabel(STRINGS.PERMADELETE); 
-	public ScrDeleteConfirm() {
+	public ScrDeleteConfirm(String name) {
 		// TODO Auto-generated constructor stub
 		//The button fills horizontal unlike everything else. This is intended or  I have to increase the original frame size.
 		this.constr.gridwidth =2;
@@ -37,7 +43,8 @@ public class ScrDeleteConfirm extends ScrFactory{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//Server call to delete the game
-				
+                //Must also delete the game in the database
+                Client.client.send(new GameDelete(name), (p)->networkGame(p));
 				//Then exits out of the delete confirmation page
 				frame.dispose();
 				frame.link.dispose();
@@ -47,10 +54,28 @@ public class ScrDeleteConfirm extends ScrFactory{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				//Delete the message box without doing anything if action is canceled / quited
 				frame.dispose();
 			}
 		});
 	}
+
+    private void networkGame(Packet p) {
+        Message message = p.getData();
+        switch (message.type()) {
+            case ACK:
+                Ack ack = (Ack) message;
+                if (ack.getSuccess()) {
+                    //delete game was successful
+                    frame.dispose();
+                } else {
+                    //this login has failed
+                    FrameNotify fn = new FrameNotify();
+                    fn.add(new ScrNotify(ack.getMessage()));
+                }
+                break;
+            default:
+                System.out.println("Unexpected message from server: " + p.toJson());
+        }
+    }
 }

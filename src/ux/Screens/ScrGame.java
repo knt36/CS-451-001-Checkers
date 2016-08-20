@@ -120,9 +120,7 @@ public class ScrGame extends ScrFactory{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				FrameNotify fn = new FrameNotify();
-				frame.OpenLinkFrame(fn, new ScrDeleteConfirm());
-				//Must also delete the game in the database
-                Client.client.send(new GameDelete(game.name), (p)->networkGame(p));
+				frame.OpenLinkFrame(fn, new ScrDeleteConfirm(game.name));
 			}
 		});
 	
