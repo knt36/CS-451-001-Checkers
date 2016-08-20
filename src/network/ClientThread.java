@@ -43,6 +43,7 @@ public class ClientThread extends Thread {
                 callback.accept(Packet.perror("Could not parse data"));
                 return; // Error from client side, nothing to do
             }
+            Client.client.setToken(packet.getToken());
             callback.accept(packet);
         } catch (IOException e) {
             callback.accept(Packet.perror("Could not connect"));

@@ -44,15 +44,17 @@ public class ServerThread extends Thread {
                 }
             }
             System.out.println("Got " + input);
-            if (packet == null || packet.getData() == null) {
-                out.write(Packet.error("Could not parse data"));
-            }
-            Packet result = process(packet);
             String output;
-            if (result == null) {
-                output = Packet.error("Server error, failed to process data");
+            if (packet == null || packet.getData() == null) {
+                output = Packet.error("Could not parse data");
             } else {
-                output = result.toJson();
+                this.token = packet.getToken();
+                Packet result = process(packet);
+                if (result == null) {
+                    output = Packet.error("Server error, failed to process data");
+                } else {
+                    output = result.toJson();
+                }
             }
             System.out.println("Sending: " + output);
             out.write(output + "\n");
@@ -71,7 +73,6 @@ public class ServerThread extends Thread {
 
     public Packet process(Packet packet) {
         Message message = packet.getData();
-        this.token = packet.getToken();
         switch (packet.getData().type()) {
             case GAME:
                 return new Packet(token, updateGame((Game) message));

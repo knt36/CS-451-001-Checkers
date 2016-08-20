@@ -44,4 +44,11 @@ public class Client extends Observable {
         new ClientThread(data, callback).start();
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }
