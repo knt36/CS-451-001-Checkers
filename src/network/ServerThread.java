@@ -147,7 +147,7 @@ public class ServerThread extends Thread {
             return "";
         }
         // password verification failed.
-        if (!Utils.verifyHash(p, u, savedUser.salt)) {
+        if (!Utils.verifyHash(p, savedUser.getHash(), savedUser.getSalt())) {
             System.out.println("Invalid password");
             return "";
         }
