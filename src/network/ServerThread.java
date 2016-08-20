@@ -18,10 +18,11 @@ import java.util.UUID;
  * This is the thread handler for the server.
  */
 public class ServerThread extends Thread {
+    private final int MAX_PASSWORD_CHAR = 160;
+    private final int MIN_PASSWORD_CHAR = 8;
     private Socket socket;
     private String token;
     private String user = null;
-
     public ServerThread(Socket socket) {
         this.socket = socket;
     }
@@ -132,7 +133,10 @@ public class ServerThread extends Thread {
     private String login(Login login) {
         String u = login.getUsername();
         String p = login.getPassword();
-
+        if (!validatePassword(p)) {
+            //Password does not meet requirements, we do not need to hash
+            return "";
+        }
         Credentials savedUser = DBWrapper.getUser(u);
         // no user exists with this username
         if (savedUser == null) {
@@ -154,13 +158,18 @@ public class ServerThread extends Thread {
     // Returns token if successful, else null or ""
     private String signup(Signup signup) {
         String username = signup.getUsername();
+        String password = signup.getPassword();
         Credentials savedUser = DBWrapper.getUser(username);
+        if (!validatePassword(password)) {
+            //Password does not meet requirements, we do not need to hash
+            return "";
+        }
         // no user exists with this username
         if (savedUser != null) {
             return "";
         }
         //Begin updating this credential object with new info
-        String password = signup.getPassword();
+
         String salt = Utils.generateSalt();
         String hash = Utils.hash(password, salt);
         // Create the Credentials object
@@ -185,5 +194,10 @@ public class ServerThread extends Thread {
 
     public String getToken() {
         return token;
+    }
+
+    private boolean validatePassword(String p) {
+        int l = p.length();
+        return !(l < MIN_PASSWORD_CHAR || l > MAX_PASSWORD_CHAR);
     }
 }
