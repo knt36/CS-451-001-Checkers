@@ -144,6 +144,7 @@ public class ServerThread extends Thread {
             return "";
         }
         Credentials savedUser = DBWrapper.getUser(u);
+        System.out.println("LOGIN CREDENTIAL USER PULLED, CREDENTIAL OBJECT IS: " + savedUser.toString());
         // no user exists with this username
         if (savedUser == null) {
             System.out.println("LOGIN: Did not find user " + u);
@@ -160,7 +161,6 @@ public class ServerThread extends Thread {
         savedUser.token = token;
         savedUser.updateTokenDate();
         DBWrapper.saveUser(savedUser);
-        System.out.println("LOGIN CREDENTIAL USER SAVED, CREDENTIAL OBJECT IS: " + savedUser.toString());
         return token;
     }
 
