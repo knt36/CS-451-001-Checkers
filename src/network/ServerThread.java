@@ -128,10 +128,19 @@ public class ServerThread extends Thread {
     // Returns token if successful, else null or ""
     private String signup(Signup signup) {
         DBWrapper db = new DBWrapper();
-        String u = signup.getUsername();
-        Credentials savedUser = db.getUser(u);
+        String username = signup.getUsername();
+        Credentials savedUser = db.getUser(username);
         // no user exists with this username
         if (savedUser != null){ return ""; }
+        //Begin updating this credential object with new info
+        String password = signup.getPassword();
+        String salt = Utils.generateSalt();
+        String hash = Utils.hash(password, salt);
+        // Create the Credentials object
+        savedUser = new Credentials(username, salt, hash);
+        // Save it
+        db.saveUser(savedUser);
+        // Proceed to the login flow to generate a token
         return login(signup);
     }
 

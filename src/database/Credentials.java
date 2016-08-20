@@ -31,11 +31,11 @@ public class Credentials {
     }
 
     public Credentials(String username, String salt, String hash, String token) {
-        this.username = username;
-        this.token = token;
-        this.tokenDate = Date.valueOf(LocalDate.now());
-        this.salt = salt;
-        this.hash = hash;
+        this(username, salt, hash, token, Date.valueOf(LocalDate.now()));
+    }
+
+    public Credentials(String username, String salt, String hash) {
+        this(username, salt, hash, "", Date.valueOf(LocalDate.now()));
     }
 
     public String password() {
