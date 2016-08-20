@@ -22,7 +22,7 @@ public class Timing implements Runnable {
         int minutes = 0;
         try {
             while (true) {
-                Thread.sleep(1);
+                Thread.sleep(1000);
                 if (seconds < 59) {
                     seconds++;
                 } else if (seconds >= 59) {

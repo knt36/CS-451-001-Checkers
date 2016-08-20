@@ -15,10 +15,11 @@ import network.messages.Packet;
 import network.messages.Signup;
 import ux.Buttons.OptionButton;
 import ux.TextField.TextField;
+import ux.TextField.UserTextField;
 
 public class ScrSignUp extends ScrFactory{
-	protected TextField userName = new TextField(STRINGS.USERNAME_HINT);
-	protected TextField passWord = new TextField(STRINGS.PASSWORD_HINT);
+	protected UserTextField userName = new UserTextField(STRINGS.USERNAME_HINT);
+	protected UserTextField passWord = new UserTextField(STRINGS.PASSWORD_HINT);
 
 	protected OptionButton createBt = new OptionButton(STYLE.GREEN, STRINGS.CREATE);
 	public ScrSignUp() {
@@ -39,7 +40,13 @@ public class ScrSignUp extends ScrFactory{
 				// TODO Auto-generated method stub
 				//Add the network adding user function into here
 				System.out.println("Create button pressed");
-				Client.client.send(new Signup(userName.getText(), passWord.getText()), (p)->networkSignup(p));
+				if(userName.isValidPassUser() && passWord.isValidPassUser()){
+					Client.client.send(new Signup(userName.getText(), passWord.getText()), (p)->networkSignup(p));
+				}else {
+					FrameNotify nf = new FrameNotify();
+					nf.add(new ScrNotify(STRINGS.CREDENTIALLENGTHERROR));
+				}
+				
 			}
 		});
 	}
@@ -48,9 +55,14 @@ public class ScrSignUp extends ScrFactory{
 		Ack k = (Ack)p.getData();
 		if(k.getSuccess()){
 			//Username and password made successfully.
+			FrameMain fm = new FrameMain();
+			fm.add(new ScrMainMenu());
 			FrameNotify fn = new FrameNotify();
 			fn.add(new ScrNotify(k.getMessage()));
+			frame.link.dispose();
 			frame.dispose();
+			
+			
 		}else {
 			//Creation failed
 			System.out.println("Something failed");
