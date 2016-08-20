@@ -11,6 +11,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.nio.file.attribute.UserPrincipalLookupService;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -21,14 +23,12 @@ import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import database.UserList;
 import game.Game;
 import game.GameList;
 import game.Player;
 import network.Client;
-import network.messages.Ack;
-import network.messages.GameRequest;
-import network.messages.Message;
-import network.messages.Packet;
+import network.messages.*;
 import ux.Buttons.OptionButton;
 import ux.CheckBox.CheckBoxFactory;
 import ux.Labels.BulletLabel;
@@ -48,8 +48,8 @@ public class ScrCreateGame extends ScrFactory {
 		ScrFactory usersArea = new ScrFactory();
 		JScrollPane usersScroll = new JScrollPane(usersArea);
 	
-	protected ArrayList<Player> playerList = new ArrayList<>();
-	protected ArrayList<BulletLabel> usersList = new ArrayList<>();
+	protected List<String> playerList = new ArrayList<>();
+	protected List<BulletLabel> usersList = new ArrayList<>();
 	
 	protected CheckBoxFactory allUsers = new CheckBoxFactory(STRINGS.ALLUSERSLABEL);
 	protected OptionButton startBut = new OptionButton(STYLE.GREEN,STRINGS.START);
@@ -78,17 +78,10 @@ public class ScrCreateGame extends ScrFactory {
 		//There are no users in our database so I have to leave them at Dicks the label will select the selected user
 		//Add users to the database
 		//Add false users to the database
-		playerList.add(new Player("John"));
-		playerList.add(new Player("Bob"));
-		playerList.add(new Player("Jenny"));
-		playerList.add(new Player("Henry"));
-		playerList.add(new Player("Arrison"));
-		playerList.add(new Player("Thomas"));
-		playerList.add(new Player("Racheal"));
 		GroupBulletLabel groupBullets = new GroupBulletLabel();
 		for(int i = 0 ; i < playerList.size(); i ++){
-			Player p = playerList.get(i);
-			BulletLabel bt = new BulletLabel(p.getName());
+			String p = playerList.get(i);
+			BulletLabel bt = new BulletLabel(p);
 			groupBullets.add(bt);
 			this.usersArea.add(bt);
 			final int selection = i;
@@ -165,7 +158,7 @@ public class ScrCreateGame extends ScrFactory {
 				}else {
 					if(selectedUserForGame != -1){
 						//A player has been selected since it is not -1
-                        Client.client.send(new Game(gameNameField.getText(), Client.client.getUsername(), playerList.get(selectedUserForGame).getName()), (p)->networkGame(p));
+                        Client.client.send(new Game(gameNameField.getText(), Client.client.getUsername(), playerList.get(selectedUserForGame)), (p)->networkGame(p));
 					}else{
 						FrameNotify fn = new FrameNotify();
 						fn.add(new ScrNotify("Either select a player or checkbox for all players..."));
@@ -204,12 +197,14 @@ public class ScrCreateGame extends ScrFactory {
 					if(s.length()==3){
 						//Get the database info for the names
 						System.out.println(s);
-                        //Client.client.send(new UserListRequest(s), (p)->networkGameRequest(p));
+                        Client.client.send(new UserListRequest(s), (p)->networkGameRequest(p));
 					} else if(s.length()<3){
 						//Do nothing
 						System.out.println(s);
 					} else{
 						//if it is greater than 3 then just search off the list you have now
+
+                        playerList = playerList.stream().filter(p -> p.startsWith(s)).collect(Collectors.toList());
 						System.out.println(s);
 					}
 				}catch(Exception b){
@@ -226,17 +221,17 @@ public class ScrCreateGame extends ScrFactory {
     private void networkGameRequest(Packet p) {
         Message message = p.getData();
         switch (message.type()) {
-            case GAME:
-                Game game = (Game) message;
-                FrameGame fg = new FrameGame();
-                fg.add(new ScrGame(new Game(game)));
-                frame.dispose();
+            case USER_LIST:
+                UserList userList = (UserList) message;
+                this.playerList = userList.getUsers();
+                break;
             case ACK:
                 Ack ack = (Ack) message;
                 //Creation failed
                 System.out.println("Something failed");
                 FrameNotify fn = new FrameNotify();
                 fn.add(new ScrNotify(ack.getMessage()));
+                break;
             default:
                 System.out.println("Unexpected message from server: " + p.toJson());
         }

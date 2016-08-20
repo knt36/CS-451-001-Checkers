@@ -1,11 +1,11 @@
 package ux.Screens;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.List;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -64,9 +64,12 @@ public class ScrMainMenu extends ScrFactory {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				FrameNotify fn = new FrameNotify();
-				//Not sure what goes into here since we agreed it was going to be html page
-				fn.add(new JLabel("Help- not sure what is in here since we said html"));
+                try {
+                    File htmlFile = new File("help.html");
+                    Desktop.getDesktop().browse(htmlFile.toURI());
+                } catch(IOException error){
+                    //don't open
+                }
 			}
 		});
 		newGameBt.addActionListener(new ActionListener() {
@@ -232,12 +235,14 @@ public class ScrMainMenu extends ScrFactory {
         switch (message.type()) {
             case GAME_LIST:
                 this.gameList = (GameList) message;
+                break;
             case ACK:
                 Ack ack = (Ack) message;
                 //Creation failed
                 System.out.println("Something failed");
                 FrameNotify fn = new FrameNotify();
                 fn.add(new ScrNotify(ack.getMessage()));
+                break;
             default:
                 System.out.println("Unexpected message from server: " + p.toJson());
         }
