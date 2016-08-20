@@ -3,7 +3,7 @@ package ux.Utilities;
 import org.junit.Test;
 import ux.Labels.NoteLabel;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Created by rachelgoeken on 8/18/16.

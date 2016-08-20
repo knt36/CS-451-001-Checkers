@@ -141,14 +141,15 @@ public class ServerThread extends Thread {
             return "";
         }
         Credentials savedUser = DBWrapper.getUser(u);
+
         // no user exists with this username
         if (savedUser == null) {
-            System.out.println("Did not find user");
+            System.out.println("LOGIN: Did not find user " + u);
             return "";
         }
         // password verification failed.
-        if (!Utils.verifyHash(p, u, savedUser.salt)) {
-            System.out.println("Invalid password");
+        if (!Utils.verifyHash(p, savedUser.getHash(), savedUser.getSalt())) {
+            System.out.println("Password Auth failed: " + p);
             return "";
         }
 
@@ -156,7 +157,6 @@ public class ServerThread extends Thread {
         savedUser.token = token;
         savedUser.updateTokenDate();
         DBWrapper.saveUser(savedUser);
-
         return token;
     }
 
@@ -172,7 +172,6 @@ public class ServerThread extends Thread {
         }
         // user already exists with this username
         if (savedUser != null) {
-            System.out.println("Found user");
             return "";
         }
         //Begin updating this credential object with new info
