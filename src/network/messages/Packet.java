@@ -28,7 +28,7 @@ public class Packet {
         fromJson.put(GameList.class.getSimpleName(), GameList::fromJson);
         fromJson.put(GameRequest.class.getSimpleName(), GameRequest::fromJson);
         fromJson.put(GameListRequest.class.getSimpleName(), GameListRequest::fromJson);
-        fromJson.put(GameDelete.class.getSimpleName(), GameDelete::fromJson);
+        fromJson.put(GameDelete.class.getSimpleName(), GameDelete::gameDeleteFromJson);
         fromJson.put(UserListRequest.class.getSimpleName(), UserListRequest::fromJson);
         fromJson.put(UserList.class.getSimpleName(), UserList::fromJson);
     }
