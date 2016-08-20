@@ -177,6 +177,9 @@ public class ServerThread extends Thread {
             } else {
                 return Packet.perror("Invalid game name").getData();
             }
+        } else if (serverGame.isPublicGame() && clientGame.board == serverGame.board) {
+            DBWrapper.saveGame(clientGame);
+            return clientGame;
         } else if (user.equals(serverGame.turn.getName()) && serverGame.move(clientGame).success()) {
             DBWrapper.saveGame(serverGame);
         } else {

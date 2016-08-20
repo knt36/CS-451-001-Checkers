@@ -7,7 +7,6 @@ import game.Player;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static game.Color.RED;
 import static game.Color.WHITE;
@@ -125,15 +124,28 @@ public final class DBWrapper {
         return result;
     }
 
-    public static List<Game> getPublicGames(String username) {
-        return getGames(username).stream().filter(g -> g.p2.nobody()).collect(Collectors.toList());
-    }
-
     public static List<Game> getPrivateGames(String username) {
-        return getGames(username).stream().filter(g -> !g.p2.nobody()).collect(Collectors.toList());
+        Connection conn = null;
+        List<Game> result = new ArrayList<>();
+        String sql = "SELECT name, p1, p2, state, turn, red FROM Games WHERE p1!=? AND p2=?";
+        try {
+            conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.setString(2, "");
+            ResultSet rs = query(stmt);
+            while (rs.next()) {
+                result.add(gameFromSQL(rs));
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        } finally {
+            close(conn);
+        }
+        return result;
     }
 
-    private static List<Game> getGames(String username) {
+    public static List<Game> getPublicGames(String username) {
         Connection conn = null;
         List<Game> result = new ArrayList<>();
         String sql = "SELECT name, p1, p2, state, turn, red FROM Games WHERE p1=? OR p2=?";
