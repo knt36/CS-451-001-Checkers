@@ -83,6 +83,7 @@ public class DiskTest {
     @Test
     public void RedKingTest() {
         Disk disk = RED_KING;
+        assertEquals(RED_KING, Disk.fromString("rk"));
         assertEquals(WHITE_DISK, disk.inverse());
         assertEquals(false, disk.empty());
         assertEquals(true, disk.canMoveUp());
@@ -120,5 +121,6 @@ public class DiskTest {
         assertEquals(true, disk.white());
         assertEquals(true, disk.king());
         assertEquals("wk", disk.toString());
+        assertEquals(WHITE_KING, Disk.fromString("wk"));
     }
 }
