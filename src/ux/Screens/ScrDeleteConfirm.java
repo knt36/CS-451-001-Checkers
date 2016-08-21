@@ -55,22 +55,26 @@ public class ScrDeleteConfirm extends ScrFactory{
 		});
 	}
 
-	private void networkGame(Packet p) {
-		Message message = p.getData();
-		switch (message.type()) {
-			case ACK:
-				Ack ack = (Ack) message;
-				if (ack.getSuccess()) {
-					//delete game was successful
-					frame.dispose();
-				} else {
-					//this login has failed
-					FrameNotify fn = new FrameNotify();
-					fn.add(new ScrNotify(ack.getMessage()));
-				}
-				break;
-			default:
-				System.out.println("Unexpected message from server: " + p.toJson());
-		}
-	}
+    private void networkGame(Packet p) {
+        Message message = p.getData();
+        switch (message.type()) {
+            case ACK:
+                Ack ack = (Ack) message;
+                if (ack.getSuccess()) {
+                    //delete game was successful
+                    frame.dispose();
+                } else {
+                    if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
+                        FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
+                        fn.add(new ScrDisconnect());
+                    } else if (!ack.getMessage().contains("connect")){
+                        FrameNotify fn = new FrameNotify();
+                        fn.add(new ScrNotify(ack.getMessage()));
+                    }
+                }
+                break;
+            default:
+                System.out.println("Unexpected message from server: " + p.toJson());
+        }
+    }
 }

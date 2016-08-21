@@ -291,47 +291,55 @@ public class ScrCreateGame extends ScrFactory {
 	}
 
 	private void networkUserRequest(Packet p) {
-		Message message = p.getData();
-		switch (message.type()) {
-			case USER_LIST:
-				UserList userList = (UserList) message;
-				playerList = userList.getUsers();
-				paintUsersArea();
-				revalidate();
-				repaint();
-				break;
-			case ACK:
-				Ack ack = (Ack) message;
-				//Creation failed
-				System.out.println("Something failed");
-				FrameNotify fn = new FrameNotify();
-				fn.add(new ScrNotify(ack.getMessage()));
-				break;
-			default:
-				System.out.println("Unexpected message from server: " + p.toJson());
-		}
-	}
+        Message message = p.getData();
+        switch (message.type()) {
+            case USER_LIST:
+                UserList userList = (UserList) message;
+                playerList = userList.getUsers();
+                paintUsersArea();
+                revalidate();
+                repaint();
+                break;
+            case ACK:
+                Ack ack = (Ack) message;
+                //Creation failed
+                if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
+                    FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
+                    fn.add(new ScrDisconnect());
+                } else if (!ack.getMessage().contains("connect")){
+                    FrameNotify fn = new FrameNotify();
+                    fn.add(new ScrNotify(ack.getMessage()));
+                }
+                break;
+            default:
+                System.out.println("Unexpected message from server: " + p.toJson());
+        }
+    }
 
-	public void networkGameRequest(Packet p) {
+	public void networkGameRequest(Packet p){
 		System.out.println("Network Game Request");
-		Message message = p.getData();
-		switch (message.type()) {
-			case GAME:
-				Game game = (Game) message;
-				FrameGame fg = new FrameGame();
-				fg.add(new ScrGame(game));
-				frame.dispose();
-				//Peform the start of the new game while closing down this window
-				break;
-			case ACK:
-				Ack ack = (Ack) message;
-				//Creation failed
-				System.out.println("Something failed");
-				FrameNotify fn = new FrameNotify();
-				fn.add(new ScrNotify(ack.getMessage()));
-				break;
-			default:
-				System.out.println("Unexpected message from server: " + p.toJson());
-		}
+		 Message message = p.getData();
+	        switch (message.type()) {
+	            case GAME:
+	                Game game = (Game) message;
+	                FrameGame fg = new FrameGame();
+	                fg.add(new ScrGame(game));
+	                frame.dispose();
+	                //Peform the start of the new game while closing down this window
+	                break;
+	            case ACK:
+	                Ack ack = (Ack) message;
+	                //Creation failed
+                    if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
+                        FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
+                        fn.add(new ScrDisconnect());
+                    } else if (!ack.getMessage().contains("connect")){
+                        FrameNotify fn = new FrameNotify();
+                        fn.add(new ScrNotify(ack.getMessage()));
+                    }
+	                break;
+	            default:
+	                System.out.println("Unexpected message from server: " + p.toJson());
+	        }
 	}
 }
