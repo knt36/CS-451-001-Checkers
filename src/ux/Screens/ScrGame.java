@@ -1,42 +1,28 @@
 package ux.Screens;
 
-import static game.Color.*;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.geom.Ellipse2D;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-import java.util.Observer;
-import java.util.Timer;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import game.Game;
 import game.MoveStatus;
 import game.Player;
-import javafx.scene.shape.Circle;
 import network.Client;
 import network.messages.Ack;
-import network.messages.GameDelete;
-import network.messages.GameRequest;
 import network.messages.Message;
 import network.messages.Packet;
 import ux.Buttons.GuiBoard;
 import ux.Buttons.ListenerBoard;
 import ux.Buttons.OptionButton;
-import ux.Labels.HeaderLabel;
 import ux.Labels.NoteLabel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+
+import static game.Color.RED;
+import static game.Color.WHITE;
 
 
 public class ScrGame extends ScrFactory{
@@ -80,24 +66,7 @@ public class ScrGame extends ScrFactory{
 		this.playerTurn.setText(game.turn.getName()+turnIndicator);
 		
 		//Set up pieces on checker board
-		this.board.addListenerBoard(new ListenerBoard() {
-			
-			@Override
-			public void performAction(int start, int finish) {
-				// TODO Auto-generated method stub
-				//Detects a move has been made on the board and then tries to move it in the game
-				MoveStatus result = game.move(start, finish);
-				if(result.success()){
-					//there may be more jumps but the board is updated
-					board.setBoard(game);
-			
-					Client.client.send(new Game(game), (p)->networkGame(p));
-					revalidate();
-					repaint();
-                }
-			}
-		});
-		
+		refreshBoard();
 		//Adding button functions
 		this.quitBt.addActionListener(new ActionListener() {
 			
@@ -112,12 +81,12 @@ public class ScrGame extends ScrFactory{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-                try {
-                    File htmlFile = new File("help.html");
-                    Desktop.getDesktop().browse(htmlFile.toURI());
-                } catch(IOException error){
-                    //don't open
-                }
+				try {
+					File htmlFile = new File("help.html");
+					Desktop.getDesktop().browse(htmlFile.toURI());
+				} catch (IOException error) {
+					//don't open
+				}
 			}
 		});
 		this.endBt.addActionListener(new ActionListener() {
@@ -126,7 +95,7 @@ public class ScrGame extends ScrFactory{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				FrameNotify fn = new FrameNotify();
-				ScrDeleteConfirm scrDeleteConfirm = new ScrDeleteConfirm(ScrGame.this,game.name);
+				ScrDeleteConfirm scrDeleteConfirm = new ScrDeleteConfirm(ScrGame.this, game.name);
 				frame.OpenLinkFrame(fn, scrDeleteConfirm);
 
 			}
@@ -134,16 +103,16 @@ public class ScrGame extends ScrFactory{
 
 		runThreadUpdateBoard();
 	}
-	
-	public void runThreadUpdateBoard(){
+
+	public void runThreadUpdateBoard() {
 		ThreadUpdateBoard rt = new ThreadUpdateBoard(this);
 		updateRunnable = rt;
 		updateThread = new Thread(rt);
 		updateThread.start();
 	}
-	
-	public void stopThreadUpdateBoard(){
-		if(updateRunnable !=null && updateThread != null){
+
+	public void stopThreadUpdateBoard() {
+		if (updateRunnable != null && updateThread != null) {
 			System.out.println("Stop Update Board Thread");
 			this.updateRunnable.running = false;
 			this.updateThread.stop();
@@ -154,14 +123,16 @@ public class ScrGame extends ScrFactory{
 
     public void networkGame(Packet p) {
     	System.out.print("update Game board");
+    	System.out.println(p.toJson());
         Message message = p.getData();
         switch (message.type()) {
             case GAME:
-                Game game = (Game) message;
+                Game game = new Game((Game) message);
                 System.out.print("update Game board");
-                board.setBoard(game);
                 this.game = game;
+                refreshBoard();
                 setTurnText();
+                resumeThreadUpdateBoard();
                 revalidate();
                 repaint();
                 break;
@@ -181,7 +152,7 @@ public class ScrGame extends ScrFactory{
         }
     }
 
-    public void setTurnText(){
+	public void setTurnText() {
 		if(this.game.winner()!=null){
 			//there is a winner
 			Player winner = this.game.winner();
@@ -208,8 +179,8 @@ public class ScrGame extends ScrFactory{
 			this.turnColorIndicator.setForeground(Color.black);
 		}
 	}
-	
-	public void addThreadEnder(){
+
+	public void addThreadEnder() {
 		this.frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -220,5 +191,33 @@ public class ScrGame extends ScrFactory{
 		});
 	}
 
-	
+	public void refreshBoard() {
+		board.setBoard(game);
+		this.board.addListenerBoard(new ListenerBoard() {
+
+			@Override
+			public void performAction(int start, int finish) {
+				// TODO Auto-generated method stub
+				//Detects a move has been made on the board and then tries to move it in the game
+				MoveStatus result = game.move(start, finish);
+				pauseThreadUpdateBoard();
+				if (result.success()) {
+					//there may be more jumps but the board is updated
+					board.setBoard(game);
+					Client.client.send(new Game(game), (p)->networkGame(p));
+					revalidate();
+					repaint();
+				}
+			}
+		});
+
+	}
+
+	public void pauseThreadUpdateBoard(){
+		this.updateThread.suspend();
+	}
+
+	public void resumeThreadUpdateBoard(){
+		this.updateThread.resume();
+	}
 }

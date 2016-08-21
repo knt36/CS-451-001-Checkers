@@ -1,4 +1,15 @@
 package ux.Screens;
+
+import game.Game;
+import game.GameList;
+import network.messages.Ack;
+import network.messages.Message;
+import network.messages.Packet;
+import ux.Buttons.OptionButton;
+import ux.Labels.BulletGameLabel;
+import ux.Labels.HeaderLabel;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,42 +17,20 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.Scrollable;
-
-import game.Game;
-import game.GameList;
-import network.Client;
-import network.messages.Ack;
-import network.messages.GameListRequest;
-import network.messages.Message;
-import network.messages.Packet;
-import ux.Buttons.OptionButton;
-import ux.Labels.BulletGameLabel;
-import ux.Labels.HeaderLabel;
 
 public class ScrMainMenu extends ScrFactory {
 	protected GameList gameList = null;
 	protected HeaderLabel curGameLabel = new HeaderLabel(STRINGS.CURGAMELABEL);
-	//Bullets
-	ScrFactory curGameArea = new ScrFactory();
-	JScrollPane curGameScroll = new JScrollPane(curGameArea);
-
-
 	protected HeaderLabel pubGameLabel = new HeaderLabel(STRINGS.PUBGAMELABEL);
-	//Bullets
-	ScrFactory pubGameArea = new ScrFactory();
-	JScrollPane pubGameScroll = new JScrollPane(pubGameArea);
-
 	protected OptionButton newGameBt = new OptionButton(STYLE.GREEN, STRINGS.NEW_GAMEBUT);
 	protected OptionButton helpBt = new OptionButton(STYLE.GREEN, STRINGS.HELPBUT);
 	protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
+	//Bullets
+	ScrFactory curGameArea = new ScrFactory();
+	JScrollPane curGameScroll = new JScrollPane(curGameArea);
+	//Bullets
+	ScrFactory pubGameArea = new ScrFactory();
+	JScrollPane pubGameScroll = new JScrollPane(pubGameArea);
 
 	public ScrMainMenu() {
 		// TODO Auto-generated constructor stub
@@ -64,12 +53,12 @@ public class ScrMainMenu extends ScrFactory {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-                try {
-                    File htmlFile = new File("help.html");
-                    Desktop.getDesktop().browse(htmlFile.toURI());
-                } catch(IOException error){
-                    //don't open
-                }
+				try {
+					File htmlFile = new File("help.html");
+					Desktop.getDesktop().browse(htmlFile.toURI());
+				} catch (IOException error) {
+					//don't open
+				}
 			}
 		});
 		newGameBt.addActionListener(new ActionListener() {
@@ -226,25 +215,26 @@ public class ScrMainMenu extends ScrFactory {
 		repaint();
 	}
 
-    public void networkGameListRefresh(Packet p) {
-    	System.out.println("Game network Game List Refreshed");
-        Message message = p.getData();
-        System.out.println(p.getData().toJson().toString());
-        switch (message.type()) {
-            case GAME_LIST:
-                gameList = (GameList) message;
-                refreshGameList();
-                break;
-            case ACK:
-                Ack ack = (Ack) message;
-                //Creation failed
-                System.out.println("Something failed");
-                FrameNotify fn = new FrameNotify();
-                fn.add(new ScrNotify(ack.getMessage()));
-                break;
-            default:
-                System.out.println("Unexpected message from server: " + p.toJson());
-        }
-    }
+	public void networkGameListRefresh(Packet p) {
+
+		//System.out.println("Game network Game List Refreshed");
+		Message message = p.getData();
+		//System.out.println(p.getData().toJson().toString());
+		switch (message.type()) {
+			case GAME_LIST:
+				gameList = (GameList) message;
+				refreshGameList();
+				break;
+			case ACK:
+				Ack ack = (Ack) message;
+				//Creation failed
+				System.out.println("Something failed");
+				FrameNotify fn = new FrameNotify();
+				fn.add(new ScrNotify(ack.getMessage()));
+				break;
+			default:
+				System.out.println("Unexpected message from server: " + p.toJson());
+		}
+	}
 
 }

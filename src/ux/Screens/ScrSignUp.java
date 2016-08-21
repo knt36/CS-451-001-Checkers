@@ -17,7 +17,7 @@ public class ScrSignUp extends ScrFactory{
 	protected UserTextField passWord = new UserTextField(STRINGS.PASSWORD_HINT);
 
 	protected OptionButton createBt = new OptionButton(STYLE.GREEN, STRINGS.CREATE);
-    protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
+	protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
 	public ScrSignUp() {
 		// TODO Auto-generated constructor stub
 		this.constr.fill=this.constr.HORIZONTAL;
@@ -27,8 +27,8 @@ public class ScrSignUp extends ScrFactory{
 		this.constr.gridy++;
 		this.constr.fill = constr.NONE;
 		this.add(createBt);
-        this.constr.gridy++;
-        this.add(quitBt);
+		this.constr.gridy++;
+		this.add(quitBt);
 
 		//Add button functionalities
 		this.createBt.addActionListener(new ActionListener() {
@@ -47,15 +47,15 @@ public class ScrSignUp extends ScrFactory{
 				
 			}
 		});
-        this.quitBt.addActionListener(new ActionListener() {
+		this.quitBt.addActionListener(new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
-                //Exits out of program entirely
-                System.exit(0);
-            }
-        });
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				//Exits out of program entirely
+				System.exit(0);
+			}
+		});
 	}
 	
 	public void networkSignup(Packet p){
