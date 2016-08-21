@@ -20,11 +20,6 @@ public class ThreadUpdateBoard implements Runnable{
 				System.out.println("Board Refreshed on board -" + this.scrGame.getName());
 				Thread.sleep(1000);
 				Client.client.send(new GameRequest(scrGame.game.name), (p)->scrGame.networkGame(p));
-				if(scrGame.game.turn.getName().equals(Client.client.getUsername())){
-					//if it is the client's turn again then stop this thread
-					running = false;
-					break;
-				}
 			}catch(Exception e){
 				if (e instanceof InterruptedException){
 					running = false;

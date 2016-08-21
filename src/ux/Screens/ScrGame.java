@@ -90,12 +90,6 @@ public class ScrGame extends ScrFactory{
 				if(result.success()){
 					//there may be more jumps but the board is updated
 					board.setBoard(game);
-					if(game.turn.getName().equals(Client.client.getUsername())){
-						//still your turn
-					}else{
-						//else run thread to listen for changes to the board as you wait
-						runThreadUpdateBoard();
-					}
 			
 					Client.client.send(new Game(game), (p)->networkGame(p));
 					revalidate();
@@ -137,6 +131,8 @@ public class ScrGame extends ScrFactory{
 
 			}
 		});
+
+		runThreadUpdateBoard();
 	}
 	
 	public void runThreadUpdateBoard(){
