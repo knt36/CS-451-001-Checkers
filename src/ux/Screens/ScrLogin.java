@@ -22,6 +22,8 @@ public class ScrLogin extends ScrFactory{
 	protected UserTextField passWord = new UserTextField(STRINGS.PASSWORD_HINT);
 
 	protected TitleLabel title = new TitleLabel(STRINGS.TITLE);
+    protected Runnable rt = new ThreadHeartBeat(this);
+    protected Thread th = new Thread(rt);
 
 	public ScrLogin() {
 		// TODO Auto-generated constructor stub
@@ -60,8 +62,6 @@ public class ScrLogin extends ScrFactory{
         });
 
         //Start refreshing game thread
-        Runnable rt = new ThreadHeartBeat(this);
-        Thread th = new Thread(rt);
         th.start();
 
 	}
@@ -74,6 +74,8 @@ public class ScrLogin extends ScrFactory{
 				if (ack.getSuccess()) {
 					//this login is successful;
 					frame.dispose();
+                    th.stop();
+                    
 					FrameMain fm = new FrameMain();
 					fm.add(new ScrMainMenu());
 
