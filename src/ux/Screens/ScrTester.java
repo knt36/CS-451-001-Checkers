@@ -27,8 +27,7 @@ public class ScrTester {
 		disconnectFr.add(new ScrDisconnect());
 		
 
-		FrameMain deleteFr = new FrameNotify();
-		deleteFr.add(new ScrDeleteConfirm());
+		
 		
 		FrameMain gameFr = new FrameMain();
 		gameFr.add(new ScrGame(new Game("BattleGround", "Rachel", "Khoi")));

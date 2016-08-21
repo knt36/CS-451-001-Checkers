@@ -8,7 +8,7 @@ import network.messages.Message;
 import network.messages.Packet;
 
 public class ThreadRefreshGameList implements Runnable {
-
+	protected boolean running = true;
 	ScrMainMenu scr  = null;
 	public ThreadRefreshGameList(ScrMainMenu scr) {
 		this.scr = scr;
