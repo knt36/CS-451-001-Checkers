@@ -80,24 +80,7 @@ public class ScrGame extends ScrFactory{
 		this.playerTurn.setText(game.turn.getName()+turnIndicator);
 		
 		//Set up pieces on checker board
-		this.board.addListenerBoard(new ListenerBoard() {
-			
-			@Override
-			public void performAction(int start, int finish) {
-				// TODO Auto-generated method stub
-				//Detects a move has been made on the board and then tries to move it in the game
-				MoveStatus result = game.move(start, finish);
-				if(result.success()){
-					//there may be more jumps but the board is updated
-					board.setBoard(game);
-			
-					Client.client.send(new Game(game), (p)->networkGame(p));
-					revalidate();
-					repaint();
-                }
-			}
-		});
-		
+		refreshBoard();
 		//Adding button functions
 		this.quitBt.addActionListener(new ActionListener() {
 			
@@ -154,13 +137,14 @@ public class ScrGame extends ScrFactory{
 
     public void networkGame(Packet p) {
     	System.out.print("update Game board");
+    	System.out.println(p.toJson());
         Message message = p.getData();
         switch (message.type()) {
             case GAME:
-                Game game = (Game) message;
+                Game game = new Game((Game) message);
                 System.out.print("update Game board");
-                board.setBoard(game);
                 this.game = game;
+                refreshBoard();
                 setTurnText();
                 revalidate();
                 repaint();
@@ -220,5 +204,25 @@ public class ScrGame extends ScrFactory{
 		});
 	}
 
-	
+	public void refreshBoard(){
+		board.setBoard(game);
+        this.board.addListenerBoard(new ListenerBoard() {
+			
+			@Override
+			public void performAction(int start, int finish) {
+				// TODO Auto-generated method stub
+				//Detects a move has been made on the board and then tries to move it in the game
+				MoveStatus result = game.move(start, finish);
+				if(result.success()){
+					//there may be more jumps but the board is updated
+					board.setBoard(game);
+			
+					Client.client.send(new Game(game), (p)->networkGame(p));
+					revalidate();
+					repaint();
+                }
+			}
+		});
+
+	}
 }

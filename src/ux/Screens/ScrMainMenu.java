@@ -227,9 +227,10 @@ public class ScrMainMenu extends ScrFactory {
 	}
 
     public void networkGameListRefresh(Packet p) {
-    	System.out.println("Game network Game List Refreshed");
+    	
+    	//System.out.println("Game network Game List Refreshed");
         Message message = p.getData();
-        System.out.println(p.getData().toJson().toString());
+        //System.out.println(p.getData().toJson().toString());
         switch (message.type()) {
             case GAME_LIST:
                 gameList = (GameList) message;
