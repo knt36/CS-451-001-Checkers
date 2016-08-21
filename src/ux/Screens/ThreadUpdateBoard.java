@@ -18,7 +18,7 @@ public class ThreadUpdateBoard implements Runnable{
 		while(running){
 			try{
 				System.out.println("Board Refreshed on board -" + this.scrGame.getName());
-				Thread.sleep(1000);
+				Thread.sleep(10000);
 				Client.client.send(new GameRequest(scrGame.game.name), (p)->scrGame.networkGame(p));
 			}catch(Exception e){
 				if (e instanceof InterruptedException){
