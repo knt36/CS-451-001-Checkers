@@ -175,16 +175,23 @@ public class Game implements Message {
     public static Game fromJson(JsonElement json) {
         try {
             JsonObject root = json.getAsJsonObject();
-            Player turn = new Player(root.get("red").getAsString(), RED);
+            Player red = new Player(root.get("red").getAsString(), RED);
+            String turnName = root.get("turn").getAsString();
             String u1 = root.get("p1").getAsString();
             Player p1;
             Player p2;
-            if (u1.equals(turn.getName())) {
-                p1 = new Player(turn);
+            if (red.getName().equals(u1)) {
+                p1 = new Player(red);
                 p2 = p1.opponent(root.get("p2").getAsString());
             } else {
-                p2 = new Player(turn);
+                p2 = new Player(red);
                 p1 = p2.opponent(u1);
+            }
+            Player turn;
+            if (turnName.equals(p1.getName())) {
+                turn = p1;
+            } else {
+                turn = p2;
             }
             List<Disk> board = deserializeBoard(root.get("board").getAsString());
             String name = root.get("name").getAsString();
@@ -307,7 +314,7 @@ public class Game implements Message {
     }
 
     private Player nextTurn() {
-        if (turn.equals(p1)) {
+        if (turn.getName().equals(p1.getName())) {
             return p2;
         } else {
             return p1;

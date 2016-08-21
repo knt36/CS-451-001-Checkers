@@ -42,7 +42,7 @@ public class ClientThread extends Thread {
             out.write(data + "\n");
             out.flush();
             String input = in.readLine();
-            System.out.println(input);
+            //System.out.println(input);
             Packet packet = Packet.fromJson(input);
             if (input == null || input.equals(".")) {
                 return;

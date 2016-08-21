@@ -1,14 +1,10 @@
 package ux.TextField;
 
 
-import java.awt.event.ActionListener;
+import ux.Screens.STYLE;
+
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
-import ux.Screens.STYLE;
 
 public class TextField extends TextFieldFactory{
 	
@@ -27,7 +23,7 @@ public class TextField extends TextFieldFactory{
 			public void focusLost(FocusEvent e) {
 				// TODO Auto-generated method stub
 				if(getText().length()>0){
-					System.out.println(getText());
+					//System.out.println(getText());
 					userInputedText = true;
 				}
 				else{
