@@ -87,16 +87,19 @@ public class ScrGame extends ScrFactory{
 				// TODO Auto-generated method stub
 				//Detects a move has been made on the board and then tries to move it in the game
 				MoveStatus result = game.move(start, finish);
-				
 				if(result.success()){
 					//there may be more jumps but the board is updated
 					board.setBoard(game);
+					if(game.turn.getName().equals(Client.client.getUsername())){
+						//still your turn
+					}else{
+						//else run thread to listen for changes to the board as you wait
+						runThreadUpdateBoard();
+					}
+			
 					Client.client.send(new Game(game), (p)->networkGame(p));
-					setTurnText();
 					revalidate();
 					repaint();
-                    
-                    
                 }
 			}
 		});
@@ -134,8 +137,6 @@ public class ScrGame extends ScrFactory{
 
 			}
 		});
-	
-		runThreadUpdateBoard();
 	}
 	
 	public void runThreadUpdateBoard(){
@@ -146,9 +147,13 @@ public class ScrGame extends ScrFactory{
 	}
 	
 	public void stopThreadUpdateBoard(){
-		System.out.println("Stop Update Board Thread");
-		this.updateRunnable.running = false;
-		this.updateThread.stop();
+		if(updateRunnable !=null && updateThread != null){
+			System.out.println("Stop Update Board Thread");
+			this.updateRunnable.running = false;
+			this.updateThread.stop();
+			this.updateRunnable = null;
+			this.updateThread = null;
+		}
 	}
 
     public void networkGame(Packet p) {
