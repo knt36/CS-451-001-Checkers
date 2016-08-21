@@ -6,8 +6,6 @@ import network.messages.Message;
 import network.messages.MessageTypes;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static network.messages.JsonHelper.arrayToList;
 import static network.messages.JsonHelper.listToArray;
@@ -29,10 +27,6 @@ public class GameList implements Message {
         List<Game> pub = arrayToList(root.get("public").getAsJsonArray(), Game::fromJson);
         List<Game> current = arrayToList(root.get("current").getAsJsonArray(), Game::fromJson);
         return new GameList(pub, current);
-    }
-
-    public List<Game> allGames() {
-        return Stream.concat(current.stream(), pub.stream()).collect(Collectors.toList());
     }
 
     public JsonElement toJson() {

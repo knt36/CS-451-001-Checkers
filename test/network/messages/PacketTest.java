@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
 public class PacketTest {
     // Dummy token, this is close to what the real data will be
     // TODO: Import implementation from the Packet Class
-    public static final String token = UUID.randomUUID().toString();
+    private static final String token = UUID.randomUUID().toString();
 
     @Test
     public void game() throws Exception {
@@ -36,30 +36,17 @@ public class PacketTest {
         // Make basic login's, one constructed, one set
         Login LoginTrue = new Login("foo", "bar");
 
-        Login LoginFalse = new Login();
-        LoginFalse.setPassword("bar");
-        LoginFalse.setUsername("baz");
-
         // Make packets from login's
         Packet testTrue = new Packet(token, LoginTrue);
-        Packet testFalse = new Packet(token, LoginFalse);
 
         // Make JSON from packets
         String jsonTrue = testTrue.toJson();
-        String jsonFalse = testFalse.toJson();
 
         // Perform test Battery on constructed
         System.out.println("Constructed Login packet: " + jsonTrue);
         Packet resultTrue = Packet.fromJson(jsonTrue);
         assertNotNull(resultTrue);
         assertEquals(resultTrue.getData(), testTrue.getData());
-
-        // Perform test Battery on generated
-        System.out.println("Generated Login packet: " + jsonFalse);
-        Packet resultFalse = Packet.fromJson(jsonFalse);
-        assertNotNull(resultFalse);
-        assertEquals(resultFalse.getData(), testFalse.getData());
-
     }
 
     @Test

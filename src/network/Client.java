@@ -37,16 +37,8 @@ public class Client extends Observable {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     private void sendData(String data, Consumer<Packet> callback) {
         new ClientThread(data, callback).start();
-    }
-
-    public String getToken() {
-        return token;
     }
 
     public void setToken(String token) {

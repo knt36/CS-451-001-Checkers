@@ -5,8 +5,8 @@ import ux.Screens.STYLE;
 import javax.swing.*;
 import java.awt.*;
 
-public class TextFieldFactory extends JTextField {
-    public TextFieldFactory() {
+class TextFieldFactory extends JTextField {
+    TextFieldFactory() {
         this.setText("");
         this.setCaretColor(Color.black);
         this.setHorizontalAlignment(JTextField.CENTER);

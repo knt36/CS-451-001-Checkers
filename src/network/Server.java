@@ -30,7 +30,11 @@ public class Server {
             }
         } finally {
             if (listener != null) {
-                listener.close();
+                try {
+                    listener.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

@@ -11,14 +11,13 @@ import ux.TextField.UserTextField;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class ScrSignUp extends ScrFactory {
-    protected UserTextField userName = new UserTextField(STRINGS.USERNAME_HINT);
-    protected TextFieldPassword passWord = new TextFieldPassword(STRINGS.PASSWORD_HINT);
+    private UserTextField userName = new UserTextField(STRINGS.USERNAME_HINT);
+    private TextFieldPassword passWord = new TextFieldPassword();
 
-    protected OptionButton createBt = new OptionButton(STYLE.GREEN, STRINGS.CREATE);
-    protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
+    private OptionButton createBt = new OptionButton(STYLE.GREEN, STRINGS.CREATE);
+    private OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
 
     public ScrSignUp() {
         this.constr.fill = GridBagConstraints.HORIZONTAL;
@@ -32,27 +31,18 @@ public class ScrSignUp extends ScrFactory {
         this.add(quitBt);
 
         //Add button functionalities
-        this.createBt.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //Add the network adding user function into here
-                System.out.println("Create button pressed");
-                Client.client.send(new Signup(userName.getText(), passWord.getText()), (p) -> networkSignup(p));
-
-            }
+        this.createBt.addActionListener((ActionEvent e) -> {
+            //Add the network adding user function into here
+            System.out.println("Create button pressed");
+            Client.client.send(new Signup(userName.getText(), new String(passWord.getPassword())), this::networkSignup);
         });
-        this.quitBt.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //Exits out of program entirely
-                System.exit(0);
-            }
+        this.quitBt.addActionListener((ActionEvent e) -> {
+            //Exits out of program entirely
+            System.exit(0);
         });
     }
 
-    public void networkSignup(Packet p) {
+    private void networkSignup(Packet p) {
         Message message = p.getData();
         switch (message.type()) {
             case ACK:

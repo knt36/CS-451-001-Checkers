@@ -5,8 +5,8 @@ import ux.Screens.STYLE;
 
 import javax.swing.*;
 
-public class LabelFactory extends JLabel {
-    public LabelFactory(String label) {
+class LabelFactory extends JLabel {
+    LabelFactory(String label) {
         this.setText(STRINGS.DIVTEXTCENTER + label + STRINGS.ENDDIV);
         this.setBackground(STYLE.BACKGROUND);
         this.setHorizontalAlignment(CENTER);

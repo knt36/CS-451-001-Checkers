@@ -3,17 +3,17 @@ package ux.Screens;
 import network.Client;
 import network.messages.Ack;
 
-public class ThreadHeartBeat implements Runnable {
-    protected boolean running = true;
-    ScrLogin scr = null;
+class ThreadHeartBeat implements Runnable {
+    Boolean running = true;
+    private ScrLogin scr = null;
 
-    public ThreadHeartBeat(ScrLogin scr) {
+    ThreadHeartBeat(ScrLogin scr) {
         this.scr = scr;
     }
 
     @Override
     public void run() {
-        while (true) {
+        while (running) {
             Client.client.send(new Ack("", true), (p) -> scr.networkHB(p));
 
             try {

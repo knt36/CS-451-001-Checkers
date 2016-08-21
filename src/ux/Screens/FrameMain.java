@@ -4,9 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class FrameMain extends JFrame {
-    protected static int instances = 0;
-    protected FrameMain link = null;
-    protected GridBagConstraints constr = new GridBagConstraints();
+    private static int instances = 0;
+    FrameMain link = null;
+    private GridBagConstraints constr = new GridBagConstraints();
 
     public FrameMain() {
         instances++;
@@ -17,7 +17,6 @@ public class FrameMain extends JFrame {
         this.setSize(800, 500);
         this.setVisible(true);
         this.setBackground(STYLE.BACKGROUND);
-        this.show();
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
@@ -41,21 +40,8 @@ public class FrameMain extends JFrame {
         repaint();
     }
 
-    public void addComp(Component comp) {
-        super.add(comp, this.constr);
-        this.validate();
-        this.repaint();
-    }
-
     public void OpenLinkFrame(FrameMain frame, JPanel screen) {
         frame.link = this;
         frame.add(screen);
     }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-    }
-
-
 }

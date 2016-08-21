@@ -3,13 +3,12 @@ package ux.Screens;
 import java.awt.*;
 
 /**
- * Created by rachelgoeken on 8/21/16.
  */
-public class FrameNotifyDisconnect extends FrameNotify {
+class FrameNotifyDisconnect extends FrameNotify {
 
-    protected static int counter = 0;
+    private static int counter = 0;
 
-    public FrameNotifyDisconnect() {
+    FrameNotifyDisconnect() {
         super();
         counter++;
         if (counter <= 1) {
@@ -22,7 +21,7 @@ public class FrameNotifyDisconnect extends FrameNotify {
 
     }
 
-    public static int getCounter() {
+    static int getCounter() {
         return counter;
     }
 

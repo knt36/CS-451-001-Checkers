@@ -2,16 +2,13 @@ package ux.Screens;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ScrFactory extends JPanel {
-    protected FrameMain frame = null;
-    protected Map<String, Object> intent = new HashMap<>();
     protected GridBagConstraints constr = new GridBagConstraints();
+    FrameMain frame = null;
 
 
-    public ScrFactory() {
+    protected ScrFactory() {
         this.constr.weightx = 1;
         this.constr.weighty = 1;
         this.constr.gridwidth = 1;

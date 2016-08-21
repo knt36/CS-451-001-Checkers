@@ -13,25 +13,24 @@ import ux.Labels.HeaderLabel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 
 public class ScrMainMenu extends ScrFactory {
-    protected GameList gameList = null;
-    protected HeaderLabel curGameLabel = new HeaderLabel(STRINGS.CURGAMELABEL);
-    protected HeaderLabel pubGameLabel = new HeaderLabel(STRINGS.PUBGAMELABEL);
-    protected OptionButton newGameBt = new OptionButton(STYLE.GREEN, STRINGS.NEW_GAMEBUT);
-    protected OptionButton helpBt = new OptionButton(STYLE.GREEN, STRINGS.HELPBUT);
-    protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
+    private GameList gameList = null;
+    private HeaderLabel curGameLabel = new HeaderLabel(STRINGS.CURGAMELABEL);
+    private HeaderLabel pubGameLabel = new HeaderLabel(STRINGS.PUBGAMELABEL);
+    private OptionButton newGameBt = new OptionButton(STYLE.GREEN, STRINGS.NEW_GAMEBUT);
+    private OptionButton helpBt = new OptionButton(STYLE.GREEN, STRINGS.HELPBUT);
+    private OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
     //Bullets
-    ScrFactory curGameArea = new ScrFactory();
-    JScrollPane curGameScroll = new JScrollPane(curGameArea);
+    private ScrFactory curGameArea = new ScrFactory();
+    private JScrollPane curGameScroll = new JScrollPane(curGameArea);
     //Bullets
-    ScrFactory pubGameArea = new ScrFactory();
-    JScrollPane pubGameScroll = new JScrollPane(pubGameArea);
+    private ScrFactory pubGameArea = new ScrFactory();
+    private JScrollPane pubGameScroll = new JScrollPane(pubGameArea);
 
     public ScrMainMenu() {
         this.add(leftPanel());
@@ -39,42 +38,30 @@ public class ScrMainMenu extends ScrFactory {
         this.add(rightPanel());
 
         //Adding Button listners
-        quitBt.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //Exits out of program entirely
-                System.exit(0);
+        quitBt.addActionListener((ActionEvent e) -> {
+            //Exits out of program entirely
+            System.exit(0);
+        });
+        helpBt.addActionListener((ActionEvent e) -> {
+            try {
+                File htmlFile = new File("help.html");
+                Desktop.getDesktop().browse(htmlFile.toURI());
+            } catch (IOException error) {
+                //don't open
             }
         });
-        helpBt.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    File htmlFile = new File("help.html");
-                    Desktop.getDesktop().browse(htmlFile.toURI());
-                } catch (IOException error) {
-                    //don't open
-                }
-            }
-        });
-        newGameBt.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                FrameCreateGame fcg = new FrameCreateGame();
-                fcg.add(new ScrCreateGame());
-            }
+        newGameBt.addActionListener((ActionEvent e) -> {
+            FrameCreateGame fcg = new FrameCreateGame();
+            fcg.add(new ScrCreateGame());
         });
 
         //Start refreshing game thread
-        Runnable rt = new ThreadRefreshGameList(this);
+        ThreadRefreshGameList rt = new ThreadRefreshGameList(this);
         Thread th = new Thread(rt);
         th.start();
     }
 
-    public ScrFactory leftPanel() {
+    private ScrFactory leftPanel() {
         ScrFactory left = new ScrFactory();
         left.constr.fill = GridBagConstraints.NONE;
         left.add(newGameBt);
@@ -85,7 +72,7 @@ public class ScrMainMenu extends ScrFactory {
         return (left);
     }
 
-    public ScrFactory rightPanel() {
+    private ScrFactory rightPanel() {
         ScrFactory right = new ScrFactory();
         right.constr.fill = GridBagConstraints.HORIZONTAL;
         right.constr.weighty = 0;
@@ -119,7 +106,7 @@ public class ScrMainMenu extends ScrFactory {
         return (right);
     }
 
-    public void refreshGameList() {
+    private void refreshGameList() {
         if (this.gameList == null) {
             return;
             // don't do anything since it did not return anything
@@ -174,7 +161,7 @@ public class ScrMainMenu extends ScrFactory {
                 public void mouseReleased(MouseEvent e) {
                     //Start the selected game
                     g.p2 = g.p1.opponent(Client.client.getUsername());
-                    if (g.turn.getName() == "") {
+                    if (g.turn.getName().equals("")) {
                         g.turn = g.p2;
                     }
                     Client.client.send(g, (p) -> networkGameUpdate(p));
@@ -246,7 +233,7 @@ public class ScrMainMenu extends ScrFactory {
         }
     }
 
-    public void networkGameUpdate(Packet p) {
+    private void networkGameUpdate(Packet p) {
         Message message = p.getData();
         switch (message.type()) {
             case GAME:

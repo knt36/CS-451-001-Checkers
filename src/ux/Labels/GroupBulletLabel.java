@@ -7,7 +7,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class GroupBulletLabel {
-    ArrayList<BulletLabel> bullets = new ArrayList<>();
+    private ArrayList<BulletLabel> bullets = new ArrayList<>();
 
     public GroupBulletLabel() {
     }
@@ -46,12 +46,11 @@ public class GroupBulletLabel {
             }
 
             public void setReleaseAll() {
-                for (int i = 0; i < bullets.size(); i++) {
-                    bullets.get(i).pressed = false;
-                    bullets.get(i).setForeground(STYLE.BULLETAFTCLICKCLR);
-                    bullets.get(i).revalidate();
-                    bullets.get(i).repaint();
-                    //System.out.println("Changing all bullets");
+                for (BulletLabel bullet : bullets) {
+                    bullet.pressed = false;
+                    bullet.setForeground(STYLE.BULLETAFTCLICKCLR);
+                    bullet.revalidate();
+                    bullet.repaint();
                 }
             }
         });

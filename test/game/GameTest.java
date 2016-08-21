@@ -154,7 +154,7 @@ public class GameTest {
      * @throws Exception
      */
     @Test
-    public void isPublicGame() throws Exception {
+    public void isPublicGame() {
         Game testPublic = new Game("test", "p1");
         assertTrue(testPublic.isPublicGame());
         Game testPrivate = new Game("test", "p1", "p2");
@@ -164,10 +164,9 @@ public class GameTest {
     /**
      * Tests that a jump cannot be made over an empty space
      *
-     * @throws Exception
      */
     @Test
-    public void jumpEmpty() throws Exception {
+    public void jumpEmpty() {
         assertFalse(setupBoardAdj(sampleSrc, sampleJmpDst, RED_DISK).move(sampleSrc, sampleJmpDst).success());
     }
 
@@ -177,7 +176,7 @@ public class GameTest {
      * @throws Exception
      */
     @Test
-    public void jumpSameColor() throws Exception {
+    public void jumpSameColor() {
         Disk testDisk = RED_DISK;
         Game testGame = setupBoardAdj(sampleSrc, sampleJmpDst, testDisk);
         testGame.board.set(Game.jumpedSquare(sampleSrc, sampleJmpDst), testDisk);
@@ -190,14 +189,14 @@ public class GameTest {
      * @throws Exception
      */
     @Test
-    public void moveOutsideBoard() throws Exception {
+    public void moveOutsideBoard() {
         MoveStatus status = setupBoardAdj(sampleSrc, sampleSrc - 4, RED_DISK).move(sampleSrc, sampleSrc - 4);
         assertEquals(OUT_OF_BOARD, status);
         assertTrue(status.serious());
     }
 
     @Test
-    public void jumpTwo() throws Exception {
+    public void jumpTwo() {
         Disk testDisk = RED_DISK;
         Game testGame = setupBoardJmp(sampleSrc, sampleJmpDst, testDisk);
         for (Integer space : asList(3, 4, 5)) {
@@ -208,7 +207,7 @@ public class GameTest {
     }
 
     @Test
-    public void jumpWrongDisk() throws Exception {
+    public void jumpWrongDisk() {
         Disk testDisk = RED_DISK;
         Game testGame = setupBoardJmp(sampleSrc, sampleJmpDst, testDisk);
         for (Integer space : asList(3, 4, 5)) {
@@ -225,7 +224,7 @@ public class GameTest {
      * @throws Exception
      */
     @Test
-    public void moveExhaustiveLocations() throws Exception {
+    public void moveExhaustiveLocations() {
         List<Integer> adjMoves;
         List<Integer> jmpMoves;
         int totalMoves = 0;
@@ -389,7 +388,7 @@ public class GameTest {
      * @throws Exception
      */
     @Test
-    public void moveStateAdj() throws Exception {
+    public void moveStateAdj() {
         Disk testDisk = RED_DISK;
         Game testGame = setupBoardAdj(sampleSrc, sampleAdjDst, testDisk);
         Game newState = new Game(testGame);
@@ -403,7 +402,7 @@ public class GameTest {
      * @throws Exception
      */
     @Test
-    public void moveStateJmp() throws Exception {
+    public void moveStateJmp() {
         Disk testDisk = RED_DISK;
         Game testGame = setupBoardJmp(sampleSrc, sampleJmpDst, testDisk);
         for (Integer space : asList(3, 4, 5)) {
@@ -421,7 +420,7 @@ public class GameTest {
      * @throws Exception
      */
     @Test
-    public void moveStateFailed() throws Exception {
+    public void moveStateFailed() {
         Disk testDisk = RED_DISK;
         Game testGame = setupBoardAdj(sampleSrc, sampleAdjDst, testDisk);
         Game newState = new Game(testGame);
@@ -435,7 +434,7 @@ public class GameTest {
      * @throws Exception
      */
     @Test
-    public void getSquare() throws Exception {
+    public void getSquare() {
         for (Integer coordinate = 0; coordinate < 32; coordinate++) {
             assertEquals(sampleBoard.get(coordinate), sampleGame.getDisk(coordinate));
         }

@@ -5,13 +5,12 @@ import ux.Labels.NoteLabel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class ScrNotify extends ScrFactory {
-    protected OptionButton okBut = new OptionButton(STYLE.GREEN, STRINGS.DELETECONFIRMBUT);
-    NoteLabel msg = null;
+class ScrNotify extends ScrFactory {
+    private OptionButton okBut = new OptionButton(STYLE.GREEN, STRINGS.DELETECONFIRMBUT);
+    private NoteLabel msg = null;
 
-    public ScrNotify(String text) {
+    ScrNotify(String text) {
         //The button fills horizontal unlike everything else. This is intended or  I have to increase the original frame size.
         msg = new NoteLabel(text);
         this.constr.gridwidth = 2;
@@ -23,15 +22,10 @@ public class ScrNotify extends ScrFactory {
         this.constr.gridx++;
 
         //Add button functionality
-        this.okBut.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //Server call to delete the game
-
-                //Then exits out of the delete confirmation page
-                frame.dispose();
-            }
+        this.okBut.addActionListener((ActionEvent e) -> {
+            //Server call to delete the game
+            //Then exits out of the delete confirmation page
+            frame.dispose();
         });
 
     }

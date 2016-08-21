@@ -6,7 +6,7 @@ import network.Server;
  *
  *
  */
-public class ServerMain {
+class ServerMain {
     public static void main(String[] args) {
         try {
             // The newInstance() call is a work around for some

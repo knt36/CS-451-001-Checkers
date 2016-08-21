@@ -120,7 +120,7 @@ public class ServerThread extends Thread {
         }
     }
 
-    public Packet process(Packet packet) {
+    private Packet process(Packet packet) {
         Message message = packet.getData();
         switch (packet.getData().type()) {
             case GAME:
@@ -264,13 +264,5 @@ public class ServerThread extends Thread {
 
     private Game getGame(GameRequest request) {
         return DBWrapper.getGame(request.name);
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public String getToken() {
-        return token;
     }
 }

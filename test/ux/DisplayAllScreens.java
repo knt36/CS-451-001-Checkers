@@ -4,7 +4,7 @@ import ux.Screens.FrameCreateGame;
 import ux.Screens.FrameMain;
 import ux.Screens.ScrCreateGame;
 
-public class DisplayAllScreens {
+class DisplayAllScreens {
     public static void main(String args[]) {
         FrameMain createGame = new FrameCreateGame();
         ScrCreateGame scrCreateGame = new ScrCreateGame();

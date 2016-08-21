@@ -7,12 +7,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 public class TextField extends TextFieldFactory {
-
-    public boolean userInputedText = false;
-
-    public TextField() {
-
-    }
+    Boolean userInputedText = false;
 
     public TextField(String hint) {
         final String hintFinal = hint;
@@ -22,7 +17,6 @@ public class TextField extends TextFieldFactory {
             @Override
             public void focusLost(FocusEvent e) {
                 if (getText().length() > 0) {
-                    //System.out.println(getText());
                     userInputedText = true;
                 } else {
                     userInputedText = false;

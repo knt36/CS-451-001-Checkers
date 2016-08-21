@@ -51,10 +51,5 @@ public class STYLE {
 
     public static final Color BOARD_BACKGROUND_CLR = Color.white;
 
-
     public static final Color BOARDSELECTEDCLR = Color.yellow;
-
-    public static final int SIZEDISC = 40;
-
-
 }

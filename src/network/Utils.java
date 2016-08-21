@@ -10,9 +10,8 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Random;
 
 /**
- * Unit tested 8/19/16, 100% methods, 14/16 lines
  */
-public class Utils {
+class Utils {
     private static final int ITERATIONS = 100;
     private static final int KEY_LENGTH = 256;
 

@@ -3,8 +3,8 @@ package ux.Screens;
 import java.awt.*;
 
 public class FrameSignUp extends FrameMain {
-    protected static final int MAXAMOUNT = 1;
-    protected static int thisInstances = 0;
+    private static final int MAXAMOUNT = 1;
+    private static int thisInstances = 0;
 
     public FrameSignUp() {
         super();

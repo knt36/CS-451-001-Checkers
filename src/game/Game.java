@@ -18,16 +18,16 @@ import static game.Disk.*;
 import static game.MoveStatus.*;
 
 public class Game implements Message {
-    protected static Integer boardSize = 32;
-    protected static Integer columns = (int) Math.sqrt(boardSize / 2);
-    protected static Integer width = columns * 2;
-    protected static Integer startRows = 3;
+    public static Integer boardSize = 32;
+    private static Integer columns = (int) Math.sqrt(boardSize / 2);
+    private static Integer width = columns * 2;
+    private static Integer startRows = 3;
     public Player turn;
     public Player p1;
     public Player p2;
     public List<Disk> board;
     public String name;
-    public List<Integer> lastMove;
+    List<Integer> lastMove;
 
     /**
      * Creates a new public game with the initiating player. Colors will be randomized.
@@ -290,8 +290,8 @@ public class Game implements Message {
      * @param src Disk location
      * @return Destination squares that would produce valid moves
      */
-    public Set<Integer> adjMoves(Integer src) {
-        Set<Integer> result = Stream
+    private Set<Integer> adjMoves(Integer src) {
+        return Stream
                 // All valid adjacent moves
                 .of(-columns - 1, -columns, -columns + 1, columns - 1, columns, columns + 1)
                 // Basic filtering for moves
@@ -300,7 +300,6 @@ public class Game implements Message {
                 // Prevent wrapping around the edge of the board
                 .filter(dst -> legalAdj(src, dst))
                 .collect(Collectors.toSet());
-        return result;
     }
 
     public Set<Integer> jmpMoves(Integer src) {

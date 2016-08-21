@@ -3,11 +3,10 @@ package ux.Screens;
 import network.Client;
 import network.messages.GameListRequest;
 
-public class ThreadRefreshGameList implements Runnable {
-    protected boolean running = true;
-    ScrMainMenu scr = null;
+class ThreadRefreshGameList implements Runnable {
+    private ScrMainMenu scr = null;
 
-    public ThreadRefreshGameList(ScrMainMenu scr) {
+    ThreadRefreshGameList(ScrMainMenu scr) {
         this.scr = scr;
     }
 

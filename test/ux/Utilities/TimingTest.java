@@ -6,7 +6,6 @@ import ux.Labels.NoteLabel;
 import static org.junit.Assert.assertNotEquals;
 
 /**
- * Created by rachelgoeken on 8/18/16.
  */
 public class TimingTest {
     @Test

@@ -22,16 +22,12 @@ public class Credentials {
         this.setHash(pass[1]);
     }
 
-    public Credentials(String username, String salt, String hash, String token, Date tokenDate) {
+    private Credentials(String username, String salt, String hash, String token, Date tokenDate) {
         this.username = username;
         this.token = token;
         this.tokenDate = tokenDate;
         this.setSalt(salt);
         this.setHash(hash);
-    }
-
-    public Credentials(String username, String salt, String hash, String token) {
-        this(username, salt, hash, token, Date.valueOf(LocalDate.now()));
     }
 
     public Credentials(String username, String salt, String hash) {
@@ -42,7 +38,7 @@ public class Credentials {
         return this.salt;
     }
 
-    public void setSalt(String salt) {
+    private void setSalt(String salt) {
         this.salt = salt;
     }
 
@@ -50,7 +46,7 @@ public class Credentials {
         return this.hash;
     }
 
-    public void setHash(String hash) {
+    private void setHash(String hash) {
         this.hash = hash;
     }
 

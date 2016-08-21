@@ -2,7 +2,7 @@ package ux.Screens;
 
 import game.Game;
 
-public class ScrTester {
+class ScrTester {
     public static void main(String args[]) {
         FrameMain createGame = new FrameCreateGame();
         createGame.add(new ScrCreateGame());
