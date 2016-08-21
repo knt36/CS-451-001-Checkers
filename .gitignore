@@ -99,3 +99,4 @@ ENV/
 *.classpath
 *.project
 /glowing-dollop-CS-451.iml
+/keystore.jks
