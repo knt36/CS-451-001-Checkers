@@ -36,6 +36,10 @@ public class PacketTest {
         // Make basic login's, one constructed, one set
         Login LoginTrue = new Login("foo", "bar");
 
+        //Test Getters
+        assertEquals(LoginTrue.getUsername(), "foo");
+        assertEquals(LoginTrue.getPassword(), "bar");
+
         Login LoginFalse = new Login();
         LoginFalse.setPassword("bar");
         LoginFalse.setUsername("baz");
