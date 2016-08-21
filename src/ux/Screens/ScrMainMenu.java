@@ -215,6 +215,7 @@ public class ScrMainMenu extends ScrFactory {
 		repaint();
 	}
 
+<<<<<<< Updated upstream
 	public void networkGameListRefresh(Packet p) {
 
 		//System.out.println("Game network Game List Refreshed");
@@ -236,5 +237,31 @@ public class ScrMainMenu extends ScrFactory {
 				System.out.println("Unexpected message from server: " + p.toJson());
 		}
 	}
+=======
+    public void networkGameListRefresh(Packet p) {
+    	System.out.println("Game network Game List Refreshed");
+        Message message = p.getData();
+        System.out.println(p.getData().toJson().toString());
+        switch (message.type()) {
+            case GAME_LIST:
+                gameList = (GameList) message;
+                refreshGameList();
+                break;
+            case ACK:
+                Ack ack = (Ack) message;
+                //Creation failed
+                if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
+                    FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
+                    fn.add(new ScrDisconnect());
+                } else if (!ack.getMessage().contains("connect")){
+                    FrameNotify fn = new FrameNotify();
+                    fn.add(new ScrNotify(ack.getMessage()));
+                }
+                break;
+            default:
+                System.out.println("Unexpected message from server: " + p.toJson());
+        }
+    }
+>>>>>>> Stashed changes
 
 }

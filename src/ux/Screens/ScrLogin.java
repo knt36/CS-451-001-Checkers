@@ -31,7 +31,6 @@ public class ScrLogin extends ScrFactory{
 		this.signUpBut.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				frame.OpenLinkFrame(new FrameSignUp(), new ScrSignUp());
 			}
 		});
@@ -39,7 +38,6 @@ public class ScrLogin extends ScrFactory{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				//Check if the user name is the right length
 				if(!isValidPassUser()){
 					//Failed and send notification screen
@@ -54,13 +52,13 @@ public class ScrLogin extends ScrFactory{
 		});
 		this.quitBt.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				//Exits out of program entirely
-				System.exit(0);
-			}
-		});
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Exits out of program entirely
+                System.exit(0);
+            }
+        });
+
 
 	}
 
@@ -74,10 +72,25 @@ public class ScrLogin extends ScrFactory{
 					frame.dispose();
 					FrameMain fm = new FrameMain();
 					fm.add(new ScrMainMenu());
+
+                    //if getting this, close disconnect window if open?
+                    if(FrameNotifyDisconnect.getCounter() >= 1){
+                        //close FrameNotifyDisconnect
+                        Frame[] frame = FrameNotifyDisconnect.getFrames();
+                        for(Frame f : frame){
+                            f.dispose();
+                        }
+                    }
+
 				} else {
 					//this login has failed
-					FrameNotify fn = new FrameNotify();
-					fn.add(new ScrNotify(ack.getMessage()));
+                    if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
+                        FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
+                        fn.add(new ScrDisconnect());
+                    } else if (!ack.getMessage().contains("connect")){
+                        FrameNotify fn = new FrameNotify();
+                        fn.add(new ScrNotify(ack.getMessage()));
+                    }
 				}
 				break;
 			default:
