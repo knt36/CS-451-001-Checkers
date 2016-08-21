@@ -75,6 +75,7 @@ public class ScrLogin extends ScrFactory{
 					//this login is successful;
 					frame.dispose();
                     th.stop();
+                    
 					FrameMain fm = new FrameMain();
 					fm.add(new ScrMainMenu());
 
