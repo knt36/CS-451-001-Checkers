@@ -15,8 +15,7 @@ import java.util.function.Consumer;
  */
 public class ClientThread extends Thread {
     private static final String SERVER_HOSTNAME = "www.centralark.org";
-    //TODO CHANGE BEFORE MERGING
-    private static final int SERVER_PORT = 4448;
+    private static final int SERVER_PORT = 4443;
     private String data;
     private Consumer<Packet> callback;
 
@@ -27,7 +26,7 @@ public class ClientThread extends Thread {
 
     @Override
     public void run() {
-        System.setProperty("javax.net.debug", "ssl");
+        //System.setProperty("javax.net.debug", "ssl");
         System.setProperty("javax.net.ssl.trustStore", "client.jks");
         System.setProperty("javax.net.ssl.trustStorePassword", "checkers");
         SSLSocket socket = null;

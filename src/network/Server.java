@@ -10,11 +10,10 @@ import java.net.ServerSocket;
  *
  */
 public class Server {
-    //TODO CHANGE BEFORE MERGING
-    private static final int SERVER_PORT = 4448;
+    private static final int SERVER_PORT = 4443;
 
     public static void startServer() throws IOException {
-        System.setProperty("javax.net.debug", "ssl");
+        //System.setProperty("javax.net.debug", "ssl");
         System.setProperty("javax.net.ssl.keyStore", "keystore.jks");
         System.setProperty("javax.net.ssl.keyStorePassword", "checkers");
         // SSL Taken from the Oracle Docs
