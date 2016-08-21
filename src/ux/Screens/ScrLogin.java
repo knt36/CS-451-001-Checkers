@@ -13,13 +13,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
 public class ScrLogin extends ScrFactory{
 	protected OptionButton signUpBut = new OptionButton(STYLE.GREEN,STRINGS.SIGNUP);
 	protected OptionButton signInBut = new OptionButton(Color.RED,STRINGS.SIGNIN);
-    protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
+	protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
 	protected UserTextField userName = new UserTextField(STRINGS.USERNAME_HINT);
 	protected UserTextField passWord = new UserTextField(STRINGS.PASSWORD_HINT);
 
@@ -54,15 +52,15 @@ public class ScrLogin extends ScrFactory{
 				
 			}
 		});
-        this.quitBt.addActionListener(new ActionListener() {
+		this.quitBt.addActionListener(new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
-                //Exits out of program entirely
-                System.exit(0);
-            }
-        });
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				//Exits out of program entirely
+				System.exit(0);
+			}
+		});
 
 	}
 
@@ -96,8 +94,8 @@ public class ScrLogin extends ScrFactory{
 		right.constr.fill = right.constr.NONE;
 		right.constr.gridy++;
 		right.add(this.signInBut);
-        right.constr.gridy++;
-        right.add(this.quitBt);
+		right.constr.gridy++;
+		right.add(this.quitBt);
 		return(right);
 	}
 

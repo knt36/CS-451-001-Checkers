@@ -1,17 +1,11 @@
 package ux.Screens;
 
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 public class FrameMain extends JFrame{
-	protected FrameMain link = null;
 	protected static int instances = 0;
+	protected FrameMain link = null;
 	protected GridBagConstraints constr = new GridBagConstraints();
 	public FrameMain() {
 		// TODO Auto-generated constructor stub
@@ -58,7 +52,7 @@ public class FrameMain extends JFrame{
 		frame.link = this;
 		frame.add(screen);
 	}
-	
+
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
