@@ -3,6 +3,8 @@ package ux.Screens;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,7 +24,7 @@ public class FrameMain extends JFrame{
 		this.setVisible(true);
 		this.setBackground(STYLE.BACKGROUND);
 		this.show();
-		this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
 	}
 	
 	@Override
@@ -56,4 +58,12 @@ public class FrameMain extends JFrame{
 		frame.link = this;
 		frame.add(screen);
 	}
+	
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		super.dispose();
+	}
+
+
 }

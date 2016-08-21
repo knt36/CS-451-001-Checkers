@@ -22,9 +22,8 @@ import ux.Labels.NoteLabel;
 public class ScrDeleteConfirm extends ScrFactory{
 	protected OptionButton okBut = new OptionButton(STYLE.GREEN,STRINGS.DELETECONFIRMBUT);
 	protected OptionButton cancelBut = new OptionButton(Color.red,STRINGS.CANCELBUT);
-	
 	NoteLabel msg = new NoteLabel(STRINGS.PERMADELETE); 
-	public ScrDeleteConfirm(String name) {
+	public ScrDeleteConfirm(ScrGame lastScrGame, String lastGame) {
 		// TODO Auto-generated constructor stub
 		//The button fills horizontal unlike everything else. This is intended or  I have to increase the original frame size.
 		this.constr.gridwidth =2;
@@ -44,10 +43,11 @@ public class ScrDeleteConfirm extends ScrFactory{
 				// TODO Auto-generated method stub
 				//Server call to delete the game
                 //Must also delete the game in the database
-                Client.client.send(new GameDelete(name), (p)->networkGame(p));
 				//Then exits out of the delete confirmation page
-				frame.dispose();
+			    lastScrGame.stopThreadUpdateBoard();
+				Client.client.send(new GameDelete(lastGame), (p)->lastScrGame.networkGame(p));				
 				frame.link.dispose();
+				frame.dispose();
 			}
 		});
 		this.cancelBut.addActionListener(new ActionListener() {

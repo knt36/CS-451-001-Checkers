@@ -307,7 +307,7 @@ public class Game implements Message {
     }
 
     private Player nextTurn() {
-        if (turn.equals(p1)) {
+        if (turn.getName().equals(p1.getName())) {
             return p2;
         } else {
             return p1;
