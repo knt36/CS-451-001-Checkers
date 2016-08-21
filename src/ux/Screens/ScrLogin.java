@@ -20,7 +20,7 @@ public class ScrLogin extends ScrFactory{
 	protected OptionButton signInBut = new OptionButton(Color.RED,STRINGS.SIGNIN);
 	protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
 	protected UserTextField userName = new UserTextField(STRINGS.USERNAME_HINT);
-	protected TextFieldPassword passWord = new TextFieldPassword(STRINGS.PASSWORD_HINT);
+	protected TextFieldPassword passWord = new TextFieldPassword();
 
 	protected TitleLabel title = new TitleLabel(STRINGS.TITLE);
 
@@ -43,7 +43,8 @@ public class ScrLogin extends ScrFactory{
 				// TODO Auto-generated method stub
 				//Check if the user name is the right length
 					//Success and logging in
-					Client.client.send(new Login(userName.getText(), passWord.getText()), (p) -> networkLogin(p));
+					System.out.println(passWord.getPassword());
+					Client.client.send(new Login(userName.getText(), passWord.getPassword()+""), (p) -> networkLogin(p));
 				
 			}
 		});
