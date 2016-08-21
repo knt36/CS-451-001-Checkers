@@ -6,6 +6,7 @@ import network.messages.Message;
 import network.messages.Packet;
 import network.messages.Signup;
 import ux.Buttons.OptionButton;
+import ux.TextField.TextFieldPassword;
 import ux.TextField.UserTextField;
 
 import java.awt.*;
@@ -14,7 +15,7 @@ import java.awt.event.ActionListener;
 
 public class ScrSignUp extends ScrFactory{
 	protected UserTextField userName = new UserTextField(STRINGS.USERNAME_HINT);
-	protected UserTextField passWord = new UserTextField(STRINGS.PASSWORD_HINT);
+	protected TextFieldPassword passWord = new TextFieldPassword(STRINGS.PASSWORD_HINT);
 
 	protected OptionButton createBt = new OptionButton(STYLE.GREEN, STRINGS.CREATE);
 	protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
@@ -38,7 +39,7 @@ public class ScrSignUp extends ScrFactory{
 				// TODO Auto-generated method stub
 				//Add the network adding user function into here
                 nextFrameCreateBtn();
-				
+
 			}
 		});
 		this.quitBt.addActionListener(new ActionListener() {
@@ -58,12 +59,7 @@ public class ScrSignUp extends ScrFactory{
 
 	public void nextFrameCreateBtn(){
         System.out.println("Create button pressed");
-        if(userName.isValidPassUser() && passWord.isValidPassUser()){
-            Client.client.send(new Signup(userName.getText(), passWord.getText()), (p)->networkSignup(p));
-        }else {
-            FrameNotify nf = new FrameNotify();
-            nf.add(new ScrNotify(STRINGS.CREDENTIALLENGTHERROR));
-        }
+        Client.client.send(new Signup(userName.getText(), passWord.getText()), (p)->networkSignup(p));
     }
 	
 	public void networkSignup(Packet p){
