@@ -36,7 +36,7 @@ public class ClientThread extends Thread {
                 (SSLSocketFactory) SSLSocketFactory.getDefault();
         try {
             socket = (SSLSocket) sslFact.createSocket(SERVER_HOSTNAME, SERVER_PORT);
-            socket.setEnabledCipherSuites(new String[]{"TLS_RSA_WITH_AES_128_CBC_SHA", "TLS_RSA_WITH_AES_256_CBC_SHA"});
+            socket.setEnabledCipherSuites(new String[]{"TLS_RSA_WITH_AES_128_CBC_SHA"});
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             out.write(data + "\n");
