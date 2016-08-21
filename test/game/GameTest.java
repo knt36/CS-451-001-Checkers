@@ -478,7 +478,7 @@ public class GameTest {
     @Test
     public void equalsTest() {
         Game first = new Game("blah", "blargh");
-        Game third = new Game("blah", "blargh");
+        Game third = first;
         Game second = new Game("bler", "blee");
 
         // check identities
