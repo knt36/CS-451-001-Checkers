@@ -6,13 +6,11 @@ import java.awt.*;
 
 public class FrameGame extends FrameMain {
 	public FrameGame() {
-		// TODO Auto-generated constructor stub
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 
 	@Override
 	public Component add(Component comp) {
-		// TODO Auto-generated method stub
 		super.add(comp);
 		if (comp instanceof ScrGame) {
 			ScrGame sg = (ScrGame) comp;
@@ -31,7 +29,6 @@ public class FrameGame extends FrameMain {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
 		super.dispose();
 	}
 }

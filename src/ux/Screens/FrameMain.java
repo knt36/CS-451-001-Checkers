@@ -9,7 +9,6 @@ public class FrameMain extends JFrame {
     protected GridBagConstraints constr = new GridBagConstraints();
 
     public FrameMain() {
-        // TODO Auto-generated constructor stub
         instances++;
         this.setLayout(new GridBagLayout());
         constr.weightx = 1;
@@ -24,7 +23,6 @@ public class FrameMain extends JFrame {
 
     @Override
     public Component add(Component comp) {
-        // TODO Auto-generated method stub
         super.add(comp, this.constr);
         //Everytime you add a component to the frame, if it is a ScrFactory made frame,
         //It will give the screen the reference to the frame that it is in for closing purposes mostly.
@@ -38,7 +36,6 @@ public class FrameMain extends JFrame {
 
     @Override
     public void removeAll() {
-        // TODO Auto-generated method stub
         super.removeAll();
         revalidate();
         repaint();
@@ -57,7 +54,6 @@ public class FrameMain extends JFrame {
 
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
         super.dispose();
     }
 

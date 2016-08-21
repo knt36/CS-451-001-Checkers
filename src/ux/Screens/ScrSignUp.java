@@ -21,7 +21,6 @@ public class ScrSignUp extends ScrFactory {
     protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
 
     public ScrSignUp() {
-        // TODO Auto-generated constructor stub
         this.constr.fill = GridBagConstraints.HORIZONTAL;
         this.add(this.userName);
         this.constr.gridy++;
@@ -37,7 +36,6 @@ public class ScrSignUp extends ScrFactory {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
                 //Add the network adding user function into here
                 System.out.println("Create button pressed");
                 Client.client.send(new Signup(userName.getText(), passWord.getText()), (p) -> networkSignup(p));
@@ -48,7 +46,6 @@ public class ScrSignUp extends ScrFactory {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
                 //Exits out of program entirely
                 System.exit(0);
             }

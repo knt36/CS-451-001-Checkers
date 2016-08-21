@@ -7,7 +7,6 @@ import java.awt.*;
 
 public class TextFieldFactory extends JTextField {
     public TextFieldFactory() {
-        // TODO Auto-generated constructor stub
         this.setText("");
         this.setCaretColor(Color.black);
         this.setHorizontalAlignment(JTextField.CENTER);

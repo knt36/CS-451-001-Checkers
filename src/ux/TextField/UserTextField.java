@@ -2,7 +2,6 @@ package ux.TextField;
 
 public class UserTextField extends TextField {
     public UserTextField(String hint) {
-        // TODO Auto-generated constructor stub
         super(hint);
     }
 

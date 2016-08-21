@@ -7,7 +7,6 @@ public class FrameSignUp extends FrameMain {
     protected static int thisInstances = 0;
 
     public FrameSignUp() {
-        // TODO Auto-generated constructor stub
         super();
         thisInstances++;
         if (thisInstances > MAXAMOUNT) {
@@ -19,7 +18,6 @@ public class FrameSignUp extends FrameMain {
     //Code to prevent multiple sign ups to appear. Prevent something bad from happening.
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
         thisInstances--;
         super.dispose();
     }

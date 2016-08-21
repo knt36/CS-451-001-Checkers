@@ -23,7 +23,6 @@ public class GuiBoard extends ScrFactory {
     protected Game lastGame = null;
 
     public GuiBoard(Game game) {
-        // TODO Auto-generated constructor stub
         this.lastGame = game;
         this.setPreferredSize(new Dimension(400, 400));
         this.setBackground(STYLE.BOARD_BACKGROUND_CLR);
@@ -61,7 +60,6 @@ public class GuiBoard extends ScrFactory {
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // TODO Auto-generated method stub
                     if (discSelected) {
                         //Making a move
                         prevButton.setBackground(STYLE.BOARDCOLOR);

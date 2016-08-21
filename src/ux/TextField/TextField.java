@@ -11,7 +11,6 @@ public class TextField extends TextFieldFactory {
     public boolean userInputedText = false;
 
     public TextField() {
-        // TODO Auto-generated constructor stub
 
     }
 
@@ -22,7 +21,6 @@ public class TextField extends TextFieldFactory {
         this.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-                // TODO Auto-generated method stub
                 if (getText().length() > 0) {
                     //System.out.println(getText());
                     userInputedText = true;
@@ -35,7 +33,6 @@ public class TextField extends TextFieldFactory {
 
             @Override
             public void focusGained(FocusEvent e) {
-                // TODO Auto-generated method stub
                 userInputedText = false;
                 setText("");
                 setForeground(STYLE.TEXTFIELDCOLOR);

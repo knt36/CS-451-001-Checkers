@@ -10,7 +10,6 @@ public class GroupBulletLabel {
     ArrayList<BulletLabel> bullets = new ArrayList<>();
 
     public GroupBulletLabel() {
-        // TODO Auto-generated constructor stub
     }
 
     public void add(BulletLabel bt) {
@@ -19,13 +18,11 @@ public class GroupBulletLabel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                // TODO Auto-generated method stub
                 setReleaseAll();
                 bt.pressed = true;
                 bt.setForeground(STYLE.BULLETBFRCLICKCLR);
@@ -35,19 +32,16 @@ public class GroupBulletLabel {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                // TODO Auto-generated method stub
 
             }
 

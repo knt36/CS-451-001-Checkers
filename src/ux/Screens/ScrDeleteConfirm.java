@@ -19,7 +19,6 @@ public class ScrDeleteConfirm extends ScrFactory {
     NoteLabel msg = new NoteLabel(STRINGS.PERMADELETE);
 
     public ScrDeleteConfirm(ScrGame lastScrGame, String lastGame) {
-        // TODO Auto-generated constructor stub
         //The button fills horizontal unlike everything else. This is intended or  I have to increase the original frame size.
         this.constr.gridwidth = 2;
         this.add(msg);
@@ -35,7 +34,6 @@ public class ScrDeleteConfirm extends ScrFactory {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
                 //Server call to delete the game
                 //Must also delete the game in the database
                 //Then exits out of the delete confirmation page

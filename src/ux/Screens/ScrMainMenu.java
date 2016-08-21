@@ -34,7 +34,6 @@ public class ScrMainMenu extends ScrFactory {
     JScrollPane pubGameScroll = new JScrollPane(pubGameArea);
 
     public ScrMainMenu() {
-        // TODO Auto-generated constructor stub
         this.add(leftPanel());
         this.constr.gridx++;
         this.add(rightPanel());
@@ -44,7 +43,6 @@ public class ScrMainMenu extends ScrFactory {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
                 //Exits out of program entirely
                 System.exit(0);
             }
@@ -53,7 +51,6 @@ public class ScrMainMenu extends ScrFactory {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
                 try {
                     File htmlFile = new File("help.html");
                     Desktop.getDesktop().browse(htmlFile.toURI());
@@ -66,7 +63,6 @@ public class ScrMainMenu extends ScrFactory {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
                 FrameCreateGame fcg = new FrameCreateGame();
                 fcg.add(new ScrCreateGame());
             }
@@ -145,25 +141,21 @@ public class ScrMainMenu extends ScrFactory {
 
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    // TODO Auto-generated method stub
 
                 }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    // TODO Auto-generated method stub
 
                 }
 
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    // TODO Auto-generated method stub
 
                 }
 
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    // TODO Auto-generated method stub
 
                 }
             });
@@ -192,19 +184,16 @@ public class ScrMainMenu extends ScrFactory {
 
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    // TODO Auto-generated method stub
 
                 }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    // TODO Auto-generated method stub
 
                 }
 
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    // TODO Auto-generated method stub
 
                 }
 

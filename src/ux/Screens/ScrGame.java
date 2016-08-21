@@ -39,7 +39,6 @@ public class ScrGame extends ScrFactory {
 	protected OptionButton turnColorIndicator = new OptionButton(Color.red, "Color");
 
 	public ScrGame(Game game) {
-		// TODO Auto-generated constructor stub
 		this.game = game;
 		this.board = new GuiBoard(this.game);
 		this.constr.gridheight = 5;
@@ -72,7 +71,6 @@ public class ScrGame extends ScrFactory {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				stopThreadUpdateBoard();
 				frame.dispose();
 			}
@@ -81,7 +79,6 @@ public class ScrGame extends ScrFactory {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				try {
 					File htmlFile = new File("help.html");
 					Desktop.getDesktop().browse(htmlFile.toURI());
@@ -94,7 +91,6 @@ public class ScrGame extends ScrFactory {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				FrameNotify fn = new FrameNotify();
 				ScrDeleteConfirm scrDeleteConfirm = new ScrDeleteConfirm(ScrGame.this, game.name);
 				frame.OpenLinkFrame(fn, scrDeleteConfirm);
@@ -190,7 +186,6 @@ public class ScrGame extends ScrFactory {
 		this.frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				// TODO Auto-generated method stub
 				stopThreadUpdateBoard();
 				super.windowClosing(e);
 			}
@@ -203,7 +198,6 @@ public class ScrGame extends ScrFactory {
 
 			@Override
 			public void performAction(int start, int finish) {
-				// TODO Auto-generated method stub
 				//Detects a move has been made on the board and then tries to move it in the game
 				MoveStatus result = game.move(start, finish);
 				pauseThreadUpdateBoard();

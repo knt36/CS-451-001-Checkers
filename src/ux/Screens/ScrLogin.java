@@ -27,7 +27,6 @@ public class ScrLogin extends ScrFactory {
     protected Thread th = new Thread(rt);
 
     public ScrLogin() {
-        // TODO Auto-generated constructor stub
         this.add(leftPanel());
         this.constr.gridx++;
         this.add(rightPanel());

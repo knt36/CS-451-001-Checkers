@@ -13,6 +13,5 @@ public class OptionButton extends ButtonFactory {
         this.setFont(STYLE.OPTBUTFONT);
         this.setBorder(BorderFactory.createLineBorder(STYLE.OPTIONBORDER, STYLE.OPTIONBORDERSIZE, true));
         this.setForeground(STYLE.OPTIONTEXTCOLOR);
-        // TODO Auto-generated constructor stub
     }
 }

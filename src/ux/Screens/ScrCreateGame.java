@@ -42,7 +42,6 @@ public class ScrCreateGame extends ScrFactory {
 	JScrollPane usersScroll = new JScrollPane(usersArea);
 
 	public ScrCreateGame() {
-		// TODO Auto-generated constructor stub
 		this.constr.fill = GridBagConstraints.HORIZONTAL;
 		this.add(gameLabel);
 		this.constr.gridy++;
@@ -70,7 +69,6 @@ public class ScrCreateGame extends ScrFactory {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				//When check all users, should release all buttons....
 				groupBullets.releaseAllButton();
 				selectedUserForGame = -1;
@@ -236,7 +234,6 @@ public class ScrCreateGame extends ScrFactory {
 	}
 
 	private void paintUsersArea() {
-		// TODO Auto-generated method stub
 		//Add users to the database
 		//Add false users to the database
 		System.out.println("Paint user area ran");
@@ -251,31 +248,26 @@ public class ScrCreateGame extends ScrFactory {
 
 				@Override
 				public void mouseReleased(MouseEvent e) {
-					// TODO Auto-generated method stub
 					action();
 				}
 
 				@Override
 				public void mousePressed(MouseEvent e) {
-					// TODO Auto-generated method stub
 					action();
 				}
 
 				@Override
 				public void mouseExited(MouseEvent e) {
-					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void mouseEntered(MouseEvent e) {
-					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					// TODO Auto-generated method stub
 					action();
 				}
 

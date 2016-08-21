@@ -8,13 +8,11 @@ public class ThreadUpdateBoard implements Runnable {
     protected boolean running = true;
 
     public ThreadUpdateBoard(ScrGame scrGame) {
-        // TODO Auto-generated constructor stub
         this.scrGame = scrGame;
     }
 
     @Override
     public void run() {
-        // TODO Auto-generated method stub
         //Send request for board and update the board every 2 seconds
         while (running) {
             try {

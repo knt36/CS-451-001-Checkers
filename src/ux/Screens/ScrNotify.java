@@ -12,7 +12,6 @@ public class ScrNotify extends ScrFactory {
     NoteLabel msg = null;
 
     public ScrNotify(String text) {
-        // TODO Auto-generated constructor stub
         //The button fills horizontal unlike everything else. This is intended or  I have to increase the original frame size.
         msg = new NoteLabel(text);
         this.constr.gridwidth = 2;
@@ -28,7 +27,6 @@ public class ScrNotify extends ScrFactory {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
                 //Server call to delete the game
 
                 //Then exits out of the delete confirmation page

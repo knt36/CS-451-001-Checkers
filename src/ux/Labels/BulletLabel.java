@@ -8,7 +8,6 @@ public class BulletLabel extends LabelFactory {
 
     public BulletLabel(String label) {
         super(STRINGS.BULLETCHAR + label);
-        // TODO Auto-generated constructor stub
         this.setFont(STYLE.BULLETLABEL_FONT);
     }
 }

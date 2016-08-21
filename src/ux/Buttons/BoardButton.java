@@ -13,14 +13,12 @@ public class BoardButton extends ButtonFactory {
 
     public BoardButton() {
         super(STYLE.BOARDCOLOR, "");
-        // TODO Auto-generated constructor stub
         this.setBorder(BorderFactory.createLineBorder(STYLE.BOARDBORDERLINECOLOR, STYLE.BOARDBORDERSTHICK, true));
     }
 
     //The checker peice that is on the board
     public BoardButton(Color c, boolean king) {
         super(STYLE.BOARDCOLOR, "");
-        // TODO Auto-generated constructor stub
         this.setBorder(BorderFactory.createLineBorder(STYLE.BOARDBORDERLINECOLOR, STYLE.BOARDBORDERSTHICK, true));
         this.c = c;
         this.k = king;
@@ -28,7 +26,6 @@ public class BoardButton extends ButtonFactory {
 
     public BoardButton(Color c, boolean king, int num) {
         super(STYLE.BOARDCOLOR, "");
-        // TODO Auto-generated constructor stub
         this.setBorder(BorderFactory.createLineBorder(STYLE.BOARDBORDERLINECOLOR, STYLE.BOARDBORDERSTHICK, true));
         this.c = c;
         this.k = king;
@@ -36,7 +33,6 @@ public class BoardButton extends ButtonFactory {
 
     @Override
     protected void paintComponent(Graphics g) {
-        // TODO Auto-generated method stub
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         // Assume x, y, and diameter are instance variables.
