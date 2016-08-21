@@ -474,4 +474,28 @@ public class GameTest {
         thrown.expect(IllegalArgumentException.class);
         Game testGame = new Game(sampleName, redPlayer, whitePlayer, testBoard, redPlayer, new ArrayList<>());
     }
+
+    @Test
+    public void equalsTest() {
+        Game first = new Game("blah", "blargh");
+        Game third = new Game("blah", "blargh");
+        Game second = new Game("bler", "blee");
+
+        // check identities
+        assertEquals(first, third);
+        assertNotEquals(second, first);
+        assertNotEquals(second, third);
+
+        // Now that identity is correct, check hashcode function
+        // this must be deterministic, we repeat it
+        assertEquals(first.hashCode(), third.hashCode());
+        assertEquals(first.hashCode(), third.hashCode());
+
+        assertNotEquals(first.hashCode(), second.hashCode());
+        assertNotEquals(first.hashCode(), second.hashCode());
+
+        assertNotEquals(third.hashCode(), second.hashCode());
+        assertNotEquals(third.hashCode(), second.hashCode());
+
+    }
 }
