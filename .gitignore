@@ -99,3 +99,5 @@ ENV/
 *.classpath
 *.project
 /glowing-dollop-CS-451.iml
+#Test Words
+/src/TestWords/
