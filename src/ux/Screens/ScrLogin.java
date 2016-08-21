@@ -31,33 +31,31 @@ public class ScrLogin extends ScrFactory{
 		this.constr.gridx++;
 		this.add(rightPanel());
 		this.signUpBut.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.OpenLinkFrame(new FrameSignUp(), new ScrSignUp());
-			}
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                nextFrameSignUpBtn();
+            }
 		});
 		this.signInBut.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//Check if the user name is the right length
-				if(!isValidPassUser()){
-					//Failed and send notification screen
-					FrameNotify fn = new FrameNotify();
-					fn.add(new ScrNotify(STRINGS.CREDENTIALLENGTHERROR));
-				}else{
-					//Success and logging in
-					Client.client.send(new Login(userName.getText(), passWord.getText()), (p) -> networkLogin(p));
-				}
-				
+                //Check if the user name is the right length
+                if(!isValidPassUser()){
+                    //Failed and send notification screen
+                    FrameNotify fn = new FrameNotify();
+                    fn.add(new ScrNotify(STRINGS.CREDENTIALLENGTHERROR));
+                }else{
+                    //Success and logging in
+                    Client.client.send(new Login(userName.getText(), passWord.getText()), (p) -> networkLogin(p));
+                }
 			}
 		});
 		this.quitBt.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Exits out of program entirely
-                System.exit(0);
+                nextFrameQuitBtn();
             }
         });
 
@@ -75,9 +73,8 @@ public class ScrLogin extends ScrFactory{
 					//this login is successful;
 					frame.dispose();
                     th.stop();
-                    
-					FrameMain fm = new FrameMain();
-					fm.add(new ScrMainMenu());
+
+                    nextFrameMainMenu();
 
                     //if getting this, close disconnect window if open?
                     if(FrameNotifyDisconnect.getCounter() >= 1){
@@ -174,5 +171,20 @@ public class ScrLogin extends ScrFactory{
                 System.out.println("Unexpected message from server: " + p.toJson());
         }
     }
+
+    public void nextFrameQuitBtn() {
+        //Exits out of program entirely
+        System.exit(0);
+    }
+
+    public void nextFrameMainMenu(){
+        FrameMain fm = new FrameMain();
+        fm.add(new ScrMainMenu());
+    }
+
+    public void nextFrameSignUpBtn(){
+        frame.OpenLinkFrame(new FrameSignUp(), new ScrSignUp());
+    }
+
 
 }

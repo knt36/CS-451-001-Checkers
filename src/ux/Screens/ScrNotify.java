@@ -29,11 +29,14 @@ public class ScrNotify extends ScrFactory {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//Server call to delete the game
-				
-				//Then exits out of the delete confirmation page
-				frame.dispose();
+				nextFrameOkBtn();
 			}
 		});
 	
 	}
+
+	public void nextFrameOkBtn() {
+        //Then exits out of the delete confirmation page
+        frame.dispose();
+    }
 }

@@ -14,7 +14,7 @@ public class BoardButton extends ButtonFactory {
 		super(STYLE.BOARDCOLOR, "");
 		// TODO Auto-generated constructor stub
 		this.setBorder(BorderFactory.createLineBorder(STYLE.BOARDBORDERLINECOLOR, STYLE.BOARDBORDERSTHICK, true));
-	}	
+	}
 	
 	//The checker peice that is on the board
 	public BoardButton(Color c, boolean king){

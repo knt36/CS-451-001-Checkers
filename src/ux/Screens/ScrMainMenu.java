@@ -35,7 +35,6 @@ public class ScrMainMenu extends ScrFactory {
 	JScrollPane pubGameScroll = new JScrollPane(pubGameArea);
 
 	public ScrMainMenu() {
-		// TODO Auto-generated constructor stub
 		this.add(leftPanel());
 		this.constr.gridx++;
 		this.add(rightPanel());
@@ -45,31 +44,21 @@ public class ScrMainMenu extends ScrFactory {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				//Exits out of program entirely
-				System.exit(0);
+				nextFrameQuitBtn();
 			}
 		});
 		helpBt.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				try {
-					File htmlFile = new File("help.html");
-					Desktop.getDesktop().browse(htmlFile.toURI());
-				} catch (IOException error) {
-					//don't open
-				}
+				nextFrameHelpBtn();
 			}
 		});
 		newGameBt.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				FrameCreateGame fcg = new FrameCreateGame();
-				fcg.add(new ScrCreateGame());
+				nextFrameNewGameBtn();
 			}
 		});
 		
@@ -139,9 +128,7 @@ public class ScrMainMenu extends ScrFactory {
 				
 				@Override
 				public void mouseReleased(MouseEvent e) {
-					//Start the selected game
-					FrameGame fg = new FrameGame();
-					fg.add(new ScrGame(g));
+                    nextFrameMouseReleasedPublic(g);
 				}
 				
 				@Override
@@ -181,34 +168,27 @@ public class ScrMainMenu extends ScrFactory {
 				
 				@Override
 				public void mouseReleased(MouseEvent e) {
-					//Start the selected game
-                    g.p2 = g.p1.opponent(Client.client.getUsername());
-                    if(g.turn.getName() == ""){
-                        g.turn = g.p2;
-                    }
-                    Client.client.send(g, (p) -> networkGameUpdate(p));
-					FrameGame fg = new FrameGame();
-					fg.add(new ScrGame(g));
+					nextFrameMouseReleasedCurrent(g);
 				}
-				
+
 				@Override
 				public void mousePressed(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+
 				}
-				
+
 				@Override
 				public void mouseExited(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+
 				}
-				
+
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+
 				}
-				
+
 				@Override
 				public void mouseClicked(MouseEvent e) {
 
@@ -288,5 +268,40 @@ public class ScrMainMenu extends ScrFactory {
             default:
                 System.out.println("Unexpected message from server: " + p.toJson());
         }
+    }
+
+    public void nextFrameQuitBtn(){
+        //Exits out of program entirely
+        System.exit(0);
+    }
+
+    public void nextFrameHelpBtn(){
+        try {
+            File htmlFile = new File("help.html");
+            Desktop.getDesktop().browse(htmlFile.toURI());
+        } catch (IOException error) {
+            //don't open
+        }
+    }
+
+    public void nextFrameNewGameBtn(){
+        FrameCreateGame fcg = new FrameCreateGame();
+        fcg.add(new ScrCreateGame());
+    }
+
+    public void nextFrameMouseReleasedPublic(Game g) {
+        //Start the selected game
+        g.p2 = g.p1.opponent(Client.client.getUsername());
+        if(g.turn.getName().equals("")){
+            g.turn = g.p2;
+        }
+        Client.client.send(g, (p) -> networkGameUpdate(p));
+        FrameGame fg = new FrameGame();
+        fg.add(new ScrGame(g));
+    }
+
+    public void nextFrameMouseReleasedCurrent(Game g) {
+        FrameGame fg = new FrameGame();
+        fg.add(new ScrGame(g));
     }
 }

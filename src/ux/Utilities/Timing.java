@@ -36,7 +36,6 @@ public class Timing implements Runnable {
                     hours = hours + 1;
                 }
 
-
                 //make time 2 digits
                 if (hours < 10) {
                     hr = "0" + Integer.toString(hours);

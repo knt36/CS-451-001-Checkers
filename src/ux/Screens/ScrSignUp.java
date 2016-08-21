@@ -37,13 +37,7 @@ public class ScrSignUp extends ScrFactory{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//Add the network adding user function into here
-				System.out.println("Create button pressed");
-				if(userName.isValidPassUser() && passWord.isValidPassUser()){
-					Client.client.send(new Signup(userName.getText(), passWord.getText()), (p)->networkSignup(p));
-				}else {
-					FrameNotify nf = new FrameNotify();
-					nf.add(new ScrNotify(STRINGS.CREDENTIALLENGTHERROR));
-				}
+                nextFrameCreateBtn();
 				
 			}
 		});
@@ -53,10 +47,24 @@ public class ScrSignUp extends ScrFactory{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//Exits out of program entirely
-				System.exit(0);
+				nextFrameQuitBtn();
 			}
 		});
 	}
+
+	public void nextFrameQuitBtn(){
+        System.exit(0);
+    }
+
+	public void nextFrameCreateBtn(){
+        System.out.println("Create button pressed");
+        if(userName.isValidPassUser() && passWord.isValidPassUser()){
+            Client.client.send(new Signup(userName.getText(), passWord.getText()), (p)->networkSignup(p));
+        }else {
+            FrameNotify nf = new FrameNotify();
+            nf.add(new ScrNotify(STRINGS.CREDENTIALLENGTHERROR));
+        }
+    }
 	
 	public void networkSignup(Packet p){
 		Message message = p.getData();
