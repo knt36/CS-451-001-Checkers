@@ -17,6 +17,7 @@ import javax.swing.Scrollable;
 
 import game.Game;
 import game.GameList;
+import game.Player;
 import network.Client;
 import network.messages.Ack;
 import network.messages.GameListRequest;
@@ -149,6 +150,8 @@ public class ScrMainMenu extends ScrFactory {
 				@Override
 				public void mouseReleased(MouseEvent e) {
 					//Start the selected game
+					//Fill myself as player2
+					g.p2 = new Player(Client.client.getUsername());
 					FrameGame fg = new FrameGame();
 					fg.add(new ScrGame(g));
 				}
