@@ -458,4 +458,44 @@ public class Game implements Message {
     public MessageTypes type() {
         return MessageTypes.GAME;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Game game = (Game) o;
+
+        // Intellij simplified this
+        return turn != null ? turn.equals(game.turn) : game.turn == null
+                && (p1 != null ? p1.equals(game.p1) : game.p1 == null
+                && (p2 != null ? p2.equals(game.p2) : game.p2 == null
+                && (board != null ? board.equals(game.board) : game.board == null
+                && (name != null ? name.equals(game.name) : game.name == null
+                && (lastMove != null ? lastMove.equals(game.lastMove) : game.lastMove == null)))));
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = turn.hashCode();
+        result = 31 * result + p1.hashCode();
+        result = 31 * result + p2.hashCode();
+        result = 31 * result + board.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + lastMove.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "turn=" + turn +
+                ", p1=" + p1 +
+                ", p2=" + p2 +
+                ", board=" + board +
+                ", name='" + name + '\'' +
+                ", lastMove=" + lastMove +
+                '}';
+    }
 }

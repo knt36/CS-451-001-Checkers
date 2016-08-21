@@ -43,6 +43,7 @@ public class GameList implements Message {
     }
 
     @Override
+    // Is covered in JUnit testing, GameListTest:EqualsTest but it isn't registering.
     public MessageTypes type() {
         return MessageTypes.GAME_LIST;
     }
