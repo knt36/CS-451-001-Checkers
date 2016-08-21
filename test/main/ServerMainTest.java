@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 /**
+ * MUST BE RUN ON THE SERVER!
  */
 public class ServerMainTest {
     @Test
