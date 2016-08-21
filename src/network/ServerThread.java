@@ -77,6 +77,7 @@ public class ServerThread extends Thread {
 
     @Override
     public void run() {
+        String output = null;
         try {
             System.out.println("\nConnected to client");
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -93,20 +94,17 @@ public class ServerThread extends Thread {
                     return;
                 }
             }
-            System.out.println("Got " + input);
-            String output;
             if (packet == null || packet.getData() == null) {
-                output = Packet.error("Could not parse data");
+                output = Packet.error("Could not parse " + input);
             } else {
                 this.token = packet.getToken();
                 Packet result = process(packet);
                 if (result == null) {
-                    output = Packet.error("Server error, failed to process data");
+                    output = Packet.error("Server error, failed to process " + input);
                 } else {
                     output = result.toJson();
                 }
             }
-            System.out.println("Sending: " + output);
             out.write(output + "\n");
             out.flush();
         } catch (IOException e) {
@@ -125,35 +123,49 @@ public class ServerThread extends Thread {
         Message message = packet.getData();
         switch (packet.getData().type()) {
             case GAME:
-                return new Packet(token, updateGame((Game) message));
+                Game game = (Game) message;
+                System.out.println("Got a game: " + game.toJson());
+                return new Packet(token, updateGame(game));
             case SIGNUP:
-                token = signup((Signup) message);
+                Signup signup = (Signup) message;
+                System.out.println("Signing up: " + signup.getUsername());
+                token = signup(signup);
                 if (token != null && !token.equals("")) {
                     return new Packet(token, new Ack("Logged in", true));
                 } else {
                     return Packet.perror("Incorrect username or password");
                 }
             case LOGIN:
-                token = login((Login) message);
+                Login login = (Login) message;
+                System.out.println("Logging in: " + login.getUsername());
+                token = login(login);
                 if(token != null && !token.equals("")) {
                     return new Packet(token, new Ack("Logged in", true));
                 } else {
                     return Packet.perror("Incorrect username or password");
                 }
             case GAME_LIST_REQUEST:
+                GameListRequest request = (GameListRequest) message;
+                System.out.println("Request for game list from: " + request.user);
                 GameList gameList = getGameList((GameListRequest) message);
                 return new Packet(token, gameList);
             case GAME_REQUEST:
-                Game game = getGame((GameRequest) message);
-                return new Packet(token, game);
+                GameRequest grequest = (GameRequest) message;
+                System.out.println("Requested game: " + grequest.name);
+                Game requested = getGame(grequest);
+                return new Packet(token, requested);
             case GAME_DELETE:
-                Boolean success = deleteGame((GameDelete) message);
+                GameDelete delete = (GameDelete) message;
+                System.out.println("Deleting game: " + delete.name);
+                Boolean success = deleteGame(delete);
                 return new Packet(token, new Ack("Attempted to delete game", success));
             case USER_LIST_REQUEST:
+                UserListRequest ulr = (UserListRequest) message;
+                System.out.println("Requested user list starting with: " + ulr.str);
                 UserList userList = getUserList(token, (UserListRequest) message);
                 return new Packet(token, userList);
             default:
-                System.out.println("Received unexpected message from client");
+                System.out.println("Received unexpected message from client: " + message.toJson());
                 return Packet.perror("Unexpected message");
         }
     }
@@ -191,7 +203,6 @@ public class ServerThread extends Thread {
 
     // Returns token if successful, else null or ""
     private String login(Login login) {
-        System.out.println("Logging in");
         String u = login.getUsername();
         String p = login.getPassword();
         if (!validatePassword(p) || !validateUsername(u)) {
@@ -202,12 +213,12 @@ public class ServerThread extends Thread {
 
         // no user exists with this username
         if (savedUser == null) {
-            System.out.println("LOGIN: Did not find user " + u);
+            System.out.println("Did not find user");
             return "";
         }
         // password verification failed.
         if (!Utils.verifyHash(p, savedUser.getHash(), savedUser.getSalt())) {
-            System.out.println("Password Auth failed: " + p);
+            System.out.println("Password Auth failed");
             return "";
         }
 
@@ -220,16 +231,17 @@ public class ServerThread extends Thread {
 
     // Returns token if successful, else null or ""
     private String signup(Signup signup) {
-        System.out.println("Signing up");
         String username = signup.getUsername();
         String password = signup.getPassword();
         if (!validateUsername(username) || !validatePassword(password)) {
             //Username Password does not meet requirements, we do not need to hash
+            System.out.println("Invalid password");
             return "";
         }
         Credentials savedUser = DBWrapper.getUser(username);
         // user already exists with this username
         if (savedUser != null) {
+            System.out.println("User already exists");
             return "";
         }
         //Begin updating this credential object with new info

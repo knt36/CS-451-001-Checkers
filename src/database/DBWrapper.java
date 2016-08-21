@@ -25,7 +25,6 @@ public final class DBWrapper {
     }
 
     private static Connection connect() throws SQLException {
-        System.out.println("Connecting to the database");
         return DriverManager.getConnection("jdbc:mysql://127.0.0.1:" + port + "/" + database, user, password);
     }
 
