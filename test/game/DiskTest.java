@@ -5,6 +5,7 @@ import org.junit.Test;
 import static game.Color.*;
 import static game.Disk.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class DiskTest {
     @Test
@@ -77,5 +78,29 @@ public class DiskTest {
         assertEquals(true, disk.king());
         assertEquals("wk", disk.toString());
         assertEquals(WHITE_KING, Disk.fromString("wk"));
+    }
+
+    @Test
+    public void EqualsTest() {
+        Disk first = WHITE_KING;
+        Disk third = WHITE_KING;
+        Disk second = WHITE_DISK;
+
+        // check identities
+        assertEquals(first, third);
+        assertNotEquals(second, first);
+        assertNotEquals(second, third);
+
+        // Now that identity is correct, check hashcode function
+        // this must be deterministic, we repeat it
+        assertEquals(first.hashCode(), third.hashCode());
+        assertEquals(first.hashCode(), third.hashCode());
+
+        assertNotEquals(first.hashCode(), second.hashCode());
+        assertNotEquals(first.hashCode(), second.hashCode());
+
+        assertNotEquals(third.hashCode(), second.hashCode());
+        assertNotEquals(third.hashCode(), second.hashCode());
+
     }
 }
