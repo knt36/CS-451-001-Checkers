@@ -2,11 +2,12 @@ package network;
 
 import network.messages.Packet;
 
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.function.Consumer;
 
 /**
@@ -14,7 +15,8 @@ import java.util.function.Consumer;
  */
 public class ClientThread extends Thread {
     private static final String SERVER_HOSTNAME = "www.centralark.org";
-    private static final int SERVER_PORT = 4443;
+    //TODO CHANGE BEFORE MERGING
+    private static final int SERVER_PORT = 4448;
     private String data;
     private Consumer<Packet> callback;
 
@@ -25,11 +27,13 @@ public class ClientThread extends Thread {
 
     @Override
     public void run() {
-        Socket socket = null;
+        SSLSocket socket = null;
         BufferedReader in = null;
         PrintWriter out = null;
         try {
-            socket = new Socket(SERVER_HOSTNAME, SERVER_PORT);
+            SSLSocketFactory sslFact =
+                    (SSLSocketFactory) SSLSocketFactory.getDefault();
+            socket = (SSLSocket) sslFact.createSocket(SERVER_HOSTNAME, SERVER_PORT);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             out.write(data + "\n");
