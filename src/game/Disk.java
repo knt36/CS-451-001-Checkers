@@ -94,4 +94,22 @@ public class Disk {
         }
         return result;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Disk disk = (Disk) o;
+
+        return color == disk.color && (king != null ? king.equals(disk.king) : disk.king == null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = color.hashCode();
+        result = 31 * result + king.hashCode();
+        return result;
+    }
 }
