@@ -2,6 +2,8 @@ package ux.Screens;
 
 import game.Game;
 import game.GameList;
+import game.Player;
+import network.Client;
 import network.messages.Ack;
 import network.messages.Message;
 import network.messages.Packet;
@@ -180,6 +182,11 @@ public class ScrMainMenu extends ScrFactory {
 				@Override
 				public void mouseReleased(MouseEvent e) {
 					//Start the selected game
+                    g.p2 = g.p1.opponent(Client.client.getUsername());
+                    if(g.turn.getName() == ""){
+                        g.turn = g.p2;
+                    }
+                    Client.client.send(g, (p) -> networkGameUpdate(p));
 					FrameGame fg = new FrameGame();
 					fg.add(new ScrGame(g));
 				}
@@ -216,11 +223,45 @@ public class ScrMainMenu extends ScrFactory {
 	}
 
     public void networkGameListRefresh(Packet p) {
-    	System.out.println("Game network Game List Refreshed");
+        System.out.println("Game network Game List Refreshed");
         Message message = p.getData();
         System.out.println(p.getData().toJson().toString());
         switch (message.type()) {
             case GAME_LIST:
+                //if getting this, close disconnect window if open?
+                if (FrameNotifyDisconnect.getCounter() >= 1) {
+                    //close FrameNotifyDisconnect
+                    Frame[] frame = FrameNotifyDisconnect.getFrames();
+                    for (Frame f : frame) {
+                        if (f instanceof FrameNotifyDisconnect) {
+                            f.dispose();
+                        }
+                    }
+                }
+
+                gameList = (GameList) message;
+                refreshGameList();
+                break;
+            case ACK:
+                Ack ack = (Ack) message;
+                //Creation failed
+                if (ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1) {
+                    FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
+                    fn.add(new ScrDisconnect());
+                } else if (!ack.getMessage().contains("connect")) {
+                    FrameNotify fn = new FrameNotify();
+                    fn.add(new ScrNotify(ack.getMessage()));
+                }
+                break;
+            default:
+                System.out.println("Unexpected message from server: " + p.toJson());
+        }
+    }
+
+    public void networkGameUpdate(Packet p) {
+        Message message = p.getData();
+        switch (message.type()) {
+            case GAME:
                 //if getting this, close disconnect window if open?
                 if(FrameNotifyDisconnect.getCounter() >= 1){
                     //close FrameNotifyDisconnect
@@ -232,8 +273,6 @@ public class ScrMainMenu extends ScrFactory {
                     }
                 }
 
-                gameList = (GameList) message;
-                refreshGameList();
                 break;
             case ACK:
                 Ack ack = (Ack) message;
