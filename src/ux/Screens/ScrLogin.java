@@ -59,6 +59,10 @@ public class ScrLogin extends ScrFactory{
             }
         });
 
+        //Start refreshing game thread
+        Runnable rt = new ThreadHeartBeat(this);
+        Thread th = new Thread(rt);
+        th.start();
 
 	}
 
@@ -78,7 +82,9 @@ public class ScrLogin extends ScrFactory{
                         //close FrameNotifyDisconnect
                         Frame[] frame = FrameNotifyDisconnect.getFrames();
                         for(Frame f : frame){
-                            f.dispose();
+                            if(f instanceof FrameNotifyDisconnect){
+                                f.dispose();
+                            }
                         }
                     }
 
@@ -87,6 +93,7 @@ public class ScrLogin extends ScrFactory{
                     if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
                         FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
                         fn.add(new ScrDisconnect());
+
                     } else if (!ack.getMessage().contains("connect")){
                         FrameNotify fn = new FrameNotify();
                         fn.add(new ScrNotify(ack.getMessage()));
@@ -131,4 +138,39 @@ public class ScrLogin extends ScrFactory{
 			return(false);
 		}
 	}
+
+    public void networkHB(Packet p) {
+        Message message = p.getData();
+        switch (message.type()) {
+            case ACK:
+                Ack ack = (Ack) message;
+                if (ack.getSuccess()) {
+                    //server is up
+                    if(FrameNotifyDisconnect.getCounter() >= 1){
+                        //close FrameNotifyDisconnect
+                        Frame[] frame = FrameNotifyDisconnect.getFrames();
+                        for(Frame f : frame){
+                            if(f instanceof FrameNotifyDisconnect){
+                                f.dispose();
+                            }
+                        }
+                    }
+
+                } else {
+                    //server is down
+                    if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
+                        FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
+                        fn.add(new ScrDisconnect());
+
+                    } else if (!ack.getMessage().contains("connect")){
+                        FrameNotify fn = new FrameNotify();
+                        fn.add(new ScrNotify(ack.getMessage()));
+                    }
+                }
+                break;
+            default:
+                System.out.println("Unexpected message from server: " + p.toJson());
+        }
+    }
+
 }
