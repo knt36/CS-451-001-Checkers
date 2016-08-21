@@ -146,6 +146,7 @@ public class ScrGame extends ScrFactory{
                 this.game = game;
                 refreshBoard();
                 setTurnText();
+                resumeThreadUpdateBoard();
                 revalidate();
                 repaint();
                 break;
@@ -213,10 +214,10 @@ public class ScrGame extends ScrFactory{
 				// TODO Auto-generated method stub
 				//Detects a move has been made on the board and then tries to move it in the game
 				MoveStatus result = game.move(start, finish);
+				pauseThreadUpdateBoard();
 				if(result.success()){
 					//there may be more jumps but the board is updated
 					board.setBoard(game);
-			
 					Client.client.send(new Game(game), (p)->networkGame(p));
 					revalidate();
 					repaint();
@@ -224,5 +225,13 @@ public class ScrGame extends ScrFactory{
 			}
 		});
 
+	}
+	
+	public void pauseThreadUpdateBoard(){
+		this.updateThread.suspend();
+	}
+	
+	public void resumeThreadUpdateBoard(){
+		this.updateThread.resume();
 	}
 }
