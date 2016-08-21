@@ -17,6 +17,7 @@ import javax.swing.Scrollable;
 
 import game.Game;
 import game.GameList;
+import game.Player;
 import network.Client;
 import network.messages.Ack;
 import network.messages.GameListRequest;
@@ -135,6 +136,7 @@ public class ScrMainMenu extends ScrFactory {
 	
 	public void refreshGameList(){
 		if(this.gameList == null){
+			System.out.println("The Gamelist was null on refreshGameList!");
 			return;
 			// don't do anything since it did not return anything
 		}
@@ -149,6 +151,13 @@ public class ScrMainMenu extends ScrFactory {
 				@Override
 				public void mouseReleased(MouseEvent e) {
 					//Start the selected game
+					//Fill myself as player2 if I am not already player 1!
+					if(!(g.p1.getName().equals(Client.client.getUsername()))){
+						g.p2 = new Player(Client.client.getUsername());
+					}else{
+						//do nothing your name is already there
+					}
+					
 					FrameGame fg = new FrameGame();
 					fg.add(new ScrGame(g));
 				}
@@ -191,6 +200,11 @@ public class ScrMainMenu extends ScrFactory {
 				@Override
 				public void mouseReleased(MouseEvent e) {
 					//Start the selected game
+					if(!(g.p1.getName().equals(Client.client.getUsername()))){
+						g.p2 = new Player(Client.client.getUsername());
+					}else{
+						//do nothing your name is already there
+					}
 					FrameGame fg = new FrameGame();
 					fg.add(new ScrGame(g));
 				}
