@@ -27,7 +27,7 @@ public class GameList implements Message {
     public static GameList fromJson(JsonElement json) {
         JsonObject root = json.getAsJsonObject();
         List<Game> pub = arrayToList(root.get("public").getAsJsonArray(), Game::fromJson);
-        List<Game> current = arrayToList(root.get("public").getAsJsonArray(), Game::fromJson);
+        List<Game> current = arrayToList(root.get("current").getAsJsonArray(), Game::fromJson);
         return new GameList(pub, current);
     }
 

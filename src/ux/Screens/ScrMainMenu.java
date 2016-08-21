@@ -85,7 +85,7 @@ public class ScrMainMenu extends ScrFactory {
 		//Start refreshing game thread
 		Runnable rt = new ThreadRefreshGameList(this);
 		Thread th = new Thread(rt);
-		//th.start();
+		th.start();
 	}
 
 	public ScrFactory leftPanel() {
@@ -134,13 +134,12 @@ public class ScrMainMenu extends ScrFactory {
 	}
 	
 	public void refreshGameList(){
-        Client.client.send(new GameListRequest(Client.client.getUsername()), (p)->networkGameListRefresh(p));
-		this.curGameArea.removeAll();
-		this.pubGameArea.removeAll();
 		if(this.gameList == null){
 			return;
 			// don't do anything since it did not return anything
 		}
+		this.curGameArea.removeAll();
+		this.pubGameArea.removeAll();
 		this.curGameArea.constr.fill = curGameArea.constr.HORIZONTAL;
 		this.curGameScroll.setMinimumSize(new Dimension(0, 300));
 		for (Game g : this.gameList.current) {
@@ -149,7 +148,6 @@ public class ScrMainMenu extends ScrFactory {
 				
 				@Override
 				public void mouseReleased(MouseEvent e) {
-					// TODO Auto-generated method stub
 					//Start the selected game
 					FrameGame fg = new FrameGame();
 					fg.add(new ScrGame(g));
@@ -192,7 +190,6 @@ public class ScrMainMenu extends ScrFactory {
 				
 				@Override
 				public void mouseReleased(MouseEvent e) {
-					// TODO Auto-generated method stub
 					//Start the selected game
 					FrameGame fg = new FrameGame();
 					fg.add(new ScrGame(g));
@@ -218,8 +215,7 @@ public class ScrMainMenu extends ScrFactory {
 				
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					// TODO Auto-generated method stub
-					
+
 				}
 			});
 		
@@ -230,11 +226,14 @@ public class ScrMainMenu extends ScrFactory {
 		repaint();
 	}
 
-    private void networkGameListRefresh(Packet p) {
+    public void networkGameListRefresh(Packet p) {
+    	System.out.println("Game network Game List Refreshed");
         Message message = p.getData();
+        System.out.println(p.getData().toJson().toString());
         switch (message.type()) {
             case GAME_LIST:
-                this.gameList = (GameList) message;
+                gameList = (GameList) message;
+                refreshGameList();
                 break;
             case ACK:
                 Ack ack = (Ack) message;

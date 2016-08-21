@@ -8,51 +8,6 @@ import static org.junit.Assert.assertEquals;
 
 public class DiskTest {
     @Test
-    public void fromString() throws Exception {
-
-    }
-
-    @Test
-    public void inverse() throws Exception {
-
-    }
-
-    @Test
-    public void empty() throws Exception {
-
-    }
-
-    @Test
-    public void canMoveUp() throws Exception {
-
-    }
-
-    @Test
-    public void canMoveDown() throws Exception {
-
-    }
-
-    @Test
-    public void getColor() throws Exception {
-
-    }
-
-    @Test
-    public void red() throws Exception {
-
-    }
-
-    @Test
-    public void white() throws Exception {
-
-    }
-
-    @Test
-    public void king() throws Exception {
-
-    }
-
-    @Test
     public void EmptyTest() {
         Disk disk = EMPTY;
         assertEquals(EMPTY, disk.inverse());
@@ -83,6 +38,7 @@ public class DiskTest {
     @Test
     public void RedKingTest() {
         Disk disk = RED_KING;
+        assertEquals(RED_KING, Disk.fromString("rk"));
         assertEquals(WHITE_DISK, disk.inverse());
         assertEquals(false, disk.empty());
         assertEquals(true, disk.canMoveUp());
@@ -120,5 +76,6 @@ public class DiskTest {
         assertEquals(true, disk.white());
         assertEquals(true, disk.king());
         assertEquals("wk", disk.toString());
+        assertEquals(WHITE_KING, Disk.fromString("wk"));
     }
 }
