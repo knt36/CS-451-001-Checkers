@@ -15,9 +15,9 @@ public class Timing implements Runnable {
     }
 
     public void run() {
-        String sec = "";
-        String min = "";
-        String hr = "";
+        String sec;
+        String min;
+        String hr;
         int seconds = 0;
         int hours = 0;
         int minutes = 0;

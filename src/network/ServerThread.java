@@ -78,7 +78,7 @@ public class ServerThread extends Thread {
 
     @Override
     public void run() {
-        String output = null;
+        String output;
         try {
             System.out.println("\nConnected to client");
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));

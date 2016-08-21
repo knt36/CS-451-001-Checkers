@@ -443,19 +443,19 @@ public class GameTest {
     @Test
     public void constructInvalidPlayers() {
         thrown.expect(IllegalArgumentException.class);
-        Game testGame = new Game(sampleName, redPlayer, redPlayer, sampleBoard, redPlayer, new ArrayList<>());
+        new Game(sampleName, redPlayer, redPlayer, sampleBoard, redPlayer, new ArrayList<>());
     }
 
     @Test
     public void constructInvalidTurn() {
         thrown.expect(IllegalArgumentException.class);
-        Game testGame = new Game(sampleName, redPlayer, whitePlayer, sampleBoard, new Player("test", RED), new ArrayList<>());
+        new Game(sampleName, redPlayer, whitePlayer, sampleBoard, new Player("test", RED), new ArrayList<>());
     }
 
     @Test
     public void constructInvalidBoardSize() {
         thrown.expect(IllegalArgumentException.class);
-        Game testGame = new Game(sampleName, redPlayer, whitePlayer, new ArrayList<>(10), redPlayer, new ArrayList<>());
+        new Game(sampleName, redPlayer, whitePlayer, new ArrayList<>(10), redPlayer, new ArrayList<>());
     }
 
     @Test
@@ -463,7 +463,7 @@ public class GameTest {
         List<Disk> testBoard = new ArrayList<>(sampleBoard);
         testBoard.replaceAll(d -> WHITE_DISK);
         thrown.expect(IllegalArgumentException.class);
-        Game testGame = new Game(sampleName, redPlayer, whitePlayer, testBoard, redPlayer, new ArrayList<>());
+        new Game(sampleName, redPlayer, whitePlayer, testBoard, redPlayer, new ArrayList<>());
     }
 
     @Test
@@ -471,6 +471,6 @@ public class GameTest {
         List<Disk> testBoard = new ArrayList<>(sampleBoard);
         testBoard.replaceAll(d -> RED_DISK);
         thrown.expect(IllegalArgumentException.class);
-        Game testGame = new Game(sampleName, redPlayer, whitePlayer, testBoard, redPlayer, new ArrayList<>());
+        new Game(sampleName, redPlayer, whitePlayer, testBoard, redPlayer, new ArrayList<>());
     }
 }
