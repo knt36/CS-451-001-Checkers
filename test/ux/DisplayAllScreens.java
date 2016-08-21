@@ -4,12 +4,12 @@ import ux.Screens.FrameCreateGame;
 import ux.Screens.FrameMain;
 import ux.Screens.ScrCreateGame;
 
-public class DisplayAllScreens {
-	public static void main (String args []){ 
-		FrameMain createGame = new FrameCreateGame();
-		ScrCreateGame scrCreateGame = new ScrCreateGame();
-		createGame.add(scrCreateGame);		
-		
+class DisplayAllScreens {
+    public static void main(String args[]) {
+        FrameMain createGame = new FrameCreateGame();
+        ScrCreateGame scrCreateGame = new ScrCreateGame();
+        createGame.add(scrCreateGame);
+
 //		FrameMain mainMenu = new FrameMain();
 //		mainMenu.add(new ScrMainMenu());
 //		
@@ -28,5 +28,5 @@ public class DisplayAllScreens {
 //		
 //		FrameMain gameFr = new FrameMain();
 //		gameFr.add(new ScrGame(new Game("BattleGround", "Rachel", "Khoi")));
-	}
+    }
 }
