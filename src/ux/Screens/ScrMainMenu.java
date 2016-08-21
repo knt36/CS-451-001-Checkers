@@ -1,11 +1,11 @@
 package ux.Screens;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.List;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -17,6 +17,11 @@ import javax.swing.Scrollable;
 
 import game.Game;
 import game.GameList;
+import network.Client;
+import network.messages.Ack;
+import network.messages.GameListRequest;
+import network.messages.Message;
+import network.messages.Packet;
 import ux.Buttons.OptionButton;
 import ux.Labels.BulletGameLabel;
 import ux.Labels.HeaderLabel;
@@ -59,9 +64,12 @@ public class ScrMainMenu extends ScrFactory {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				FrameNotify fn = new FrameNotify();
-				//Not sure what goes into here since we agreed it was going to be html page
-				fn.add(new JLabel("Help- not sure what is in here since we said html"));
+                try {
+                    File htmlFile = new File("help.html");
+                    Desktop.getDesktop().browse(htmlFile.toURI());
+                } catch(IOException error){
+                    //don't open
+                }
 			}
 		});
 		newGameBt.addActionListener(new ActionListener() {
@@ -77,7 +85,7 @@ public class ScrMainMenu extends ScrFactory {
 		//Start refreshing game thread
 		Runnable rt = new ThreadRefreshGameList(this);
 		Thread th = new Thread(rt);
-		//th.start();
+		th.start();
 	}
 
 	public ScrFactory leftPanel() {
@@ -126,12 +134,12 @@ public class ScrMainMenu extends ScrFactory {
 	}
 	
 	public void refreshGameList(){
-		this.curGameArea.removeAll();
-		this.pubGameArea.removeAll();
 		if(this.gameList == null){
 			return;
 			// don't do anything since it did not return anything
 		}
+		this.curGameArea.removeAll();
+		this.pubGameArea.removeAll();
 		this.curGameArea.constr.fill = curGameArea.constr.HORIZONTAL;
 		this.curGameScroll.setMinimumSize(new Dimension(0, 300));
 		for (Game g : this.gameList.current) {
@@ -140,7 +148,6 @@ public class ScrMainMenu extends ScrFactory {
 				
 				@Override
 				public void mouseReleased(MouseEvent e) {
-					// TODO Auto-generated method stub
 					//Start the selected game
 					FrameGame fg = new FrameGame();
 					fg.add(new ScrGame(g));
@@ -183,7 +190,6 @@ public class ScrMainMenu extends ScrFactory {
 				
 				@Override
 				public void mouseReleased(MouseEvent e) {
-					// TODO Auto-generated method stub
 					//Start the selected game
 					FrameGame fg = new FrameGame();
 					fg.add(new ScrGame(g));
@@ -209,8 +215,7 @@ public class ScrMainMenu extends ScrFactory {
 				
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					// TODO Auto-generated method stub
-					
+
 				}
 			});
 		
@@ -220,5 +225,27 @@ public class ScrMainMenu extends ScrFactory {
 		revalidate();
 		repaint();
 	}
+
+    public void networkGameListRefresh(Packet p) {
+    	
+    	//System.out.println("Game network Game List Refreshed");
+        Message message = p.getData();
+        //System.out.println(p.getData().toJson().toString());
+        switch (message.type()) {
+            case GAME_LIST:
+                gameList = (GameList) message;
+                refreshGameList();
+                break;
+            case ACK:
+                Ack ack = (Ack) message;
+                //Creation failed
+                System.out.println("Something failed");
+                FrameNotify fn = new FrameNotify();
+                fn.add(new ScrNotify(ack.getMessage()));
+                break;
+            default:
+                System.out.println("Unexpected message from server: " + p.toJson());
+        }
+    }
 
 }

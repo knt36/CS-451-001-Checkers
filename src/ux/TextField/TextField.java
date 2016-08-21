@@ -27,6 +27,7 @@ public class TextField extends TextFieldFactory{
 			public void focusLost(FocusEvent e) {
 				// TODO Auto-generated method stub
 				if(getText().length()>0){
+					//System.out.println(getText());
 					userInputedText = true;
 				}
 				else{

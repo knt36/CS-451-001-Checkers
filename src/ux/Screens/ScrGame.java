@@ -1,13 +1,19 @@
 package ux.Screens;
 
 import static game.Color.*;
-import java.awt.Color;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.geom.Ellipse2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
+import java.util.Observer;
 import java.util.Timer;
 
 import javax.swing.BorderFactory;
@@ -20,6 +26,12 @@ import game.Game;
 import game.MoveStatus;
 import game.Player;
 import javafx.scene.shape.Circle;
+import network.Client;
+import network.messages.Ack;
+import network.messages.GameDelete;
+import network.messages.GameRequest;
+import network.messages.Message;
+import network.messages.Packet;
 import ux.Buttons.GuiBoard;
 import ux.Buttons.ListenerBoard;
 import ux.Buttons.OptionButton;
@@ -28,6 +40,9 @@ import ux.Labels.NoteLabel;
 
 
 public class ScrGame extends ScrFactory{
+	protected Thread updateThread = null;
+	protected ThreadUpdateBoard updateRunnable = null;
+	
 	protected GuiBoard board = null;
 	protected OptionButton helpBt = new OptionButton(STYLE.GREEN,STRINGS.HELPBUT);
 	protected OptionButton quitBt= new OptionButton(STYLE.GREEN,STRINGS.QUITBUT);
@@ -65,30 +80,14 @@ public class ScrGame extends ScrFactory{
 		this.playerTurn.setText(game.turn.getName()+turnIndicator);
 		
 		//Set up pieces on checker board
-		this.board.addListenerBoard(new ListenerBoard() {
-			
-			@Override
-			public void performAction(int start, int finish) {
-				// TODO Auto-generated method stub
-				//Detects a move has been made on the board and then tries to move it in the game
-				MoveStatus result = game.move(start, finish);
-				
-				if(result.success()){
-					//there may be more jumps but the board is updated
-					board.setBoard(game);
-					setTurnText();
-					revalidate();
-					repaint();
-					}
-			}
-		});
-		
+		refreshBoard();
 		//Adding button functions
 		this.quitBt.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				stopThreadUpdateBoard();
 				frame.dispose();
 			}});
 		this.helpBt.addActionListener(new ActionListener() {
@@ -96,8 +95,12 @@ public class ScrGame extends ScrFactory{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				FrameNotify fn = new FrameNotify();
-				fn.add(new JLabel("Not sure what html help menu is"));
+                try {
+                    File htmlFile = new File("help.html");
+                    Desktop.getDesktop().browse(htmlFile.toURI());
+                } catch(IOException error){
+                    //don't open
+                }
 			}
 		});
 		this.endBt.addActionListener(new ActionListener() {
@@ -106,14 +109,63 @@ public class ScrGame extends ScrFactory{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				FrameNotify fn = new FrameNotify();
-				frame.OpenLinkFrame(fn, new ScrDeleteConfirm());
-				//Must also delete the game in the database...
-				//Idk some surrendering conditions before leaving the game server or just delete the game period.
+				ScrDeleteConfirm scrDeleteConfirm = new ScrDeleteConfirm(ScrGame.this,game.name);
+				frame.OpenLinkFrame(fn, scrDeleteConfirm);
+
 			}
 		});
-	
+
+		runThreadUpdateBoard();
 	}
-	public void setTurnText(){
+	
+	public void runThreadUpdateBoard(){
+		ThreadUpdateBoard rt = new ThreadUpdateBoard(this);
+		updateRunnable = rt;
+		updateThread = new Thread(rt);
+		updateThread.start();
+	}
+	
+	public void stopThreadUpdateBoard(){
+		if(updateRunnable !=null && updateThread != null){
+			System.out.println("Stop Update Board Thread");
+			this.updateRunnable.running = false;
+			this.updateThread.stop();
+			this.updateRunnable = null;
+			this.updateThread = null;
+		}
+	}
+
+    public void networkGame(Packet p) {
+    	System.out.print("update Game board");
+    	System.out.println(p.toJson());
+        Message message = p.getData();
+        switch (message.type()) {
+            case GAME:
+                Game game = new Game((Game) message);
+                System.out.print("update Game board");
+                this.game = game;
+                refreshBoard();
+                setTurnText();
+                revalidate();
+                repaint();
+                break;
+            case ACK:
+                Ack ack = (Ack) message;
+                if (ack.getSuccess()) {
+                    //delete game was successful
+                    frame.dispose();
+                } else {
+                    //this login has failed
+                    FrameNotify fn = new FrameNotify();
+                    fn.add(new ScrNotify(ack.getMessage()));
+                }
+                break;
+            default:
+                System.out.println("Unexpected message from server: " + p.toJson());
+        }
+    }
+
+    public void setTurnText(){
 		if(this.game.winner()!=null){
 			//there is a winner
 			Player winner = this.game.winner();
@@ -139,5 +191,38 @@ public class ScrGame extends ScrFactory{
 			this.turnColorIndicator.setBackground(Color.white);
 			this.turnColorIndicator.setForeground(Color.black);
 		}
+	}
+	
+	public void addThreadEnder(){
+		this.frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				stopThreadUpdateBoard();
+				super.windowClosing(e);
+			}
+		});
+	}
+
+	public void refreshBoard(){
+		board.setBoard(game);
+        this.board.addListenerBoard(new ListenerBoard() {
+			
+			@Override
+			public void performAction(int start, int finish) {
+				// TODO Auto-generated method stub
+				//Detects a move has been made on the board and then tries to move it in the game
+				MoveStatus result = game.move(start, finish);
+				if(result.success()){
+					//there may be more jumps but the board is updated
+					board.setBoard(game);
+			
+					Client.client.send(new Game(game), (p)->networkGame(p));
+					revalidate();
+					repaint();
+                }
+			}
+		});
+
 	}
 }

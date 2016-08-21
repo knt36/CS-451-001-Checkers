@@ -7,7 +7,6 @@ import game.Player;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static game.Color.RED;
 import static game.Color.WHITE;
@@ -26,7 +25,6 @@ public final class DBWrapper {
     }
 
     private static Connection connect() throws SQLException {
-        System.out.println("Connecting to the database");
         return DriverManager.getConnection("jdbc:mysql://127.0.0.1:" + port + "/" + database, user, password);
     }
 
@@ -126,22 +124,36 @@ public final class DBWrapper {
     }
 
     public static List<Game> getPublicGames(String username) {
-        return getGames(username).stream().filter(g -> g.p2.nobody()).collect(Collectors.toList());
+        Connection conn = null;
+        List<Game> result = new ArrayList<>();
+        String sql = "SELECT name, p1, p2, state, turn, red FROM Games WHERE p1!=? AND p2=?";
+        try {
+            conn = connect();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.setString(2, "");
+            ResultSet rs = query(stmt);
+            while (rs.next()) {
+                result.add(gameFromSQL(rs));
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        } finally {
+            close(conn);
+        }
+        return result;
     }
 
     public static List<Game> getPrivateGames(String username) {
-        return getGames(username).stream().filter(g -> !g.p2.nobody()).collect(Collectors.toList());
-    }
-
-    private static List<Game> getGames(String username) {
         Connection conn = null;
         List<Game> result = new ArrayList<>();
-        String sql = "SELECT name, p1, p2, state, turn, red FROM Games WHERE p1=? OR p2=?";
+        String sql = "SELECT name, p1, p2, state, turn, red FROM Games WHERE (p1=? OR p2=?) AND p2!=?";
         try {
             conn = connect();
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
             stmt.setString(2, username);
+            stmt.setString(3, "");
             ResultSet rs = query(stmt);
             while (rs.next()) {
                 result.add(gameFromSQL(rs));
