@@ -14,7 +14,9 @@ public class Server {
     private static final int SERVER_PORT = 4448;
 
     public static void startServer() throws IOException {
-
+        System.setProperty("javax.net.debug", "ssl");
+        System.setProperty("javax.net.ssl.keyStore", "keystore.jks");
+        System.setProperty("javax.net.ssl.keyStorePassword", "checkers");
         // SSL Taken from the Oracle Docs
         ServerSocket listener = null;
         // Instantiate the ssl socket factory with default setting
