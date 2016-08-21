@@ -20,12 +20,13 @@ public final class DBWrapper {
     private static final String password = "C01l3e18999";
     private static final String database = "Checker";
     private static final String port = "3306";
+    public static String ip = "127.0.0.1";
 
     private DBWrapper() {
     }
 
     private static Connection connect() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://127.0.0.1:" + port + "/" + database, user, password);
+        return DriverManager.getConnection("jdbc:mysql://" + ip + ":" + port + "/" + database, user, password);
     }
 
     private static void close(Connection conn) {
