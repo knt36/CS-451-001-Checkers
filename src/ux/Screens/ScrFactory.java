@@ -9,8 +9,9 @@ public class ScrFactory extends JPanel {
 	protected FrameMain frame = null;
 	protected Map<String, Object> intent = new HashMap<>();
 	protected GridBagConstraints constr = new GridBagConstraints();
+
+
 	public ScrFactory() {
-		// TODO Auto-generated constructor stub
 		this.constr.weightx=1;
 		this.constr.weighty=1;
 		this.constr.gridwidth=1;
@@ -25,7 +26,6 @@ public class ScrFactory extends JPanel {
 	
 	@Override
 	public Component add(Component comp) {
-		// TODO Auto-generated method stub
 		super.add(comp,this.constr);
 		this.revalidate();
 		this.repaint();

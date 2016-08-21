@@ -143,8 +143,13 @@ public class ScrGame extends ScrFactory{
                     frame.dispose();
                 } else {
                     //this login has failed
-                    FrameNotify fn = new FrameNotify();
-                    fn.add(new ScrNotify(ack.getMessage()));
+                    if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
+                        FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
+                        fn.add(new ScrDisconnect());
+                    } else if (!ack.getMessage().contains("connect")){
+                        FrameNotify fn = new FrameNotify();
+                        fn.add(new ScrNotify(ack.getMessage()));
+                    }
                 }
                 break;
             default:

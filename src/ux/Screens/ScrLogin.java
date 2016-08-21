@@ -20,7 +20,7 @@ public class ScrLogin extends ScrFactory{
 	protected OptionButton signInBut = new OptionButton(Color.RED,STRINGS.SIGNIN);
 	protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
 	protected UserTextField userName = new UserTextField(STRINGS.USERNAME_HINT);
-	protected TextFieldPassword passWord = new TextFieldPassword();
+	protected TextFieldPassword passWord = new TextFieldPassword(STRINGS.PASSWORD_HINT);
 
 	protected TitleLabel title = new TitleLabel(STRINGS.TITLE);
 
@@ -32,7 +32,6 @@ public class ScrLogin extends ScrFactory{
 		this.signUpBut.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				frame.OpenLinkFrame(new FrameSignUp(), new ScrSignUp());
 			}
 		});
@@ -40,23 +39,26 @@ public class ScrLogin extends ScrFactory{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				//Check if the user name is the right length
 					//Success and logging in
-					System.out.println(passWord.getPassword());
-					Client.client.send(new Login(userName.getText(), passWord.getPassword()+""), (p) -> networkLogin(p));
+					String s = new String(passWord.getPassword());
+					Client.client.send(new Login(userName.getText(), s), (p) -> networkLogin(p));
 				
 			}
 		});
 		this.quitBt.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				//Exits out of program entirely
-				System.exit(0);
-			}
-		});
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Exits out of program entirely
+                System.exit(0);
+            }
+        });
+
+        //Start refreshing game thread
+        Runnable rt = new ThreadHeartBeat(this);
+        Thread th = new Thread(rt);
+        th.start();
 
 	}
 
@@ -70,10 +72,28 @@ public class ScrLogin extends ScrFactory{
 					frame.dispose();
 					FrameMain fm = new FrameMain();
 					fm.add(new ScrMainMenu());
+
+                    //if getting this, close disconnect window if open?
+                    if(FrameNotifyDisconnect.getCounter() >= 1){
+                        //close FrameNotifyDisconnect
+                        Frame[] frame = FrameNotifyDisconnect.getFrames();
+                        for(Frame f : frame){
+                            if(f instanceof FrameNotifyDisconnect){
+                                f.dispose();
+                            }
+                        }
+                    }
+
 				} else {
 					//this login has failed
-					FrameNotify fn = new FrameNotify();
-					fn.add(new ScrNotify(ack.getMessage()));
+                    if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
+                        FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
+                        fn.add(new ScrDisconnect());
+
+                    } else if (!ack.getMessage().contains("connect")){
+                        FrameNotify fn = new FrameNotify();
+                        fn.add(new ScrNotify(ack.getMessage()));
+                    }
 				}
 				break;
 			default:
@@ -106,4 +126,37 @@ public class ScrLogin extends ScrFactory{
 		return(left);
 	}
 
+    public void networkHB(Packet p) {
+        Message message = p.getData();
+        switch (message.type()) {
+            case ACK:
+                Ack ack = (Ack) message;
+                if (ack.getSuccess()) {
+                    //server is up
+                    if(FrameNotifyDisconnect.getCounter() >= 1){
+                        //close FrameNotifyDisconnect
+                        Frame[] frame = FrameNotifyDisconnect.getFrames();
+                        for(Frame f : frame){
+                            if(f instanceof FrameNotifyDisconnect){
+                                f.dispose();
+                            }
+                        }
+                    }
+
+                } else {
+                    //server is down
+                    if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
+                        FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
+                        fn.add(new ScrDisconnect());
+
+                    } else if (!ack.getMessage().contains("connect")){
+                        FrameNotify fn = new FrameNotify();
+                        fn.add(new ScrNotify(ack.getMessage()));
+                    }
+                }
+                break;
+            default:
+                System.out.println("Unexpected message from server: " + p.toJson());
+        }
+    }
 }

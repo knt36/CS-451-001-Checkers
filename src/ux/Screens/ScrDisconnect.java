@@ -14,7 +14,6 @@ public class ScrDisconnect extends ScrFactory {
 	protected NoteLabel dcTime = new NoteLabel(STRINGS.DCTIME);
 	
 	public ScrDisconnect() {
-		// TODO Auto-generated constructor stub
 		//Something is wrong with centering of the text
 		//get the time the window opened
 		this.constr.anchor = constr.CENTER;

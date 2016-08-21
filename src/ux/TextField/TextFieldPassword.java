@@ -2,6 +2,9 @@ package ux.TextField;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -17,14 +20,15 @@ import javax.swing.event.EventListenerList;
 import ux.Screens.STYLE;
 
 public class TextFieldPassword extends JPasswordField {
-	public TextFieldPassword() {
+	protected String hint = "";
+	public TextFieldPassword(String hint) {
 		// TODO Auto-generated constructor stub
-		this.setText("");
+		this.hint = hint;
 		this.setCaretColor(Color.black);
 		this.setHorizontalAlignment(JTextField.CENTER);
 		this.setPreferredSize(new Dimension(50, 50));
 		this.setBorder(BorderFactory.createLineBorder(STYLE.TXTFIELDBRDCOLOR, 5, true));
 		this.setFont(STYLE.TEXTFIELDFONT);
 	}
-
+	
 }

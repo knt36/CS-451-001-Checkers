@@ -70,10 +70,13 @@ public class ScrSignUp extends ScrFactory{
 					frame.link.dispose();
 					frame.dispose();
 				} else {
-					//Creation failed
-					System.out.println("Something failed");
-					FrameNotify fn = new FrameNotify();
-					fn.add(new ScrNotify(ack.getMessage()));
+                    if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
+                        FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
+                        fn.add(new ScrDisconnect());
+                    } else if (!ack.getMessage().contains("connect")){
+                        FrameNotify fn = new FrameNotify();
+                        fn.add(new ScrNotify(ack.getMessage()));
+                    }
 				}
 			default:
 				System.out.println("Unexpected message from server: " + p.toJson());

@@ -164,6 +164,8 @@ public class ServerThread extends Thread {
                 System.out.println("Requested user list starting with: " + ulr.str);
                 UserList userList = getUserList(token, (UserListRequest) message);
                 return new Packet(token, userList);
+            case ACK:
+                return packet;
             default:
                 System.out.println("Received unexpected message from client: " + message.toJson());
                 return Packet.perror("Unexpected message");
