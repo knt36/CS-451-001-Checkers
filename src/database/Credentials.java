@@ -33,6 +33,7 @@ public class Credentials {
     public Credentials(String username, String salt, String hash, String token) {
         this(username, salt, hash, token, Date.valueOf(LocalDate.now()));
     }
+
     public Credentials(String username, String salt, String hash) {
         this(username, salt, hash, "", Date.valueOf(LocalDate.now()));
     }

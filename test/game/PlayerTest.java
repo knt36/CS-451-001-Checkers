@@ -11,56 +11,6 @@ import static org.junit.Assert.assertEquals;
  *
  */
 public class PlayerTest {
-    @Test
-    public void opponent1() throws Exception {
-
-    }
-
-    @Test
-    public void getColor2() throws Exception {
-
-    }
-
-    @Test
-    public void getName1() throws Exception {
-
-    }
-
-    @Test
-    public void oppositeColor2() throws Exception {
-
-    }
-
-    @Test
-    public void nobody1() throws Exception {
-
-    }
-
-    @Test
-    public void opponent() throws Exception {
-
-    }
-
-    @Test
-    public void getColor1() throws Exception {
-
-    }
-
-    @Test
-    public void getName() throws Exception {
-
-    }
-
-    @Test
-    public void oppositeColor1() throws Exception {
-
-    }
-
-    @Test
-    public void nobody() throws Exception {
-
-    }
-
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 

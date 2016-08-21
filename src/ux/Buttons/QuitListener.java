@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 /**
  * Created by mblaho on 8/11/16.
- *
+ * <p>
  * This is the listener for all "Quit Buttons." Pass a new instance of the class to the .addCond() method for a button.
  */
 public class QuitListener implements ActionListener {

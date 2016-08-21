@@ -15,7 +15,7 @@ public class TimingTest {
         NoteLabel l = new NoteLabel("hi");
         Thread t = new Thread(new Timing(l));
         t.start();
-        t.sleep(10);
+        Thread.sleep(10);
         t.interrupt();
         assertNotEquals(l, j);
     }

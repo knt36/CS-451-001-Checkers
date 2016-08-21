@@ -14,6 +14,7 @@ public class Client extends Observable {
     public static Client client = new Client();
     private String token = "";
     private String username = null; //Keep as null so it returns an error and we know why
+
     private Client() {
 
     }

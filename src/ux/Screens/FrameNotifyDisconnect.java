@@ -12,7 +12,7 @@ public class FrameNotifyDisconnect extends FrameNotify {
     public FrameNotifyDisconnect() {
         super();
         counter++;
-        if(counter <= 1){
+        if (counter <= 1) {
             setSize(new Dimension(500, 400));
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         } else {
@@ -22,13 +22,13 @@ public class FrameNotifyDisconnect extends FrameNotify {
 
     }
 
+    public static int getCounter() {
+        return counter;
+    }
+
     @Override
     public void dispose() {
         super.dispose();
         counter--;
-    }
-
-    public static int getCounter(){
-        return counter;
     }
 }

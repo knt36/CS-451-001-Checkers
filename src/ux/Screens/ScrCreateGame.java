@@ -28,7 +28,7 @@ import java.util.List;
 public class ScrCreateGame extends ScrFactory {
 	protected TextField gameNameField = new TextField(STRINGS.GAMENAME);
 	protected TextField searchUserName = new TextField("");
-	
+
 	protected HeaderLabel gameLabel = new HeaderLabel("Game");
 	protected HeaderLabel usersLabel = new HeaderLabel(STRINGS.HEADERSEARCHUSERS);
 	protected List<String> playerList = new ArrayList<>();
@@ -43,21 +43,21 @@ public class ScrCreateGame extends ScrFactory {
 
 	public ScrCreateGame() {
 		// TODO Auto-generated constructor stub
-		this.constr.fill = constr.HORIZONTAL;
+		this.constr.fill = GridBagConstraints.HORIZONTAL;
 		this.add(gameLabel);
 		this.constr.gridy++;
 		this.add(gameNameField);
 		this.constr.gridy++;
 		this.constr.weighty = 0;
-		this.constr.fill = constr.BOTH;
-		this.constr.anchor = this.constr.ABOVE_BASELINE;
+		this.constr.fill = GridBagConstraints.BOTH;
+		this.constr.anchor = GridBagConstraints.ABOVE_BASELINE;
 		this.add(usersLabel);
 		this.constr.gridy++;
 		this.add(this.searchUserName);
 		this.constr.gridy++;
 		this.constr.weighty = 1;
-		this.constr.fill = constr.HORIZONTAL;
-		this.usersArea.constr.fill = this.usersArea.constr.BOTH;
+		this.constr.fill = GridBagConstraints.HORIZONTAL;
+		this.usersArea.constr.fill = GridBagConstraints.BOTH;
 		this.usersScroll.setMinimumSize(new Dimension(0, 300));
 
 		paintUsersArea();
@@ -78,7 +78,7 @@ public class ScrCreateGame extends ScrFactory {
 		});
 
 		this.constr.gridy++;
-		this.constr.fill = constr.NONE;
+		this.constr.fill = GridBagConstraints.NONE;
 		this.add(this.startBut);
 
 		//Add button functionality
@@ -291,8 +291,8 @@ public class ScrCreateGame extends ScrFactory {
 	}
 
 	private void networkUserRequest(Packet p) {
-        Message message = p.getData();
-        switch (message.type()) {
+		Message message = p.getData();
+		switch (message.type()) {
             case USER_LIST:
                 UserList userList = (UserList) message;
                 playerList = userList.getUsers();
@@ -303,12 +303,12 @@ public class ScrCreateGame extends ScrFactory {
             case ACK:
                 Ack ack = (Ack) message;
                 //Creation failed
-                if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
-                    FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
-                    fn.add(new ScrDisconnect());
-                } else if (!ack.getMessage().contains("connect")){
-                    FrameNotify fn = new FrameNotify();
-                    fn.add(new ScrNotify(ack.getMessage()));
+				if (ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1) {
+					FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
+					fn.add(new ScrDisconnect());
+				} else if (!ack.getMessage().contains("connect")) {
+					FrameNotify fn = new FrameNotify();
+					fn.add(new ScrNotify(ack.getMessage()));
                 }
                 break;
             default:
@@ -316,30 +316,30 @@ public class ScrCreateGame extends ScrFactory {
         }
     }
 
-	public void networkGameRequest(Packet p){
+	public void networkGameRequest(Packet p) {
 		System.out.println("Network Game Request");
-		 Message message = p.getData();
-	        switch (message.type()) {
-	            case GAME:
-	                Game game = (Game) message;
-	                FrameGame fg = new FrameGame();
-	                fg.add(new ScrGame(game));
-	                frame.dispose();
-	                //Peform the start of the new game while closing down this window
-	                break;
-	            case ACK:
-	                Ack ack = (Ack) message;
-	                //Creation failed
-                    if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
-                        FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
-                        fn.add(new ScrDisconnect());
-                    } else if (!ack.getMessage().contains("connect")){
-                        FrameNotify fn = new FrameNotify();
-                        fn.add(new ScrNotify(ack.getMessage()));
-                    }
-	                break;
-	            default:
-	                System.out.println("Unexpected message from server: " + p.toJson());
-	        }
+		Message message = p.getData();
+		switch (message.type()) {
+			case GAME:
+				Game game = (Game) message;
+				FrameGame fg = new FrameGame();
+				fg.add(new ScrGame(game));
+				frame.dispose();
+				//Peform the start of the new game while closing down this window
+				break;
+			case ACK:
+				Ack ack = (Ack) message;
+				//Creation failed
+				if (ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1) {
+					FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
+					fn.add(new ScrDisconnect());
+				} else if (!ack.getMessage().contains("connect")) {
+					FrameNotify fn = new FrameNotify();
+					fn.add(new ScrNotify(ack.getMessage()));
+				}
+				break;
+			default:
+				System.out.println("Unexpected message from server: " + p.toJson());
+		}
 	}
 }

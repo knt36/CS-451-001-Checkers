@@ -62,7 +62,6 @@ public class Game implements Message {
      * @param p2    Second player. Must have opposite color of first player
      * @param board Board state. Must have 32 spaces and <= 12 red and <= 12 white disks.
      * @param turn  Current player's turn. Must be either p1 or p2.
-     *
      * @throws IllegalArgumentException when player colors are the same.
      * @throws IllegalArgumentException when board does not have exactly 32 spaces.
      * @throws IllegalArgumentException when board has more than 12 red disks.
@@ -75,6 +74,7 @@ public class Game implements Message {
 
     /**
      * Copy Constructor. Does not run data validation, but this may change in the future.
+     *
      * @param other Game data to copy.
      */
     public Game(Game other) {
@@ -208,9 +208,10 @@ public class Game implements Message {
 
     /**
      * Constructs a new game with two players
+     *
      * @param name Unique game name
-     * @param p1 First player
-     * @param p2 Second player. Must be the opposite color of the first player
+     * @param p1   First player
+     * @param p2   Second player. Must be the opposite color of the first player
      */
     private void construct(String name, Player p1, Player p2) {
         Player turn;
@@ -224,11 +225,12 @@ public class Game implements Message {
 
     /**
      * Constructs a game from components if state is valid, otherwise throws IllegalArgumentException.
-     * @param name Unique game name
-     * @param p1 First player
-     * @param p2 Second player. Must have opposite color of first player.
+     *
+     * @param name  Unique game name
+     * @param p1    First player
+     * @param p2    Second player. Must have opposite color of first player.
      * @param board Board state. Must have 32 squares, <= 12 white disks, and <= 12 red disks
-     * @param turn Current player's turn. Must be either p1 or p2.
+     * @param turn  Current player's turn. Must be either p1 or p2.
      */
     private void construct(String name, Player p1, Player p2, List<Disk> board, Player turn, List<Integer> lastMove) {
         this.name = name;
@@ -256,6 +258,7 @@ public class Game implements Message {
 
     /**
      * Detects whether the game is public or private.
+     *
      * @return True if the game is public and waiting for another player.
      */
     public Boolean isPublicGame() {
@@ -381,6 +384,7 @@ public class Game implements Message {
      * Updates the board to the new state, if the new state represents a legal move. If the move is not legal,
      * throws an IllegalArgumentException (since this state should be coming from the server which should always be
      * accurate and errors are a very very bad sign).
+     *
      * @param newState New board state
      * @return True if the state was updated.
      */

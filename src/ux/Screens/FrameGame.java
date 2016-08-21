@@ -9,13 +9,13 @@ public class FrameGame extends FrameMain {
 		// TODO Auto-generated constructor stub
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
-	
+
 	@Override
 	public Component add(Component comp) {
 		// TODO Auto-generated method stub
 		super.add(comp);
-		if(comp instanceof ScrGame){
-			ScrGame sg = (ScrGame)comp;
+		if (comp instanceof ScrGame) {
+			ScrGame sg = (ScrGame) comp;
 			if (Client.client.getUsername().compareTo(sg.game.p1.getName()) == 0) {
 				this.setTitle(sg.game.name + ": (>" + sg.game.p1.getName() + " vs " + sg.game.p2.getName() + ")");
 			} else {
@@ -25,8 +25,8 @@ public class FrameGame extends FrameMain {
 			//Add screen ender
 			sg.addThreadEnder();
 		}
-		
-		return(comp);
+
+		return (comp);
 	}
 
 	@Override

@@ -25,28 +25,28 @@ import static game.Color.RED;
 import static game.Color.WHITE;
 
 
-public class ScrGame extends ScrFactory{
+public class ScrGame extends ScrFactory {
 	protected Thread updateThread = null;
 	protected ThreadUpdateBoard updateRunnable = null;
-	
+
 	protected GuiBoard board = null;
-	protected OptionButton helpBt = new OptionButton(STYLE.GREEN,STRINGS.HELPBUT);
-	protected OptionButton quitBt= new OptionButton(STYLE.GREEN,STRINGS.QUITBUT);
-	protected OptionButton endBt = new OptionButton(Color.red,STRINGS.ENDGAME);
+	protected OptionButton helpBt = new OptionButton(STYLE.GREEN, STRINGS.HELPBUT);
+	protected OptionButton quitBt = new OptionButton(STYLE.GREEN, STRINGS.QUITBUT);
+	protected OptionButton endBt = new OptionButton(Color.red, STRINGS.ENDGAME);
 	protected String turnIndicator = "'s Turn! ";
 	protected NoteLabel playerTurn = new NoteLabel("");
 	protected Game game = null;
 	protected OptionButton turnColorIndicator = new OptionButton(Color.red, "Color");
-	
+
 	public ScrGame(Game game) {
 		// TODO Auto-generated constructor stub
 		this.game = game;
 		this.board = new GuiBoard(this.game);
-		this.constr.gridheight=5;
+		this.constr.gridheight = 5;
 		this.add(this.board);
-		this.constr.gridheight=1;
+		this.constr.gridheight = 1;
 		this.constr.gridx++;
-		this.constr.fill=this.constr.NONE;
+		this.constr.fill = GridBagConstraints.NONE;
 		this.add(this.turnColorIndicator);
 		this.constr.gridy++;
 		this.add(this.playerTurn);
@@ -57,27 +57,28 @@ public class ScrGame extends ScrFactory{
 		this.constr.gridy++;
 		this.add(endBt);
 		this.constr.gridy++;
-		
+
 		//Set color of turn indicator
 		this.changeTurnColorIndicator();
 		turnColorIndicator.setBorder(BorderFactory.createLoweredBevelBorder());
-		
+
 		//Set label data
-		this.playerTurn.setText(game.turn.getName()+turnIndicator);
-		
+		this.playerTurn.setText(game.turn.getName() + turnIndicator);
+
 		//Set up pieces on checker board
 		refreshBoard();
 		//Adding button functions
 		this.quitBt.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				stopThreadUpdateBoard();
 				frame.dispose();
-			}});
+			}
+		});
 		this.helpBt.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -90,7 +91,7 @@ public class ScrGame extends ScrFactory{
 			}
 		});
 		this.endBt.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -122,10 +123,10 @@ public class ScrGame extends ScrFactory{
 	}
 
     public void networkGame(Packet p) {
-    	System.out.print("update Game board");
-    	System.out.println(p.toJson());
-        Message message = p.getData();
-        switch (message.type()) {
+		System.out.print("update Game board");
+		System.out.println(p.toJson());
+		Message message = p.getData();
+		switch (message.type()) {
             case GAME:
                 Game game = new Game((Game) message);
                 System.out.print("update Game board");
@@ -143,12 +144,12 @@ public class ScrGame extends ScrFactory{
                     frame.dispose();
                 } else {
                     //this login has failed
-                    if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
-                        FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
-                        fn.add(new ScrDisconnect());
-                    } else if (!ack.getMessage().contains("connect")){
-                        FrameNotify fn = new FrameNotify();
-                        fn.add(new ScrNotify(ack.getMessage()));
+					if (ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1) {
+						FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
+						fn.add(new ScrDisconnect());
+					} else if (!ack.getMessage().contains("connect")) {
+						FrameNotify fn = new FrameNotify();
+						fn.add(new ScrNotify(ack.getMessage()));
                     }
                 }
                 break;
@@ -158,28 +159,28 @@ public class ScrGame extends ScrFactory{
     }
 
 	public void setTurnText() {
-		if(this.game.winner()!=null){
+		if (this.game.winner() != null) {
 			//there is a winner
 			Player winner = this.game.winner();
-			if(winner.getColor() == RED){
+			if (winner.getColor() == RED) {
 				this.turnColorIndicator.setText(STRINGS.WINS);
-			}else if (winner.getColor() == WHITE){
+			} else if (winner.getColor() == WHITE) {
 				this.turnColorIndicator.setText(STRINGS.WINS);
 			}
-		}else {
+		} else {
 			//there is no winner and game continues
 			//changes the turn
-			this.playerTurn.setText(this.game.turn.getName()+this.turnIndicator);
+			this.playerTurn.setText(this.game.turn.getName() + this.turnIndicator);
 			changeTurnColorIndicator();
 		}
-		
+
 	}
-	
-	public void changeTurnColorIndicator(){
-		if(this.game.turn.getColor() == RED){
+
+	public void changeTurnColorIndicator() {
+		if (this.game.turn.getColor() == RED) {
 			this.turnColorIndicator.setBackground(Color.red);
 			this.turnColorIndicator.setForeground(Color.black);
-		}else if (this.game.turn.getColor() == WHITE){
+		} else if (this.game.turn.getColor() == WHITE) {
 			this.turnColorIndicator.setBackground(Color.white);
 			this.turnColorIndicator.setForeground(Color.black);
 		}
@@ -209,7 +210,7 @@ public class ScrGame extends ScrFactory{
 				if (result.success()) {
 					//there may be more jumps but the board is updated
 					board.setBoard(game);
-					Client.client.send(new Game(game), (p)->networkGame(p));
+					Client.client.send(new Game(game), (p) -> networkGame(p));
 					revalidate();
 					repaint();
 				}
@@ -218,11 +219,11 @@ public class ScrGame extends ScrFactory{
 
 	}
 
-	public void pauseThreadUpdateBoard(){
+	public void pauseThreadUpdateBoard() {
 		this.updateThread.suspend();
 	}
 
-	public void resumeThreadUpdateBoard(){
+	public void resumeThreadUpdateBoard() {
 		this.updateThread.resume();
 	}
 }

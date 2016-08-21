@@ -29,6 +29,7 @@ public class ServerThread extends Thread {
     private Socket socket;
     private String token;
     private String user = null;
+
     public ServerThread(Socket socket) {
         this.socket = socket;
     }
@@ -139,7 +140,7 @@ public class ServerThread extends Thread {
                 Login login = (Login) message;
                 System.out.println("Logging in: " + login.getUsername());
                 token = login(login);
-                if(token != null && !token.equals("")) {
+                if (token != null && !token.equals("")) {
                     return new Packet(token, new Ack("Logged in", true));
                 } else {
                     return Packet.perror("Incorrect username or password");

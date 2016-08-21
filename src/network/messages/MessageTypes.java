@@ -21,7 +21,7 @@ public enum MessageTypes {
 
     public final Class<? extends Message> klass;
 
-    private MessageTypes(Class<? extends Message> klass) {
+    MessageTypes(Class<? extends Message> klass) {
         this.klass = klass;
     }
 }

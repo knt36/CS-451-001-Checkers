@@ -52,13 +52,13 @@ public class PacketTest {
         System.out.println("Constructed Login packet: " + jsonTrue);
         Packet resultTrue = Packet.fromJson(jsonTrue);
         assertNotNull(resultTrue);
-        assertEquals((Login) resultTrue.getData(), testTrue.getData());
+        assertEquals(resultTrue.getData(), testTrue.getData());
 
         // Perform test Battery on generated
         System.out.println("Generated Login packet: " + jsonFalse);
         Packet resultFalse = Packet.fromJson(jsonFalse);
         assertNotNull(resultFalse);
-        assertEquals((Login) resultFalse.getData(), testFalse.getData());
+        assertEquals(resultFalse.getData(), testFalse.getData());
 
     }
 
@@ -80,13 +80,13 @@ public class PacketTest {
         System.out.println("True Ack packet: " + jsonTrue);
         Packet resultTrue = Packet.fromJson(jsonTrue);
         assertNotNull(resultTrue);
-        assertEquals((Ack) resultTrue.getData(), testTrue.getData());
+        assertEquals(resultTrue.getData(), testTrue.getData());
 
         // Perform test Battery on False
         System.out.println("False Ack packet: " + jsonFalse);
         Packet resultFalse = Packet.fromJson(jsonFalse);
         assertNotNull(resultFalse);
-        assertEquals((Ack) resultFalse.getData(), testFalse.getData());
+        assertEquals(resultFalse.getData(), testFalse.getData());
 
     }
 
@@ -104,7 +104,7 @@ public class PacketTest {
         System.out.println("Constructed GameRequest packet: " + jsonTrue);
         Packet resultTrue = Packet.fromJson(jsonTrue);
         assertNotNull(resultTrue);
-        assertEquals((GameRequest) resultTrue.getData(), testTrue.getData());
+        assertEquals(resultTrue.getData(), testTrue.getData());
 
     }
 }
