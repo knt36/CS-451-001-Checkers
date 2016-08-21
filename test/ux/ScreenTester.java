@@ -1,23 +1,8 @@
-package UXTest;
-
-import static org.junit.Assert.*;
-
-import java.util.Scanner;
-
-import org.junit.Test;
+package ux;
 
 import game.Game;
-import ux.Screens.FrameCreateGame;
-import ux.Screens.FrameMain;
-import ux.Screens.FrameNotify;
-import ux.Screens.FrameSignUp;
-import ux.Screens.ScrCreateGame;
-import ux.Screens.ScrDeleteConfirm;
-import ux.Screens.ScrDisconnect;
-import ux.Screens.ScrGame;
-import ux.Screens.ScrLogin;
-import ux.Screens.ScrMainMenu;
-import ux.Screens.ScrSignUp;
+import org.junit.Test;
+import ux.Screens.*;
 
 public class ScreenTester {
 
@@ -53,17 +38,15 @@ public class ScreenTester {
 		disconnectFr.add(srcDisconnect);
 		TestUtilities.applyDictionaryScreen(srcDisconnect);
 		disconnectFr.dispose();
-		
-		FrameMain deleteFr = new FrameNotify();
-		ScrDeleteConfirm scrDeleteConfirm = new ScrDeleteConfirm();
-		deleteFr.add(scrDeleteConfirm);
-		TestUtilities.applyDictionaryScreen(scrDeleteConfirm);
-	
+
 		FrameMain gameFr = new FrameMain();
 		ScrGame scrGame = new ScrGame(new Game("BattleGround", "Rachel", "Khoi"));
 		gameFr.add(scrGame);
-		
-		return;
+
+		FrameMain deleteFr = new FrameNotify();
+		ScrDeleteConfirm scrDeleteConfirm = new ScrDeleteConfirm(scrGame, "");
+		deleteFr.add(scrDeleteConfirm);
+		TestUtilities.applyDictionaryScreen(scrDeleteConfirm);
 	}
 
 }

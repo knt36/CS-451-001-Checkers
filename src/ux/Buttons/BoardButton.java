@@ -1,15 +1,10 @@
 package ux.Buttons;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
-
-import javax.swing.BorderFactory;
-
-import ux.Labels.NoteLabel;
 import ux.Screens.STYLE;
-import game.Disk;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
 
 public class BoardButton extends ButtonFactory {
 	protected int index = -1;
@@ -78,11 +73,6 @@ public class BoardButton extends ButtonFactory {
 				   g2d.fill(crown2);
 			   }
 		   }
-		   if(UXTest.DEBUG_CONTROLS.BoardNumbers){
-			   g.setColor(Color.black);
-			   g.drawString(""+index, (int)(this.getSize().getWidth()/2)- g.getFontMetrics().stringWidth(index+"")/2, (int)(this.getSize().getHeight()/2));
-		   }
-		   
 	}
 
 	public int getIndex() {

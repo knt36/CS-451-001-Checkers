@@ -32,6 +32,7 @@ public class Utils {
         //System.out.println("GENERATED SALT: " + toHex(salt));
         return toHex(salt);
     }
+
     /**
      * This is the internal hashing function.
      *
@@ -69,6 +70,7 @@ public class Utils {
         }
 
     }
+
     /**
      * This is the external hashing function. This calls the internal function
      *

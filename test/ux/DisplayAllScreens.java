@@ -1,24 +1,8 @@
-package UXTest;
+package ux;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.nio.charset.MalformedInputException;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import game.Game;
 import ux.Screens.FrameCreateGame;
 import ux.Screens.FrameMain;
-import ux.Screens.FrameNotify;
-import ux.Screens.FrameSignUp;
 import ux.Screens.ScrCreateGame;
-import ux.Screens.ScrDeleteConfirm;
-import ux.Screens.ScrDisconnect;
-import ux.Screens.ScrGame;
-import ux.Screens.ScrLogin;
-import ux.Screens.ScrMainMenu;
-import ux.Screens.ScrSignUp;
 
 public class DisplayAllScreens {
 	public static void main (String args []){ 

@@ -1,14 +1,13 @@
-package UXTest;
+package ux;
 
-import java.awt.Component;
+import org.junit.Assert;
+import ux.Screens.ScrFactory;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import javax.swing.JTextField;
-
-import org.junit.Assert;
-
-import ux.Screens.ScrFactory;
 
 
 public class TestUtilities {
