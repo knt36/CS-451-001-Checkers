@@ -13,33 +13,45 @@ import ux.TextField.UserTextField;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ScrLogin extends ScrFactory {
-    private OptionButton signUpBut = new OptionButton(STYLE.GREEN, STRINGS.SIGNUP);
-    private OptionButton signInBut = new OptionButton(Color.RED, STRINGS.SIGNIN);
-    private OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
-    private UserTextField userName = new UserTextField(STRINGS.USERNAME_HINT);
-    private TextFieldPassword passWord = new TextFieldPassword();
+    OptionButton signUpBut = new OptionButton(STYLE.GREEN, STRINGS.SIGNUP);
+    OptionButton signInBut = new OptionButton(Color.RED, STRINGS.SIGNIN);
+    OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
+    UserTextField userName = new UserTextField(STRINGS.USERNAME_HINT);
+    TextFieldPassword passWord = new TextFieldPassword();
 
     private TitleLabel title = new TitleLabel(STRINGS.TITLE);
     private ThreadHeartBeat rt = new ThreadHeartBeat(this);
 
-    public ScrLogin() {
-        this.add(leftPanel());
-        this.constr.gridx++;
-        this.add(rightPanel());
-        this.signUpBut.addActionListener((ActionEvent e) ->
-                frame.OpenLinkFrame(new FrameSignUp(), new ScrSignUp())
-        );
-        this.signInBut.addActionListener((ActionEvent e) -> {
-            //Check if the user name is the right length
-            //Success and logging in
-            String s = new String(passWord.getPassword());
-            Client.client.send(new Login(userName.getText(), s), this::networkLogin);
-        });
-        this.quitBt.addActionListener((ActionEvent e) -> {
-            //Exits out of program entirely
-            System.exit(0);
+	public ScrLogin() {
+		// TODO Auto-generated constructor stub
+		this.add(leftPanel());
+		this.constr.gridx++;
+		this.add(rightPanel());
+		this.signUpBut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                nextFrameSignUpBtn();
+            }
+		});
+		this.signInBut.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//Check if the user name is the right length
+                //Success and logging in
+                String s = new String(passWord.getPassword());
+                Client.client.send(new Login(userName.getText(), s), (p) -> networkLogin(p));
+			}
+		});
+		this.quitBt.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                nextFrameQuitBtn();
+            }
         });
         //Start refreshing game thread
         new Thread(rt).start();
@@ -56,8 +68,7 @@ public class ScrLogin extends ScrFactory {
                     frame.dispose();
                     rt.running = false;
 
-                    FrameMain fm = new FrameMain();
-                    fm.add(new ScrMainMenu());
+                    nextFrameMainMenu();
 
                     //if getting this, close disconnect window if open?
                     if (FrameNotifyDisconnect.getCounter() >= 1) {
@@ -144,5 +155,19 @@ public class ScrLogin extends ScrFactory {
             default:
                 System.out.println("Unexpected message from server: " + p.toJson());
         }
+    }
+
+    public void nextFrameQuitBtn() {
+        //Exits out of program entirely
+        System.exit(0);
+    }
+
+    public void nextFrameMainMenu(){
+        FrameMain fm = new FrameMain();
+        fm.add(new ScrMainMenu());
+    }
+
+    public void nextFrameSignUpBtn(){
+        frame.OpenLinkFrame(new FrameSignUp(), new ScrSignUp());
     }
 }

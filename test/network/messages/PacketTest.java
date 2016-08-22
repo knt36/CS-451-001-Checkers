@@ -40,11 +40,6 @@ public class PacketTest {
         assertEquals(LoginTrue.getUsername(), "foo");
         assertEquals(LoginTrue.getPassword(), "bar");
 
-        Login LoginFalse = new Login("bar", "baz");
-        //Login LoginFalse = new Login();
-        //LoginFalse.setPassword("bar");
-        //LoginFalse.setUsername("baz");
-
         // Make packets from login's
         Packet testTrue = new Packet(token, LoginTrue);
 
