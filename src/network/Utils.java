@@ -11,7 +11,7 @@ import java.util.Random;
 
 /**
  */
-class Utils {
+public class Utils {
     private static final int ITERATIONS = 100;
     private static final int KEY_LENGTH = 256;
 

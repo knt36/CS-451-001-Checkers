@@ -6,7 +6,7 @@ import network.Server;
  *
  *
  */
-class ServerMain {
+public class ServerMain {
     public static void main(String[] args) {
         try {
             // And here we've refactored for testability
