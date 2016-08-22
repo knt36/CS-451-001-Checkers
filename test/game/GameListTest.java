@@ -30,7 +30,8 @@ public class GameListTest {
         GameList second = new GameList(asList(test3), asList(test1));
         GameList third = new GameList(asList(test1), asList(test2));
 
-        System.out.println("\n" + first.allGames().toString() + "\n" + second.allGames().toString());
+        //casualty of refactor
+        //System.out.println("\n" + first.allGames().toString() + "\n" + second.allGames().toString());
 
         /* This code is for Equals and hashcode, which are not working.
          * (And more importantly, not needed.)

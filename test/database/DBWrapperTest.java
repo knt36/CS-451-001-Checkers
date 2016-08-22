@@ -2,9 +2,11 @@ package database;
 
 import game.Game;
 import main.ServerMain;
+import network.Utils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -47,7 +49,20 @@ public class DBWrapperTest {
     }
 
     @Test
-    public void getUser() throws Exception {
+    public void User() throws Exception {
+        String salt = Utils.generateSalt();
+        String hash = Utils.hash("fksdjfkldsjfkldsjfkljdsf", salt);
+        String token = "fdkfkdsjfdf"; //whatever lawl
+        Credentials creds = new Credentials(TEST_USER_ONE, salt, hash);
+        DBWrapper.saveUser(creds);
+        //can we pull out the user by token
+        String retrievedUser = DBWrapper.getUserByToken(token);
+        assertNotNull(retrievedUser);
+        assertEquals(TEST_USER_ONE, retrievedUser);
+        // can we pull out the user by username
+        Credentials retrievedCreds = DBWrapper.getUser(TEST_USER_ONE);
+        assertEquals(retrievedCreds.getHash(), creds.getHash());
+
 
     }
 
