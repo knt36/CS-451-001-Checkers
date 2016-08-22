@@ -15,7 +15,7 @@ public class Client extends Observable {
     private String token = "";
     private String username = null; //Keep as null so it returns an error and we know why
 
-    private Client() {
+    protected Client() {
 
     }
 
