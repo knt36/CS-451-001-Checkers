@@ -109,33 +109,26 @@ public class ScrMainMenu extends ScrFactory {
         //Add the bullets
         refreshGameList();
 
-        return (right);
-    }
-
-    public void refreshGameList() {
-        if (this.gameList == null) {
-            return;
-            // don't do anything since it did not return anything
-        }
-        this.curGameArea.removeAll();
-        this.pubGameArea.removeAll();
-        this.curGameArea.constr.fill = curGameArea.constr.HORIZONTAL;
-        this.curGameScroll.setMinimumSize(new Dimension(0, 300));
-        for (Game g : this.gameList.current) {
-            BulletGameLabel lb = new BulletGameLabel(g.name);
-            lb.addMouseListener(new MouseListener() {
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-
-                    //Start the selected game
-                    g.p2 = g.p1.opponent(Client.client.getUsername());
-                    if (g.turn.getName().equals("")) {
-                        g.turn = g.p2;
-                    }
-                    Client.client.send(g, (p) -> networkGameUpdate(p));
-                    nextFrameMouseReleasedPublic(g);
-                }
+		return (right);
+	}
+	
+	public void refreshGameList(){
+		if(this.gameList == null){
+			return;
+			// don't do anything since it did not return anything
+		}
+		this.curGameArea.removeAll();
+		this.pubGameArea.removeAll();
+		this.curGameArea.constr.fill = curGameArea.constr.HORIZONTAL;
+		this.curGameScroll.setMinimumSize(new Dimension(0, 300));
+		for (Game g : this.gameList.current) {
+			BulletGameLabel lb = new BulletGameLabel(g.name);
+			lb.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+                    nextFrameMouseReleasedCurrent(g);
+				}
 
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -172,10 +165,17 @@ public class ScrMainMenu extends ScrFactory {
             BulletGameLabel lb = new BulletGameLabel(g.name);
             lb.addMouseListener(new MouseListener() {
 
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    nextFrameMouseReleasedCurrent(g);
-                }
+				@Override
+				public void mouseReleased(MouseEvent e) {
+
+                    //Start the selected game
+                    g.p2 = g.p1.opponent(Client.client.getUsername());
+                    if(g.turn.getName().equals("")){
+                        g.turn = g.p2;
+                    }
+                    Client.client.send(g, (p) -> networkGameUpdate(p));
+                    nextFrameMouseReleasedPublic(g);
+				}
 
                 @Override
                 public void mousePressed(MouseEvent e) {
