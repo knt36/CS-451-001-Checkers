@@ -29,6 +29,7 @@ public class ServerThread extends Thread {
     private Socket socket;
     private String token;
     private String user = null;
+
     public ServerThread(Socket socket) {
         this.socket = socket;
     }
@@ -77,7 +78,7 @@ public class ServerThread extends Thread {
 
     @Override
     public void run() {
-        String output = null;
+        String output;
         try {
             System.out.println("\nConnected to client");
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -119,7 +120,7 @@ public class ServerThread extends Thread {
         }
     }
 
-    public Packet process(Packet packet) {
+    private Packet process(Packet packet) {
         Message message = packet.getData();
         switch (packet.getData().type()) {
             case GAME:
@@ -139,7 +140,7 @@ public class ServerThread extends Thread {
                 Login login = (Login) message;
                 System.out.println("Logging in: " + login.getUsername());
                 token = login(login);
-                if(token != null && !token.equals("")) {
+                if (token != null && !token.equals("")) {
                     return new Packet(token, new Ack("Logged in", true));
                 } else {
                     return Packet.perror("Incorrect username or password");
@@ -263,13 +264,5 @@ public class ServerThread extends Thread {
 
     private Game getGame(GameRequest request) {
         return DBWrapper.getGame(request.name);
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public String getToken() {
-        return token;
     }
 }

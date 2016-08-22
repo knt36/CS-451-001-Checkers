@@ -6,8 +6,6 @@ import network.messages.Message;
 import network.messages.MessageTypes;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static network.messages.JsonHelper.arrayToList;
 import static network.messages.JsonHelper.listToArray;
@@ -31,10 +29,6 @@ public class GameList implements Message {
         return new GameList(pub, current);
     }
 
-    public List<Game> allGames() {
-        return Stream.concat(current.stream(), pub.stream()).collect(Collectors.toList());
-    }
-
     public JsonElement toJson() {
         JsonObject root = new JsonObject();
         root.add("public", listToArray(pub));
@@ -43,6 +37,7 @@ public class GameList implements Message {
     }
 
     @Override
+    // Is covered in JUnit testing, GameListTest:EqualsTest but it isn't registering.
     public MessageTypes type() {
         return MessageTypes.GAME_LIST;
     }

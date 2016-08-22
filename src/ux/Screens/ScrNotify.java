@@ -1,11 +1,10 @@
 package ux.Screens;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import ux.Buttons.OptionButton;
 import ux.Labels.NoteLabel;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ScrNotify extends ScrFactory {
 	protected OptionButton okBut = new OptionButton(STYLE.GREEN,STRINGS.DELETECONFIRMBUT);	
@@ -24,10 +23,10 @@ public class ScrNotify extends ScrFactory {
 		this.constr.fill = this.constr.HORIZONTAL;
 		this.add(this.okBut);
 		this.constr.gridx++;
-		
+
 		//Add button functionality
 		this.okBut.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -35,7 +34,7 @@ public class ScrNotify extends ScrFactory {
 				nextFrameOkBtn();
 			}
 		});
-	
+
 	}
 
 	public void nextFrameOkBtn() {

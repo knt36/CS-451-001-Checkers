@@ -18,16 +18,16 @@ import static game.Disk.*;
 import static game.MoveStatus.*;
 
 public class Game implements Message {
-    protected static Integer boardSize = 32;
-    protected static Integer columns = (int) Math.sqrt(boardSize / 2);
-    protected static Integer width = columns * 2;
-    protected static Integer startRows = 3;
+    public static Integer boardSize = 32;
+    private static Integer columns = (int) Math.sqrt(boardSize / 2);
+    private static Integer width = columns * 2;
+    private static Integer startRows = 3;
     public Player turn;
     public Player p1;
     public Player p2;
     public List<Disk> board;
     public String name;
-    public List<Integer> lastMove;
+    List<Integer> lastMove;
 
     /**
      * Creates a new public game with the initiating player. Colors will be randomized.
@@ -62,7 +62,6 @@ public class Game implements Message {
      * @param p2    Second player. Must have opposite color of first player
      * @param board Board state. Must have 32 spaces and <= 12 red and <= 12 white disks.
      * @param turn  Current player's turn. Must be either p1 or p2.
-     *
      * @throws IllegalArgumentException when player colors are the same.
      * @throws IllegalArgumentException when board does not have exactly 32 spaces.
      * @throws IllegalArgumentException when board has more than 12 red disks.
@@ -75,6 +74,7 @@ public class Game implements Message {
 
     /**
      * Copy Constructor. Does not run data validation, but this may change in the future.
+     *
      * @param other Game data to copy.
      */
     public Game(Game other) {
@@ -208,9 +208,10 @@ public class Game implements Message {
 
     /**
      * Constructs a new game with two players
+     *
      * @param name Unique game name
-     * @param p1 First player
-     * @param p2 Second player. Must be the opposite color of the first player
+     * @param p1   First player
+     * @param p2   Second player. Must be the opposite color of the first player
      */
     private void construct(String name, Player p1, Player p2) {
         Player turn;
@@ -224,11 +225,12 @@ public class Game implements Message {
 
     /**
      * Constructs a game from components if state is valid, otherwise throws IllegalArgumentException.
-     * @param name Unique game name
-     * @param p1 First player
-     * @param p2 Second player. Must have opposite color of first player.
+     *
+     * @param name  Unique game name
+     * @param p1    First player
+     * @param p2    Second player. Must have opposite color of first player.
      * @param board Board state. Must have 32 squares, <= 12 white disks, and <= 12 red disks
-     * @param turn Current player's turn. Must be either p1 or p2.
+     * @param turn  Current player's turn. Must be either p1 or p2.
      */
     private void construct(String name, Player p1, Player p2, List<Disk> board, Player turn, List<Integer> lastMove) {
         this.name = name;
@@ -256,6 +258,7 @@ public class Game implements Message {
 
     /**
      * Detects whether the game is public or private.
+     *
      * @return True if the game is public and waiting for another player.
      */
     public Boolean isPublicGame() {
@@ -287,8 +290,8 @@ public class Game implements Message {
      * @param src Disk location
      * @return Destination squares that would produce valid moves
      */
-    public Set<Integer> adjMoves(Integer src) {
-        Set<Integer> result = Stream
+    private Set<Integer> adjMoves(Integer src) {
+        return Stream
                 // All valid adjacent moves
                 .of(-columns - 1, -columns, -columns + 1, columns - 1, columns, columns + 1)
                 // Basic filtering for moves
@@ -297,7 +300,6 @@ public class Game implements Message {
                 // Prevent wrapping around the edge of the board
                 .filter(dst -> legalAdj(src, dst))
                 .collect(Collectors.toSet());
-        return result;
     }
 
     public Set<Integer> jmpMoves(Integer src) {
@@ -381,6 +383,7 @@ public class Game implements Message {
      * Updates the board to the new state, if the new state represents a legal move. If the move is not legal,
      * throws an IllegalArgumentException (since this state should be coming from the server which should always be
      * accurate and errors are a very very bad sign).
+     *
      * @param newState New board state
      * @return True if the state was updated.
      */
@@ -457,5 +460,45 @@ public class Game implements Message {
     @Override
     public MessageTypes type() {
         return MessageTypes.GAME;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Game game = (Game) o;
+
+        // Intellij simplified this
+        return turn != null ? turn.equals(game.turn) : game.turn == null
+                && (p1 != null ? p1.equals(game.p1) : game.p1 == null
+                && (p2 != null ? p2.equals(game.p2) : game.p2 == null
+                && (board != null ? board.equals(game.board) : game.board == null
+                && (name != null ? name.equals(game.name) : game.name == null
+                && (lastMove != null ? lastMove.equals(game.lastMove) : game.lastMove == null)))));
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = turn.hashCode();
+        result = 31 * result + p1.hashCode();
+        result = 31 * result + p2.hashCode();
+        result = 31 * result + board.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + lastMove.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "turn=" + turn +
+                ", p1=" + p1 +
+                ", p2=" + p2 +
+                ", board=" + board +
+                ", name='" + name + '\'' +
+                ", lastMove=" + lastMove +
+                '}';
     }
 }

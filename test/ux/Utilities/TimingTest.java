@@ -6,7 +6,6 @@ import ux.Labels.NoteLabel;
 import static org.junit.Assert.assertNotEquals;
 
 /**
- * Created by rachelgoeken on 8/18/16.
  */
 public class TimingTest {
     @Test
@@ -15,7 +14,7 @@ public class TimingTest {
         NoteLabel l = new NoteLabel("hi");
         Thread t = new Thread(new Timing(l));
         t.start();
-        t.sleep(10);
+        Thread.sleep(10);
         t.interrupt();
         assertNotEquals(l, j);
     }

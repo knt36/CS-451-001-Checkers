@@ -13,23 +13,23 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ScrSignUp extends ScrFactory{
-	protected UserTextField userName = new UserTextField(STRINGS.USERNAME_HINT);
-	protected TextFieldPassword passWord = new TextFieldPassword(STRINGS.PASSWORD_HINT);
+public class ScrSignUp extends ScrFactory {
+    UserTextField userName = new UserTextField(STRINGS.USERNAME_HINT);
+    TextFieldPassword passWord = new TextFieldPassword();
 
-	protected OptionButton createBt = new OptionButton(STYLE.GREEN, STRINGS.CREATE);
-	protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
-	public ScrSignUp() {
-		// TODO Auto-generated constructor stub
-		this.constr.fill=this.constr.HORIZONTAL;
-		this.add(this.userName);
-		this.constr.gridy++;
-		this.add(this.passWord);
-		this.constr.gridy++;
-		this.constr.fill = constr.NONE;
-		this.add(createBt);
-		this.constr.gridy++;
-		this.add(quitBt);
+    OptionButton createBt = new OptionButton(STYLE.GREEN, STRINGS.CREATE);
+    OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
+
+    public ScrSignUp() {
+        this.constr.fill = GridBagConstraints.HORIZONTAL;
+        this.add(this.userName);
+        this.constr.gridy++;
+        this.add(this.passWord);
+        this.constr.gridy++;
+        this.constr.fill = GridBagConstraints.NONE;
+        this.add(createBt);
+        this.constr.gridy++;
+        this.add(quitBt);
 
 		//Add button functionalities
 		this.createBt.addActionListener(new ActionListener() {
@@ -73,15 +73,15 @@ public class ScrSignUp extends ScrFactory{
                     if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
                         FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
                         fn.add(new ScrDisconnect());
-                    } else if (!ack.getMessage().contains("connect")){
+                    } else if (!ack.getMessage().contains("connect")) {
                         FrameNotify fn = new FrameNotify();
                         fn.add(new ScrNotify(ack.getMessage()));
                     }
-				}
-				break;
-			default:
-				System.out.println("Unexpected message from server: " + p.toJson());
-		}
-	}
+                }
+                break;
+            default:
+                System.out.println("Unexpected message from server: " + p.toJson());
+        }
+    }
 
 }

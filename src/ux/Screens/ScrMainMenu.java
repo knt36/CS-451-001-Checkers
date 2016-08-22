@@ -2,7 +2,6 @@ package ux.Screens;
 
 import game.Game;
 import game.GameList;
-import game.Player;
 import network.Client;
 import network.messages.Ack;
 import network.messages.Message;
@@ -21,23 +20,23 @@ import java.io.File;
 import java.io.IOException;
 
 public class ScrMainMenu extends ScrFactory {
-	protected GameList gameList = null;
-	protected HeaderLabel curGameLabel = new HeaderLabel(STRINGS.CURGAMELABEL);
-	protected HeaderLabel pubGameLabel = new HeaderLabel(STRINGS.PUBGAMELABEL);
-	protected OptionButton newGameBt = new OptionButton(STYLE.GREEN, STRINGS.NEW_GAMEBUT);
-	protected OptionButton helpBt = new OptionButton(STYLE.GREEN, STRINGS.HELPBUT);
-	protected OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
-	//Bullets
-	ScrFactory curGameArea = new ScrFactory();
-	JScrollPane curGameScroll = new JScrollPane(curGameArea);
-	//Bullets
-	ScrFactory pubGameArea = new ScrFactory();
-	JScrollPane pubGameScroll = new JScrollPane(pubGameArea);
+    private GameList gameList = null;
+    private HeaderLabel curGameLabel = new HeaderLabel(STRINGS.CURGAMELABEL);
+    private HeaderLabel pubGameLabel = new HeaderLabel(STRINGS.PUBGAMELABEL);
+    OptionButton newGameBt = new OptionButton(STYLE.GREEN, STRINGS.NEW_GAMEBUT);
+    OptionButton helpBt = new OptionButton(STYLE.GREEN, STRINGS.HELPBUT);
+    OptionButton quitBt = new OptionButton(Color.red, STRINGS.QUITBUT);
+    //Bullets
+    private ScrFactory curGameArea = new ScrFactory();
+    private JScrollPane curGameScroll = new JScrollPane(curGameArea);
+    //Bullets
+    private ScrFactory pubGameArea = new ScrFactory();
+    private JScrollPane pubGameScroll = new JScrollPane(pubGameArea);
 
-	public ScrMainMenu() {
-		this.add(leftPanel());
-		this.constr.gridx++;
-		this.add(rightPanel());
+    public ScrMainMenu() {
+        this.add(leftPanel());
+        this.constr.gridx++;
+        this.add(rightPanel());
 
 		//Adding Button listners
 		quitBt.addActionListener(new ActionListener() {
@@ -68,47 +67,47 @@ public class ScrMainMenu extends ScrFactory {
 		th.start();
 	}
 
-	public ScrFactory leftPanel() {
-		ScrFactory left = new ScrFactory();
-		left.constr.fill = left.constr.NONE;
-		left.add(newGameBt);
-		left.constr.gridy++;
-		left.add(helpBt);
-		left.constr.gridy++;
-		left.add(quitBt);
-		return (left);
-	}
+    private ScrFactory leftPanel() {
+        ScrFactory left = new ScrFactory();
+        left.constr.fill = GridBagConstraints.NONE;
+        left.add(newGameBt);
+        left.constr.gridy++;
+        left.add(helpBt);
+        left.constr.gridy++;
+        left.add(quitBt);
+        return (left);
+    }
 
-	public ScrFactory rightPanel() {
-		ScrFactory right = new ScrFactory();
-		right.constr.fill = right.constr.HORIZONTAL;
-		right.constr.weighty = 0;
-		right.add(curGameLabel);
-		right.constr.gridy++;
+    private ScrFactory rightPanel() {
+        ScrFactory right = new ScrFactory();
+        right.constr.fill = GridBagConstraints.HORIZONTAL;
+        right.constr.weighty = 0;
+        right.add(curGameLabel);
+        right.constr.gridy++;
 
-		//Bullets
-		right.constr.fill = right.constr.BOTH;
-		this.curGameArea.constr.fill = curGameArea.constr.HORIZONTAL;
-		right.constr.weighty = 1;
-		this.curGameScroll.setMinimumSize(new Dimension(0, 300));
-		right.add(this.curGameScroll);
+        //Bullets
+        right.constr.fill = GridBagConstraints.BOTH;
+        this.curGameArea.constr.fill = GridBagConstraints.HORIZONTAL;
+        right.constr.weighty = 1;
+        this.curGameScroll.setMinimumSize(new Dimension(0, 300));
+        right.add(this.curGameScroll);
 
 
-		right.constr.gridy++;
-		right.constr.fill = right.constr.HORIZONTAL;
-		right.constr.weighty = 0;
-		right.add(pubGameLabel);
-		right.constr.gridy++;
+        right.constr.gridy++;
+        right.constr.fill = GridBagConstraints.HORIZONTAL;
+        right.constr.weighty = 0;
+        right.add(pubGameLabel);
+        right.constr.gridy++;
 
-		//Bullets
-		right.constr.fill = right.constr.BOTH;
-		this.pubGameArea.constr.fill = pubGameArea.constr.HORIZONTAL;
-		right.constr.weighty = 1;
-		this.pubGameScroll.setMinimumSize(new Dimension(0, 300));
-		right.add(this.pubGameScroll);
-		
-		//Add the bullets
-		refreshGameList();
+        //Bullets
+        right.constr.fill = GridBagConstraints.BOTH;
+        this.pubGameArea.constr.fill = GridBagConstraints.HORIZONTAL;
+        right.constr.weighty = 1;
+        this.pubGameScroll.setMinimumSize(new Dimension(0, 300));
+        right.add(this.pubGameScroll);
+
+        //Add the bullets
+        refreshGameList();
 
 		return (right);
 	}
@@ -137,42 +136,42 @@ public class ScrMainMenu extends ScrFactory {
                     Client.client.send(g, (p) -> networkGameUpdate(p));
                     nextFrameMouseReleasedPublic(g);
 				}
-				
+
 				@Override
 				public void mousePressed(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+
 				}
-				
+
 				@Override
 				public void mouseExited(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+
 				}
-				
+
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+
 				}
-				
+
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+
 				}
 			});
-		
+
 			this.curGameArea.add(lb);
 			this.curGameArea.constr.gridy++;
 		}
-		
+
 		this.pubGameArea.constr.fill = pubGameArea.constr.HORIZONTAL;
 		this.pubGameScroll.setMinimumSize(new Dimension(0, 300));
 		for (Game g : this.gameList.pub) {
 			BulletGameLabel lb = new BulletGameLabel(g.name);
 			lb.addMouseListener(new MouseListener() {
-				
+
 				@Override
 				public void mouseReleased(MouseEvent e) {
 					nextFrameMouseReleasedCurrent(g);
@@ -199,15 +198,15 @@ public class ScrMainMenu extends ScrFactory {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 
-				}
-			});
-		
-			this.pubGameArea.add(lb);
-			this.pubGameArea.constr.gridy++;
-		}
-		revalidate();
-		repaint();
-	}
+                }
+            });
+
+            this.pubGameArea.add(lb);
+            this.pubGameArea.constr.gridy++;
+        }
+        revalidate();
+        repaint();
+    }
 
     public void networkGameListRefresh(Packet p) {
         System.out.println("Game network Game List Refreshed");
@@ -245,16 +244,16 @@ public class ScrMainMenu extends ScrFactory {
         }
     }
 
-    public void networkGameUpdate(Packet p) {
+    private void networkGameUpdate(Packet p) {
         Message message = p.getData();
         switch (message.type()) {
             case GAME:
                 //if getting this, close disconnect window if open?
-                if(FrameNotifyDisconnect.getCounter() >= 1){
+                if (FrameNotifyDisconnect.getCounter() >= 1) {
                     //close FrameNotifyDisconnect
                     Frame[] frame = FrameNotifyDisconnect.getFrames();
-                    for(Frame f : frame){
-                        if(f instanceof FrameNotifyDisconnect){
+                    for (Frame f : frame) {
+                        if (f instanceof FrameNotifyDisconnect) {
                             f.dispose();
                         }
                     }
@@ -264,10 +263,10 @@ public class ScrMainMenu extends ScrFactory {
             case ACK:
                 Ack ack = (Ack) message;
                 //Creation failed
-                if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
+                if (ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1) {
                     FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
                     fn.add(new ScrDisconnect());
-                } else if (!ack.getMessage().contains("connect")){
+                } else if (!ack.getMessage().contains("connect")) {
                     FrameNotify fn = new FrameNotify();
                     fn.add(new ScrNotify(ack.getMessage()));
                 }
