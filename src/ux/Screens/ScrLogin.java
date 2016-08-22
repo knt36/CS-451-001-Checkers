@@ -25,28 +25,28 @@ public class ScrLogin extends ScrFactory {
     private TitleLabel title = new TitleLabel(STRINGS.TITLE);
     private ThreadHeartBeat rt = new ThreadHeartBeat(this);
 
-	public ScrLogin() {
-		// TODO Auto-generated constructor stub
-		this.add(leftPanel());
-		this.constr.gridx++;
-		this.add(rightPanel());
-		this.signUpBut.addActionListener(new ActionListener() {
+    public ScrLogin() {
+        // TODO Auto-generated constructor stub
+        this.add(leftPanel());
+        this.constr.gridx++;
+        this.add(rightPanel());
+        this.signUpBut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 nextFrameSignUpBtn();
             }
-		});
-		this.signInBut.addActionListener(new ActionListener() {
+        });
+        this.signInBut.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//Check if the user name is the right length
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Check if the user name is the right length
                 //Success and logging in
                 String s = new String(passWord.getPassword());
                 Client.client.send(new Login(userName.getText(), s), (p) -> networkLogin(p));
-			}
-		});
-		this.quitBt.addActionListener(new ActionListener() {
+            }
+        });
+        this.quitBt.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -162,12 +162,12 @@ public class ScrLogin extends ScrFactory {
         System.exit(0);
     }
 
-    public void nextFrameMainMenu(){
+    public void nextFrameMainMenu() {
         FrameMain fm = new FrameMain();
         fm.add(new ScrMainMenu());
     }
 
-    public void nextFrameSignUpBtn(){
+    public void nextFrameSignUpBtn() {
         frame.OpenLinkFrame(new FrameSignUp(), new ScrSignUp());
     }
 }

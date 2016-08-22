@@ -31,46 +31,46 @@ public class ScrSignUp extends ScrFactory {
         this.constr.gridy++;
         this.add(quitBt);
 
-		//Add button functionalities
-		this.createBt.addActionListener(new ActionListener() {
+        //Add button functionalities
+        this.createBt.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				//Add the network adding user function into here
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Auto-generated method stub
+                //Add the network adding user function into here
                 System.out.println("Create button pressed");
-                Client.client.send(new Signup(userName.getText(), passWord.getText()), (p)->networkSignup(p));
+                Client.client.send(new Signup(userName.getText(), passWord.getText()), (p) -> networkSignup(p));
 
-			}
-		});
-		this.quitBt.addActionListener(new ActionListener() {
+            }
+        });
+        this.quitBt.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				//Exits out of program entirely
-				nextFrameQuitBtn();
-			}
-		});
-	}
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Auto-generated method stub
+                //Exits out of program entirely
+                nextFrameQuitBtn();
+            }
+        });
+    }
 
-	public void nextFrameQuitBtn(){
+    public void nextFrameQuitBtn() {
         System.exit(0);
     }
-	
-	public void networkSignup(Packet p){
-		Message message = p.getData();
-		switch (message.type()) {
-			case ACK:
-				Ack ack = (Ack) message;
-				if (ack.getSuccess()) {
-					//Username and password made successfully.
-					FrameMain fm = new FrameMain();
-					fm.add(new ScrMainMenu());
-					frame.link.dispose();
-					frame.dispose();
-				} else {
-                    if(ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1){
+
+    public void networkSignup(Packet p) {
+        Message message = p.getData();
+        switch (message.type()) {
+            case ACK:
+                Ack ack = (Ack) message;
+                if (ack.getSuccess()) {
+                    //Username and password made successfully.
+                    FrameMain fm = new FrameMain();
+                    fm.add(new ScrMainMenu());
+                    frame.link.dispose();
+                    frame.dispose();
+                } else {
+                    if (ack.getMessage().contains("connect") && FrameNotifyDisconnect.getCounter() < 1) {
                         FrameNotifyDisconnect fn = new FrameNotifyDisconnect();
                         fn.add(new ScrDisconnect());
                     } else if (!ack.getMessage().contains("connect")) {
