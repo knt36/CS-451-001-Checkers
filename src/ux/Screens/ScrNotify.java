@@ -10,8 +10,11 @@ import ux.Labels.NoteLabel;
 public class ScrNotify extends ScrFactory {
 	protected OptionButton okBut = new OptionButton(STYLE.GREEN,STRINGS.DELETECONFIRMBUT);	
 	NoteLabel msg = null;
+    public ScrNotify(){
+
+    }
+
 	public ScrNotify(String text) {
-		// TODO Auto-generated constructor stub
 		//The button fills horizontal unlike everything else. This is intended or  I have to increase the original frame size.
 		msg = new NoteLabel(text);
 		this.constr.gridwidth =2;

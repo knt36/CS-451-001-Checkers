@@ -38,7 +38,8 @@ public class ScrSignUp extends ScrFactory{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//Add the network adding user function into here
-                nextFrameCreateBtn();
+                System.out.println("Create button pressed");
+                Client.client.send(new Signup(userName.getText(), passWord.getText()), (p)->networkSignup(p));
 
 			}
 		});
@@ -55,11 +56,6 @@ public class ScrSignUp extends ScrFactory{
 
 	public void nextFrameQuitBtn(){
         System.exit(0);
-    }
-
-	public void nextFrameCreateBtn(){
-        System.out.println("Create button pressed");
-        Client.client.send(new Signup(userName.getText(), passWord.getText()), (p)->networkSignup(p));
     }
 	
 	public void networkSignup(Packet p){
@@ -82,6 +78,7 @@ public class ScrSignUp extends ScrFactory{
                         fn.add(new ScrNotify(ack.getMessage()));
                     }
 				}
+				break;
 			default:
 				System.out.println("Unexpected message from server: " + p.toJson());
 		}

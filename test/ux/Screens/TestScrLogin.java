@@ -42,22 +42,20 @@ public class TestScrLogin {
     public void LogingScrTests(){
         Client.client = new FakeServer();
         FrameMain loginFr = new FrameMain();
-        loginFr.add(new ScrLogin());
-
         ScrLoginTest scr = new ScrLoginTest();
-        scr.signUpBut.doClick();
-        assertEquals(true, scr.signUpCalled.booleanValue());
+        loginFr.add(scr);
 
-        scr.userName.requestFocus();
         scr.userName.setText("Name12");
-        scr.passWord.requestFocus();
         scr.passWord.setText("Password12");
 
         assertEquals(scr.userName.getText(), "Name12");
-        assertEquals(scr.passWord.getText(), "Password12");
+        assertEquals(new String(scr.passWord.getPassword()), "Password12");
 
         scr.signInBut.doClick();
-        assertTrue(scr.signInCalled);
+        assertEquals(true, scr.signInCalled.booleanValue());
+
+        scr.signUpBut.doClick();
+        assertEquals(true, scr.signUpCalled.booleanValue());
 
         scr.quitBt.doClick();
         assertEquals(true, scr.quitCalled.booleanValue());

@@ -128,6 +128,13 @@ public class ScrMainMenu extends ScrFactory {
 				
 				@Override
 				public void mouseReleased(MouseEvent e) {
+
+                    //Start the selected game
+                    g.p2 = g.p1.opponent(Client.client.getUsername());
+                    if(g.turn.getName().equals("")){
+                        g.turn = g.p2;
+                    }
+                    Client.client.send(g, (p) -> networkGameUpdate(p));
                     nextFrameMouseReleasedPublic(g);
 				}
 				
@@ -290,12 +297,6 @@ public class ScrMainMenu extends ScrFactory {
     }
 
     public void nextFrameMouseReleasedPublic(Game g) {
-        //Start the selected game
-        g.p2 = g.p1.opponent(Client.client.getUsername());
-        if(g.turn.getName().equals("")){
-            g.turn = g.p2;
-        }
-        Client.client.send(g, (p) -> networkGameUpdate(p));
         FrameGame fg = new FrameGame();
         fg.add(new ScrGame(g));
     }
