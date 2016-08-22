@@ -7,7 +7,7 @@ import ux.Labels.NoteLabel;
  */
 public class Timing implements Runnable {
 
-    public Boolean running;
+    public Boolean running = true;
     private NoteLabel l = null;
 
     public Timing(NoteLabel l) {
