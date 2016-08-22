@@ -5,27 +5,11 @@ import com.google.gson.JsonObject;
 
 /**
  * POJO for Server acknowledgement.
- *
+ * <p>
  * State is true or false,
  */
 public class Ack implements Message {
-    public Boolean getSuccess() {
-		return success;
-	}
-
-	public void setSuccess(Boolean success) {
-		this.success = success;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	private Boolean success;
+    private Boolean success;
     private String message;
 
     public Ack(String message, Boolean success) {
@@ -42,6 +26,14 @@ public class Ack implements Message {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public JsonElement toJson() {

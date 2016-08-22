@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
 public class PacketTest {
     // Dummy token, this is close to what the real data will be
     // TODO: Import implementation from the Packet Class
-    public static final String token = UUID.randomUUID().toString();
+    private static final String token = UUID.randomUUID().toString();
 
     @Test
     public void game() throws Exception {
@@ -46,24 +46,15 @@ public class PacketTest {
 
         // Make packets from login's
         Packet testTrue = new Packet(token, LoginTrue);
-        Packet testFalse = new Packet(token, LoginFalse);
 
         // Make JSON from packets
         String jsonTrue = testTrue.toJson();
-        String jsonFalse = testFalse.toJson();
 
         // Perform test Battery on constructed
         System.out.println("Constructed Login packet: " + jsonTrue);
         Packet resultTrue = Packet.fromJson(jsonTrue);
         assertNotNull(resultTrue);
-        assertEquals((Login) resultTrue.getData(), testTrue.getData());
-
-        // Perform test Battery on generated
-        System.out.println("Generated Login packet: " + jsonFalse);
-        Packet resultFalse = Packet.fromJson(jsonFalse);
-        assertNotNull(resultFalse);
-        assertEquals((Login) resultFalse.getData(), testFalse.getData());
-
+        assertEquals(resultTrue.getData(), testTrue.getData());
     }
 
     @Test
@@ -84,13 +75,13 @@ public class PacketTest {
         System.out.println("True Ack packet: " + jsonTrue);
         Packet resultTrue = Packet.fromJson(jsonTrue);
         assertNotNull(resultTrue);
-        assertEquals((Ack) resultTrue.getData(), testTrue.getData());
+        assertEquals(resultTrue.getData(), testTrue.getData());
 
         // Perform test Battery on False
         System.out.println("False Ack packet: " + jsonFalse);
         Packet resultFalse = Packet.fromJson(jsonFalse);
         assertNotNull(resultFalse);
-        assertEquals((Ack) resultFalse.getData(), testFalse.getData());
+        assertEquals(resultFalse.getData(), testFalse.getData());
 
     }
 
@@ -108,7 +99,7 @@ public class PacketTest {
         System.out.println("Constructed GameRequest packet: " + jsonTrue);
         Packet resultTrue = Packet.fromJson(jsonTrue);
         assertNotNull(resultTrue);
-        assertEquals((GameRequest) resultTrue.getData(), testTrue.getData());
+        assertEquals(resultTrue.getData(), testTrue.getData());
 
     }
 }

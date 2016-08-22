@@ -16,7 +16,7 @@ public class PlayerTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void getColor() throws Exception {
+    public void getColor() {
         Player testPlayer = new Player("test", RED);
         assertEquals(testPlayer.getColor(), RED);
         testPlayer = new Player("test", WHITE);
@@ -24,7 +24,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void oppositeColor() throws Exception {
+    public void oppositeColor() {
         Player testPlayer = new Player("test", RED);
         assertEquals(testPlayer.oppositeColor(), WHITE);
         testPlayer = new Player("test", WHITE);
@@ -32,7 +32,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void newColorNone() throws Exception {
+    public void newColorNone() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Player cannot have color 'None'");
         Player testPlayer = new Player("test", NONE);

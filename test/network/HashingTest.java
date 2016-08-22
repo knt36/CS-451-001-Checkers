@@ -14,12 +14,12 @@ public class HashingTest {
         String password = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
         // Is the salt working?
-        String salt = utils.generateSalt();
+        String salt = Utils.generateSalt();
         assertNotNull(salt);
         assertNotEquals(salt, "");
 
         // Make another salt with the same function
-        String salt2 = utils.generateSalt();
+        String salt2 = Utils.generateSalt();
         assertNotNull(salt2);
         assertNotEquals(salt2, "");
 
@@ -27,12 +27,12 @@ public class HashingTest {
         assertNotEquals(salt2, salt);
 
         // Can we hash something?
-        String hash1 = utils.hash(password, salt);
+        String hash1 = Utils.hash(password, salt);
         assertNotNull(hash1);
         assertNotEquals(hash1, "");
 
         // Make another hash from the same inputs
-        String hash2 = utils.hash(password, salt);
+        String hash2 = Utils.hash(password, salt);
         assertNotNull(hash2);
         assertNotEquals(hash2, "");
 
@@ -41,8 +41,8 @@ public class HashingTest {
 
         // Can we use the Verify Hash Function to check a password against stored data?
         // These should all be equal.
-        assertTrue(utils.verifyHash(password, hash1, salt));
-        assertTrue(utils.verifyHash(password, hash2, salt));
+        assertTrue(Utils.verifyHash(password, hash1, salt));
+        assertTrue(Utils.verifyHash(password, hash2, salt));
     }
 
     @Test
@@ -53,12 +53,12 @@ public class HashingTest {
         String password = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
         // Is the salt working?
-        String salt = utils.generateSalt();
+        String salt = Utils.generateSalt();
         assertNotNull(salt);
         assertNotEquals(salt, "");
 
         // Make another salt with the same function
-        String salt2 = utils.generateSalt();
+        String salt2 = Utils.generateSalt();
         assertNotNull(salt2);
         assertNotEquals(salt2, "");
 
@@ -66,12 +66,12 @@ public class HashingTest {
         assertNotEquals(salt2, salt);
 
         // Can we hash something?
-        String hash1 = utils.hash(password, salt);
+        String hash1 = Utils.hash(password, salt);
         assertNotNull(hash1);
         assertNotEquals(hash1, "");
 
         // Make another hash from the same inputs
-        String hash2 = utils.hash(password, salt);
+        String hash2 = Utils.hash(password, salt);
         assertNotNull(hash2);
         assertNotEquals(hash2, "");
 
@@ -80,7 +80,7 @@ public class HashingTest {
 
         // Can we use the Verify Hash Function to check a password against stored data?
         // These should all be equal.
-        assertTrue(utils.verifyHash(password, hash1, salt));
-        assertTrue(utils.verifyHash(password, hash2, salt));
+        assertTrue(Utils.verifyHash(password, hash1, salt));
+        assertTrue(Utils.verifyHash(password, hash2, salt));
     }
 }

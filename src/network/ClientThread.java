@@ -13,13 +13,13 @@ import java.util.function.Consumer;
 /**
  *
  */
-public class ClientThread extends Thread {
+class ClientThread extends Thread {
     private static final String SERVER_HOSTNAME = "www.centralark.org";
     private static final int SERVER_PORT = 4443;
-    private String data;
-    private Consumer<Packet> callback;
+    private final String data;
+    private final Consumer<Packet> callback;
 
-    public ClientThread(String data, Consumer<Packet> callback) {
+    ClientThread(String data, Consumer<Packet> callback) {
         this.data = data;
         this.callback = callback;
     }
