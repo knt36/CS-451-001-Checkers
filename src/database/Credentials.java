@@ -22,7 +22,7 @@ public class Credentials {
         this.setHash(pass[1]);
     }
 
-    private Credentials(String username, String salt, String hash, String token, Date tokenDate) {
+    public Credentials(String username, String salt, String hash, String token, Date tokenDate) {
         this.username = username;
         this.token = token;
         this.tokenDate = tokenDate;
