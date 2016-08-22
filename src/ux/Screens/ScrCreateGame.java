@@ -33,7 +33,7 @@ public class ScrCreateGame extends ScrFactory {
     private List<String> playerList = new ArrayList<>();
     private List<BulletLabel> usersList = new ArrayList<>();
     private CheckBoxFactory allUsers = new CheckBoxFactory(STRINGS.ALLUSERSLABEL);
-    private OptionButton startBut = new OptionButton(STYLE.GREEN, STRINGS.START);
+    public OptionButton startBut = new OptionButton(STYLE.GREEN, STRINGS.START);
     private int selectedUserForGame = -1; // -1 for no user
     private GroupBulletLabel groupBullets = new GroupBulletLabel();
     //Bullets
