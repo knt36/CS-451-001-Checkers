@@ -180,7 +180,7 @@ public class ScrGame extends ScrFactory {
         this.board.addListenerBoard((int start, int finish) -> {
             //Detects a move has been made on the board and then tries to move it in the game
             MoveStatus result = game.move(start, finish);
-            pauseThreadUpdateBoard();
+            //pauseThreadUpdateBoard();
             if (result.success()) {
                 //there may be more jumps but the board is updated
                 board.setBoard(game);
