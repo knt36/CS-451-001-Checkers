@@ -14,7 +14,8 @@ public class Client extends Observable {
     public static Client client = new Client();
     private String token = "";
     private String username = null; //Keep as null so it returns an error and we know why
-    private Client() {
+
+    protected Client() {
 
     }
 
@@ -36,16 +37,8 @@ public class Client extends Observable {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     private void sendData(String data, Consumer<Packet> callback) {
         new ClientThread(data, callback).start();
-    }
-
-    public String getToken() {
-        return token;
     }
 
     public void setToken(String token) {

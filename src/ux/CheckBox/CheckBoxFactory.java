@@ -1,15 +1,12 @@
 package ux.CheckBox;
 
-import java.awt.Color;
-
-import javax.swing.JCheckBox;
-
 import ux.Screens.STYLE;
 
+import javax.swing.*;
+
 public class CheckBoxFactory extends JCheckBox {
-	public CheckBoxFactory(String text) {
-		// TODO Auto-generated constructor stub
-		this.setBackground(STYLE.BACKGROUND);
-		this.setText(text);
-	}
+    public CheckBoxFactory(String text) {
+        this.setBackground(STYLE.BACKGROUND);
+        this.setText(text);
+    }
 }

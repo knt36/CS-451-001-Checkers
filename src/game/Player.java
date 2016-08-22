@@ -46,6 +46,24 @@ public class Player {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Player player = (Player) o;
+
+        return name != null ? name.equals(player.name) : player.name == null && color == player.color;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (color != null ? color.hashCode() : 0);
+        return result;
+    }
+
     public Boolean nobody() {
         return this.name == null || this.name.equals("");
     }

@@ -7,21 +7,22 @@ import ux.Labels.NoteLabel;
  */
 public class Timing implements Runnable {
 
-    NoteLabel l = null;
+    public Boolean running;
+    private NoteLabel l = null;
 
     public Timing(NoteLabel l) {
         this.l = l;
     }
 
     public void run() {
-        String sec = "";
-        String min = "";
-        String hr = "";
+        String sec;
+        String min;
+        String hr;
         int seconds = 0;
         int hours = 0;
         int minutes = 0;
         try {
-            while (true) {
+            while (running) {
                 Thread.sleep(1000);
                 if (seconds < 59) {
                     seconds++;
@@ -35,7 +36,6 @@ public class Timing implements Runnable {
                     seconds = 0;
                     hours = hours + 1;
                 }
-
 
                 //make time 2 digits
                 if (hours < 10) {
@@ -59,7 +59,7 @@ public class Timing implements Runnable {
                 l.repaint();
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 

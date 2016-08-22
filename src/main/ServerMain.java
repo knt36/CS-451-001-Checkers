@@ -6,12 +6,12 @@ import network.Server;
  *
  *
  */
-public class ServerMain {
+class ServerMain {
     public static void main(String[] args) {
         try {
-            // The newInstance() call is a work around for some
-            // broken Java implementations
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            // And here we've refactored for testability
+            // Gotta get them good stats man
+            testConnectDB();
         } catch (Exception ex) {
             // weeeeell shit
             ex.printStackTrace();
@@ -23,5 +23,11 @@ public class ServerMain {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void testConnectDB() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        // The newInstance() call is a work around for some
+        // broken Java implementations
+        Class.forName("com.mysql.jdbc.Driver").newInstance();
     }
 }
