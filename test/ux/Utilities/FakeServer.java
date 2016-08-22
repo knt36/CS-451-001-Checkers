@@ -1,7 +1,5 @@
 package ux.Utilities;
 
-import database.DBWrapper;
-import database.UserList;
 import game.Game;
 import game.GameList;
 import network.Client;
@@ -31,7 +29,7 @@ public class FakeServer extends Client {
                 Login login = (Login) message;
                 System.out.println("Logging in: " + login.getUsername());
                 String token = "kalfjibhgre493oe";
-                if(token != null && !token.equals("")) {
+                if (token != null && !token.equals("")) {
                     return new Packet(token, new Ack("Logged in", true));
                 } else {
                     return Packet.perror("Incorrect username or password");
@@ -49,7 +47,7 @@ public class FakeServer extends Client {
                 GameListRequest request = (GameListRequest) message;
                 System.out.println("Request for game list from: " + request.user);
                 token = "adkjbjioje";
-                GameList gameList = new GameList(asList(new Game("name","user")), asList(new Game("name2","user2")));
+                GameList gameList = new GameList(asList(new Game("name", "user")), asList(new Game("name2", "user2")));
                 return new Packet(token, gameList);
             case ACK:
                 return packet;

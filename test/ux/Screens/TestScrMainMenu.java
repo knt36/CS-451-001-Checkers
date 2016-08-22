@@ -5,49 +5,14 @@ import network.Client;
 import org.junit.Test;
 import ux.Utilities.FakeServer;
 
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-
 import static junit.framework.TestCase.assertEquals;
 
 /**
  * Created by rachelgoeken on 8/21/16.
  */
 public class TestScrMainMenu {
-    private class ScrMainMenuTest extends ScrMainMenu {
-
-        public Boolean quitCalled = false;
-        public Boolean helpCalled = false;
-        public Boolean createGameCalled = false;
-        public Boolean publicGameCalled = false;
-        public Boolean currentGameCalled = false;
-
-        @Override
-        public void nextFrameQuitBtn(){
-            quitCalled = true;
-        }
-
-        @Override
-        public void nextFrameHelpBtn(){
-            helpCalled = true;
-        }
-
-        public void nextFrameNewGameBtn(){
-            createGameCalled = true;
-        }
-
-        public void nextFrameMouseReleasedPublic(Game g) {
-            publicGameCalled = true;
-        }
-
-        public void nextFrameMouseReleasedCurrent(Game g) {
-            currentGameCalled = true;
-        }
-    }
-
     @Test
-    public void SignUpScrTests(){
+    public void SignUpScrTests() {
         Client.client = new FakeServer();
         FrameMain fr = new FrameMain();
         ScrMainMenuTest scr = new ScrMainMenuTest();
@@ -64,6 +29,36 @@ public class TestScrMainMenu {
 
     }
 
+    private class ScrMainMenuTest extends ScrMainMenu {
+
+        public Boolean quitCalled = false;
+        public Boolean helpCalled = false;
+        public Boolean createGameCalled = false;
+        public Boolean publicGameCalled = false;
+        public Boolean currentGameCalled = false;
+
+        @Override
+        public void nextFrameQuitBtn() {
+            quitCalled = true;
+        }
+
+        @Override
+        public void nextFrameHelpBtn() {
+            helpCalled = true;
+        }
+
+        public void nextFrameNewGameBtn() {
+            createGameCalled = true;
+        }
+
+        public void nextFrameMouseReleasedPublic(Game g) {
+            publicGameCalled = true;
+        }
+
+        public void nextFrameMouseReleasedCurrent(Game g) {
+            currentGameCalled = true;
+        }
+    }
 
 
 }

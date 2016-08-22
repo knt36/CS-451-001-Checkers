@@ -11,18 +11,8 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class TestScrSignUp {
 
-    private class ScrSignUpTest extends ScrSignUp {
-
-        public Boolean quitCalled = false;
-
-        @Override
-        public void nextFrameQuitBtn(){
-            quitCalled = true;
-        }
-    }
-
     @Test
-    public void SignUpScrTests(){
+    public void SignUpScrTests() {
         Client.client = new FakeServer();
 
         FrameMain login = new FrameMain();
@@ -42,6 +32,16 @@ public class TestScrSignUp {
 
         scr.quitBt.doClick();
         assertEquals(true, scr.quitCalled.booleanValue());
+    }
+
+    private class ScrSignUpTest extends ScrSignUp {
+
+        public Boolean quitCalled = false;
+
+        @Override
+        public void nextFrameQuitBtn() {
+            quitCalled = true;
+        }
     }
 
 

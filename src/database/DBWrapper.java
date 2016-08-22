@@ -20,15 +20,16 @@ public final class DBWrapper {
     private static final String password = "C01l3e18999";
     private static final String database = "Checker";
     private static final String port = "3306";
+    public static String ip = "127.0.0.1";
 
     private DBWrapper() {
     }
 
-    private static Connection connect() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://127.0.0.1:" + port + "/" + database, user, password);
+    protected static Connection connect() throws SQLException {
+        return DriverManager.getConnection("jdbc:mysql://" + ip + ":" + port + "/" + database, user, password);
     }
 
-    private static void close(Connection conn) {
+    protected static void close(Connection conn) {
         if (conn != null) {
             try {
                 conn.close();
@@ -44,12 +45,12 @@ public final class DBWrapper {
         stmt.executeUpdate();
     }
 
-    private static ResultSet query(PreparedStatement stmt) throws SQLException {
+    protected static ResultSet query(PreparedStatement stmt) throws SQLException {
         System.out.println(stmt);
         return stmt.executeQuery();
     }
 
-    private static Game gameFromSQL(ResultSet rs) throws SQLException {
+    protected static Game gameFromSQL(ResultSet rs) throws SQLException {
         String name = rs.getString("name");
         String u1 = rs.getString("p1");
         String u2 = rs.getString("p2");
@@ -83,7 +84,7 @@ public final class DBWrapper {
         );
     }
 
-    private static void printSQLException(SQLException e) {
+    public static void printSQLException(SQLException e) {
         if (!ignoreSQLException(e.getSQLState())) {
             e.printStackTrace(System.err);
             System.err.println("SQLState: " + e.getSQLState());
