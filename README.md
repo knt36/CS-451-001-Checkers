@@ -1,5 +1,13 @@
 # CS-451-001-Checkers
+Demo Link: https://youtu.be/SSHa3qGaHiA
+
 A Networked Checkers Game. All documentation and no code makes Jack a Software Engineer!
+
+<p align="">
+  <img width="100%" src="/readmeImages/1.PNG">
+  <img width="100%" src="/readmeImages/2.PNG">
+  <img width="100%" src="/readmeImages/3.PNG">
+</p>
 
 # Group Members
 
